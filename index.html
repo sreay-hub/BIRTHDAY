@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Special Surprise</title>
+
+  <!-- CryptoJS Library for AES PBKDF2 Client-Side Decryption -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <!-- =========================================================================
+       CUSTOM STYLES / CSS SECTION
+       Plug in your custom CSS art direction, fonts, colors, and layouts below.
+     ========================================================================= -->
+  <style>
+    /* Reset & Base Setup */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fcf8f8;
+      color: #4a3b32;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Screen Management: Hide all screens by default except active screen */
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      animation: fadeIn 0.8s ease-in-out forwards;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Basic Functional Design Elements (Customize as desired) */
+    .btn {
+      background: #8b4a52;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #6e383f; }
+
+    /* Screen 1: Passcode Screen Styles */
+    #screen-passcode { text-align: center; max-width: 400px; }
+    .input-group { margin-top: 20px; }
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .error-msg { color: #d9534f; font-size: 0.9rem; margin-top: 10px; display: none; }
+    .loading-msg { color: #8b4a52; font-size: 0.9rem; margin-top: 10px; display: none; }
+
+    /* Screen 2: Birthday Wish Page Styles */
+    #screen-wish { text-align: center; padding: 40px 20px; }
+    .wish-title { font-size: 2.5rem; color: #8b4a52; margin-bottom: 20px; }
+    .wish-message { font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px; }
+
+    /* Screen 3: Photo Gallery Grid Styles */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .gallery-item {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    /* Album Filter Styles */
+    .album-filters {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #8b4a52;
+      color: #8b4a52;
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: #8b4a52;
+      color: #fff;
+    }
+
+    /* Lightbox Modal Styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img { max-width: 90%; max-height: 80vh; border-radius: 4px; }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 30px;
+      color: #fff; font-size: 2rem; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================================
+       SCREEN 1: PASSCODE ENTRY SCREEN
+     ========================================================================= -->
+  <section id="screen-passcode" class="screen active">
+    <h2>Unlock Your Surprise</h2>
+    <p>Please enter the secret passcode to view your birthday gift.</p>
+    
+    <div class="input-group">
+      <input type="password" id="passcode-input" placeholder="Enter secret passcode" autocomplete="off">
+      <button class="btn" id="passcode-submit-btn">Unlock</button>
+    </div>
+    
+    <div id="error-message" class="error-msg">Incorrect passcode. Please try again.</div>
+    <div id="loading-message" class="loading-msg">Decrypting memory gallery... Please wait.</div>
+  </section>
+
+  <!-- =========================================================================
+       SCREEN 2: BIRTHDAY WISH PAGE
+     ========================================================================= -->
+  <section id="screen-wish" class="screen">
+    <h1 class="wish-title">Happy Birthday, <span id="wife-name-placeholder">[WIFE'S NAME]</span>!</h1>
+    
+    <div class="wish-message">
+      <!-- REPLACE WITH YOUR PERSONAL MESSAGE -->
+      <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every day with you is a gift.</p>
+    </div>
+
+    <!-- Optional Background Music Element -->
+    <!-- <audio id="bg-music" src="path/to/music.mp3" loop></audio> -->
+
+    <button class="btn" onclick="navigateTo('screen-gallery')">View Our Memories &rarr;</button>
+  </section>
+
+  <!-- =========================================================================
+       SCREEN 3 & 4: PHOTO GALLERY & ALBUM FILTER VIEW
+     ========================================================================= -->
+  <section id="screen-gallery" class="screen">
+    <h2 style="text-align: center; margin-bottom: 20px;">Our Gallery</h2>
+
+    <!-- Sub-grouping / Category Filters -->
+    <div class="album-filters">
+      <button class="filter-btn active" onclick="filterAlbum('all')">All Photos</button>
+      <button class="filter-btn" onclick="filterAlbum('trips')">Our Trips</button>
+      <button class="filter-btn" onclick="filterAlbum('favorites')">Favorites</button>
+    </div>
+
+    <!-- Photo Thumbnails Grid -->
+    <div id="gallery-container" class="gallery-grid"></div>
+
+    <div style="text-align: center; margin-top: 30px;">
+      <button class="btn" onclick="navigateTo('screen-wish')">&larr; Back to Message</button>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SCREEN 5: LIGHTBOX / DETAIL VIEW MODAL
+     ========================================================================= -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <span class="lightbox-close" onclick="closeLightbox(force=true)">&times;</span>
+    <img id="lightbox-img" src="" alt="Full-size memory">
+  </div>
+
+
+  <!-- =========================================================================
+       FUNCTIONAL JAVASCRIPT LOGIC
+     ========================================================================= -->
+  <script>
+    /* -------------------------------------------------------------------------
+       CONFIG & METADATA
+       ------------------------------------------------------------------------- */
+    const WIFE_NAME = "My Dearest"; // Configurable placeholder name
+    const TOTAL_PHOTOS = 50; // Total count of photo1.enc ... photo50.enc
+
+    // Store in-memory decrypted image data URLs once processed
+    const decryptedPhotos = [];
+
+    // Optional album categories (maps photo index to category)
+    function getCategoryForPhoto(index) {
+      if (index % 3 === 0) return 'trips';
+      if (index % 2 === 0) return 'favorites';
+      return 'general';
+    }
+
+    document.getElementById('wife-name-placeholder').textContent = WIFE_NAME;
+
+    /* -------------------------------------------------------------------------
+       SCREEN NAVIGATION CONTROLLER
+       ------------------------------------------------------------------------- */
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) targetScreen.classList.add('active');
+    }
+
+    /* -------------------------------------------------------------------------
+       OPENSSL-COMPATIBLE AES DECRYPTION FUNCTION
+       Handles decryption of AES-256-CBC files encrypted via PBKDF2 with Salt
+       ------------------------------------------------------------------------- */
+    function decryptOpenSSLAES(encryptedArrayBuffer, password) {
+      try {
+        const u8 = new Uint8Array(encryptedArrayBuffer);
+        
+        // OpenSSL files start with "Salted__" header (8 bytes) + 8-byte salt
+        const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
+        if (headerStr !== "Salted__") return null; // Invalid OpenSSL payload
+
+        const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
+        const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
+
+        // Derive key and IV matching OpenSSL -pbkdf2 behavior
+        const derivedKeys = CryptoJS.PBKDF2(password, salt, {
+          keySize: (256 + 128) / 32, // 256 bits key + 128 bits IV
+          iterations: 10000,
+          hasher: CryptoJS.algo.SHA256
+        });
+
+        const key = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(0, 8));
+        const iv = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(8, 12));
+
+        // Decrypt
+        const decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+
+        // Convert decrypted WordArray to base64
+        const base64 = CryptoJS.enc.Base64.stringify(decrypted);
+        if (!base64 || base64.length === 0) return null;
+
+        return 'data:image/jpeg;base64,' + base64;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+       PASSCODE SUBMISSION & DATA FETCHING LOGIC
+       ------------------------------------------------------------------------- */
+    document.getElementById('passcode-submit-btn').addEventListener('click', handleUnlock);
+    document.getElementById('passcode-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleUnlock();
+    });
+
+    async function handleUnlock() {
+      const passcode = document.getElementById('passcode-input').value.trim();
+      const errorEl = document.getElementById('error-message');
+      const loadingEl = document.getElementById('loading-message');
+
+      if (!passcode) return;
+
+      errorEl.style.display = 'none';
+      loadingEl.style.display = 'block';
+
+      try {
+        // Step 1: Fetch photo1.enc to test passcode validity
+        const testRes = await fetch('photo1.enc');
+        if (!testRes.ok) throw new Error("File fetch failed");
+        const testBuffer = await testRes.arrayBuffer();
+        
+        const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
+
+        // Step 2: Validate decryption
+        if (!testDataUrl) {
+          errorEl.style.display = 'block';
+          loadingEl.style.display = 'none';
+          return;
+        }
+
+        // Store first decrypted photo
+        decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
+
+        // Step 3: Passcode is verified! Fetch and decrypt remaining files in background
+        const remainingFetches = [];
+        for (let i = 2; i <= TOTAL_PHOTOS; i++) {
+          remainingFetches.push(
+            fetch(`photo${i}.enc`)
+              .then(res => res.arrayBuffer())
+              .then(buf => {
+                const dataUrl = decryptOpenSSLAES(buf, passcode);
+                if (dataUrl) {
+                  decryptedPhotos.push({ id: i, src: dataUrl, category: getCategoryForPhoto(i) });
+                }
+              })
+              .catch(() => {}) // Skip missing files gracefully
+          );
+        }
+
+        await Promise.all(remainingFetches);
+
+        // Sort by photo ID to maintain sequence
+        decryptedPhotos.sort((a, b) => a.id - b.id);
+
+        // Step 4: Populate Gallery & Navigate to Wish Page
+        renderGallery('all');
+        loadingEl.style.display = 'none';
+        
+        // Optional music playback trigger:
+        // document.getElementById('bg-music').play();
+
+        navigateTo('screen-wish');
+
+      } catch (err) {
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+       GALLERY RENDER & ALBUM FILTERING
+       ------------------------------------------------------------------------- */
+    function renderGallery(filterCategory) {
+      const container = document.getElementById('gallery-container');
+      container.innerHTML = '';
+
+      decryptedPhotos.forEach(photo => {
+        if (filterCategory === 'all' || photo.category === filterCategory) {
+          const item = document.createElement('div');
+          item.className = 'gallery-item';
+          item.onclick = () => openLightbox(photo.src);
+
+          const img = document.createElement('img');
+          img.src = photo.src;
+          img.alt = `Memory ${photo.id}`;
+
+          item.appendChild(img);
+          container.appendChild(item);
+        }
+      });
+    }
+
+    function filterAlbum(category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderGallery(category);
+    }
+
+    /* -------------------------------------------------------------------------
+       LIGHTBOX HANDLERS
+       ------------------------------------------------------------------------- */
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox(event, force = false) {
+      if (force || event.target.id === 'lightbox') {
+        document.getElementById('lightbox').classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>
