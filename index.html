@@ -5,120 +5,223 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A Special Surprise</title>
 
+  <!-- Google Fonts: Great Vibes for romantic script headers, Playfair Display for serifs, Cormorant Garamond for subtexts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+
   <!-- CryptoJS Library for AES PBKDF2 Client-Side Decryption -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
   <!-- =========================================================================
-       CUSTOM STYLES / CSS SECTION
-       Plug in your custom CSS art direction, fonts, colors, and layouts below.
+       CUSTOM STYLES / CSS SECTION — DARK ROMANTIC THEME
      ========================================================================= -->
   <style>
     /* Reset & Base Setup */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
-      font-family: 'Georgia', serif;
-      background-color: #fcf8f8;
-      color: #4a3b32;
+      font-family: 'Cormorant Garamond', 'Georgia', serif;
+      background: radial-gradient(circle at center, #1e0f14 0%, #0d0608 100%);
+      color: #f3e5e8;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* Screen Management: Hide all screens by default except active screen */
+    /* Subtle ambient background glow */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(186, 74, 98, 0.15);
+      filter: blur(120px);
+      border-radius: 50%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Screen Management */
     .screen {
       display: none;
       width: 100%;
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 20px;
-      animation: fadeIn 0.8s ease-in-out forwards;
+      padding: 30px 20px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
     }
+    
     .screen.active {
       display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Typography Settings */
+    .romantic-heading {
+      font-family: 'Great Vibes', cursive;
+      color: #e8a7b3;
+      text-shadow: 0 0 15px rgba(232, 167, 179, 0.3);
+      font-weight: 400;
     }
 
-    /* Basic Functional Design Elements (Customize as desired) */
+    .serif-heading {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
+    }
+
+    /* Premium Romantic Buttons */
     .btn {
-      background: #8b4a52;
+      background: linear-gradient(135deg, #a3485e 0%, #6e2a39 100%);
       color: #fff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      border-radius: 4px;
+      border: 1px solid rgba(232, 167, 179, 0.4);
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
+      border-radius: 30px;
       cursor: pointer;
-      margin-top: 15px;
-      transition: background 0.3s;
+      margin-top: 20px;
+      box-shadow: 0 4px 20px rgba(110, 42, 57, 0.4);
+      transition: all 0.4s ease;
     }
-    .btn:hover { background: #6e383f; }
+    .btn:hover {
+      background: linear-gradient(135deg, #b8546c 0%, #853344 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(184, 84, 108, 0.6);
+      border-color: rgba(232, 167, 179, 0.7);
+    }
+
+    /* Screen 0: Welcome Screen Styles */
+    #screen-welcome {
+      text-align: center;
+      max-width: 600px;
+    }
+    .welcome-title {
+      font-size: 4.5rem;
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .welcome-subtitle {
+      font-size: 1.3rem;
+      color: #c9a0ab;
+      font-style: italic;
+      margin-bottom: 25px;
+    }
 
     /* Screen 1: Passcode Screen Styles */
-    #screen-passcode { text-align: center; max-width: 400px; }
-    .input-group { margin-top: 20px; }
+    #screen-passcode { 
+      text-align: center; 
+      max-width: 420px; 
+    }
+    .passcode-card {
+      background: rgba(25, 12, 17, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(232, 167, 179, 0.15);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    .input-group { margin-top: 25px; }
     input[type="password"] {
       width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 14px;
+      font-size: 1.1rem;
+      background: rgba(10, 5, 7, 0.8);
+      border: 1px solid rgba(232, 167, 179, 0.3);
+      border-radius: 8px;
+      color: #fff;
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
-    .error-msg { color: #d9534f; font-size: 0.9rem; margin-top: 10px; display: none; }
-    .loading-msg { color: #8b4a52; font-size: 0.9rem; margin-top: 10px; display: none; }
+    input[type="password"]:focus {
+      border-color: #e8a7b3;
+      box-shadow: 0 0 10px rgba(232, 167, 179, 0.3);
+    }
+    .error-msg { color: #e66a77; font-size: 0.95rem; margin-top: 15px; display: none; }
+    .loading-msg { color: #e8a7b3; font-size: 0.95rem; margin-top: 15px; display: none; }
 
     /* Screen 2: Birthday Wish Page Styles */
-    #screen-wish { text-align: center; padding: 40px 20px; }
-    .wish-title { font-size: 2.5rem; color: #8b4a52; margin-bottom: 20px; }
-    .wish-message { font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px; }
+    #screen-wish { 
+      text-align: center; 
+      padding: 40px 20px; 
+      max-width: 750px;
+    }
+    .wish-title { 
+      font-size: 3.5rem; 
+      color: #e8a7b3; 
+      margin-bottom: 25px; 
+    }
+    .wish-message { 
+      font-size: 1.35rem; 
+      line-height: 2; 
+      color: #e6d3d7;
+      margin-bottom: 35px; 
+      font-weight: 400;
+    }
 
     /* Screen 3: Photo Gallery Grid Styles */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 18px;
+      margin-top: 25px;
     }
     .gallery-item {
       aspect-ratio: 1 / 1;
       overflow: hidden;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid rgba(232, 167, 179, 0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
     .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
+      transition: transform 0.5s ease;
     }
-    .gallery-item:hover img { transform: scale(1.05); }
+    .gallery-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(232, 167, 179, 0.6);
+      box-shadow: 0 8px 25px rgba(186, 74, 98, 0.3);
+    }
+    .gallery-item:hover img { transform: scale(1.08); }
 
     /* Album Filter Styles */
     .album-filters {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 25px;
       flex-wrap: wrap;
     }
     .filter-btn {
-      background: transparent;
-      border: 1px solid #8b4a52;
-      color: #8b4a52;
-      padding: 6px 16px;
+      background: rgba(25, 12, 17, 0.6);
+      border: 1px solid rgba(232, 167, 179, 0.3);
+      color: #c9a0ab;
+      padding: 8px 20px;
       border-radius: 20px;
       cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      transition: all 0.3s;
     }
-    .filter-btn.active {
-      background: #8b4a52;
+    .filter-btn.active, .filter-btn:hover {
+      background: #a3485e;
       color: #fff;
+      border-color: #e8a7b3;
     }
 
     /* Lightbox Modal Styles */
@@ -126,48 +229,70 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(10, 5, 7, 0.95);
+      backdrop-filter: blur(8px);
       z-index: 1000;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .lightbox.active { display: flex; }
-    .lightbox img { max-width: 90%; max-height: 80vh; border-radius: 4px; }
+    .lightbox.active { display: flex; opacity: 1; }
+    .lightbox img { 
+      max-width: 90%; 
+      max-height: 82vh; 
+      border-radius: 6px; 
+      border: 1px solid rgba(232, 167, 179, 0.3);
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
     .lightbox-close {
       position: absolute;
-      top: 20px; right: 30px;
-      color: #fff; font-size: 2rem; cursor: pointer;
+      top: 25px; right: 35px;
+      color: #e8a7b3; font-size: 2.5rem; cursor: pointer;
+      transition: color 0.3s;
     }
+    .lightbox-close:hover { color: #fff; }
   </style>
 </head>
 <body>
 
   <!-- =========================================================================
+       SCREEN 0: WELCOME SCREEN
+     ========================================================================= -->
+  <section id="screen-welcome" class="screen active">
+    <h1 class="romantic-heading welcome-title">Welcome Akshitha</h1>
+    <p class="welcome-subtitle">A special space created with love, just for you.</p>
+    <button class="btn" onclick="navigateTo('screen-passcode')">Begin Experience &rarr;</button>
+  </section>
+
+  <!-- =========================================================================
        SCREEN 1: PASSCODE ENTRY SCREEN
      ========================================================================= -->
-  <section id="screen-passcode" class="screen active">
-    <h2>Unlock Your Surprise</h2>
-    <p>Please enter the secret passcode to view your birthday gift.</p>
-    
-    <div class="input-group">
-      <input type="password" id="passcode-input" placeholder="Enter secret passcode" autocomplete="off">
-      <button class="btn" id="passcode-submit-btn">Unlock</button>
+  <section id="screen-passcode" class="screen">
+    <div class="passcode-card">
+      <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
+      <p style="color: #c9a0ab; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
+      
+      <div class="input-group">
+        <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
+        <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 5px;">Unlock</button>
+      </div>
+      
+      <div id="error-message" class="error-msg">Incorrect passcode. Please try again.</div>
+      <div id="loading-message" class="loading-msg">Decrypting memory gallery... Please wait.</div>
     </div>
-    
-    <div id="error-message" class="error-msg">Incorrect passcode. Please try again.</div>
-    <div id="loading-message" class="loading-msg">Decrypting memory gallery... Please wait.</div>
   </section>
 
   <!-- =========================================================================
        SCREEN 2: BIRTHDAY WISH PAGE
      ========================================================================= -->
   <section id="screen-wish" class="screen">
-    <h1 class="wish-title">Happy Birthday, <span id="wife-name-placeholder">[WIFE'S NAME]</span>!</h1>
+    <h1 class="romantic-heading wish-title">Happy Birthday, <span id="wife-name-placeholder">Akshitha</span>!</h1>
     
     <div class="wish-message">
       <!-- REPLACE WITH YOUR PERSONAL MESSAGE -->
-      <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every day with you is a gift.</p>
+      <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every single day with you is a gift I cherish deeply.</p>
     </div>
 
     <!-- Optional Background Music Element -->
@@ -180,7 +305,7 @@
        SCREEN 3 & 4: PHOTO GALLERY & ALBUM FILTER VIEW
      ========================================================================= -->
   <section id="screen-gallery" class="screen">
-    <h2 style="text-align: center; margin-bottom: 20px;">Our Gallery</h2>
+    <h2 class="romantic-heading" style="font-size: 3.5rem; text-align: center; margin-bottom: 10px;">Our Gallery</h2>
 
     <!-- Sub-grouping / Category Filters -->
     <div class="album-filters">
@@ -192,7 +317,7 @@
     <!-- Photo Thumbnails Grid -->
     <div id="gallery-container" class="gallery-grid"></div>
 
-    <div style="text-align: center; margin-top: 30px;">
+    <div style="text-align: center; margin-top: 35px;">
       <button class="btn" onclick="navigateTo('screen-wish')">&larr; Back to Message</button>
     </div>
   </section>
@@ -213,7 +338,7 @@
     /* -------------------------------------------------------------------------
        CONFIG & METADATA
        ------------------------------------------------------------------------- */
-    const WIFE_NAME = "My Dearest"; // Configurable placeholder name
+    const WIFE_NAME = "Akshitha"; // Configurable placeholder name
     const TOTAL_PHOTOS = 50; // Total count of photo1.enc ... photo50.enc
 
     // Store in-memory decrypted image data URLs once processed
