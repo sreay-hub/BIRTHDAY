@@ -127,24 +127,17 @@
       align-items: center;
     }
 
-    /* Animated Calligraphy Typing Effect */
+    /* Smooth Calligraphy Intro - No Cursor Bar */
     .animated-calligraphy {
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
-      border-right: 2px solid rgba(232, 167, 179, 0.7);
-      animation: 
-        writeCalligraphy 3.2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
-        hideCaret 0.4s ease 3.5s forwards;
+      animation: writeCalligraphy 3.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     @keyframes writeCalligraphy {
       from { width: 0%; }
       to { width: 100%; }
-    }
-
-    @keyframes hideCaret {
-      to { border-right-color: transparent; }
     }
 
     .welcome-subtitle {
@@ -154,77 +147,68 @@
       margin-bottom: 30px;
     }
 
-    /* Polaroid Stack Styles */
-    .polaroid-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      margin: 10px 0 25px 0;
-      flex-wrap: wrap;
-    }
-
-    .polaroid-card {
-      background: #fff;
-      padding: 10px 10px 18px 10px;
-      border-radius: 4px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      transform: rotate(-3deg);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      width: 140px;
-    }
-
-    .polaroid-card.polaroid-2 {
-      transform: rotate(4deg) translateY(-8px);
-    }
-
-    .polaroid-card.polaroid-3 {
-      transform: rotate(-2deg);
-    }
-
-    .polaroid-card:hover {
-      transform: scale(1.08) rotate(0deg);
-      box-shadow: 0 12px 30px rgba(232, 167, 179, 0.4);
-      z-index: 5;
-    }
-
-    .polaroid-img-wrapper {
-      width: 120px;
-      height: 120px;
-      background-color: #2b181d;
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .polaroid-img-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .polaroid-caption {
-      display: block;
-      font-family: 'Alex Brush', cursive;
-      color: #2b181d;
-      font-size: 1.25rem;
-      text-align: center;
-      margin-top: 6px;
-    }
-
     /* Screen 1: Passcode Screen Styles */
     #screen-passcode { 
       text-align: center; 
-      max-width: 420px; 
+      max-width: 440px; 
     }
     .passcode-card {
       background: rgba(25, 12, 17, 0.7);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(232, 167, 179, 0.15);
       border-radius: 16px;
-      padding: 40px 30px;
+      padding: 35px 30px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .input-group { margin-top: 25px; }
+
+    /* Creative Secure Polaroid Container Inside Passcode Card */
+    .passcode-polaroid {
+      background: #fff;
+      padding: 10px 10px 16px 10px;
+      border-radius: 4px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      transform: rotate(-2deg);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      width: 150px;
+      margin-bottom: 25px;
+    }
+    .passcode-polaroid:hover {
+      transform: rotate(0deg) scale(1.05);
+      box-shadow: 0 12px 30px rgba(232, 167, 179, 0.35);
+    }
+    .passcode-polaroid-wrapper {
+      width: 130px;
+      height: 130px;
+      background-color: #1a0b10;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .passcode-polaroid-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .passcode-polaroid-placeholder {
+      color: #e8a7b3;
+      font-size: 2.2rem;
+      opacity: 0.6;
+    }
+    .passcode-polaroid-caption {
+      display: block;
+      font-family: 'Alex Brush', cursive;
+      color: #2b181d;
+      font-size: 1.35rem;
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    .input-group { margin-top: 15px; width: 100%; }
     input[type="password"] {
       width: 100%;
       padding: 14px;
@@ -488,7 +472,7 @@
   </style></head><body>
 
   <!-- =========================================================================
-       SCREEN 0: WELCOME SCREEN (WITH ANIMATED CALLIGRAPHY & POLAROID CARDS)
+       SCREEN 0: WELCOME SCREEN (CLEAN, NO POLAROIDS PRE-UNLOCK)
      ========================================================================= -->
   <section id="screen-welcome" class="screen active">
     <h1 class="welcome-title">
@@ -496,39 +480,25 @@
     </h1>
     <p class="welcome-subtitle">A special space created with and for my LOVE</p>
 
-    <!-- Polaroid Showcase Container -->
-    <div class="polaroid-container">
-      <div class="polaroid-card polaroid-1">
-        <div class="polaroid-img-wrapper">
-          <img id="welcome-img-1" src="" alt="Memory 1">
-        </div>
-        <span class="polaroid-caption">Us ❤️</span>
-      </div>
-      
-      <div class="polaroid-card polaroid-2">
-        <div class="polaroid-img-wrapper">
-          <img id="welcome-img-2" src="" alt="Memory 2">
-        </div>
-        <span class="polaroid-caption">Forever ✨</span>
-      </div>
-
-      <div class="polaroid-card polaroid-3">
-        <div class="polaroid-img-wrapper">
-          <img id="welcome-img-3" src="" alt="Memory 3">
-        </div>
-        <span class="polaroid-caption">My Love 🌹</span>
-      </div>
-    </div>
-
     <button class="btn" onclick="navigateTo('screen-passcode')">Begin Experience &rarr;</button>
   </section>
 
   <!-- =========================================================================
-       SCREEN 1: PASSCODE ENTRY SCREEN
+       SCREEN 1: PASSCODE ENTRY SCREEN (WITH SECURE POLAROID PREVIEW)
      ========================================================================= -->
   <section id="screen-passcode" class="screen">
     <div class="passcode-card">
-      <h2 class="romantic-heading" style="font-size: 3.5rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
+      
+      <!-- Polaroid Preview frame inside Unlock Card -->
+      <div class="passcode-polaroid">
+        <div class="passcode-polaroid-wrapper">
+          <span id="passcode-polaroid-lock" class="passcode-polaroid-placeholder">🔒</span>
+          <img id="passcode-polaroid-img" src="" alt="First Memory" style="display: none;">
+        </div>
+        <span class="passcode-polaroid-caption">Us ❤️</span>
+      </div>
+
+      <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
       <p style="color: #c9a0ab; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
       
       <div class="input-group">
@@ -755,7 +725,7 @@
       loadingEl.style.display = 'block';
 
       try {
-        // Fetch test photo from the 'enc/' subfolder
+        // Fetch photo1.enc from the 'enc/' subfolder
         const testRes = await fetch('enc/photo1.enc');
         if (!testRes.ok) throw new Error("File fetch failed");
         const testBuffer = await testRes.arrayBuffer();
@@ -768,7 +738,14 @@
           return;
         }
 
-        decryptedPhotos.length = 0; // Clear previous array
+        // Show decrypted photo1 inside passcode Polaroid preview frame
+        const polaroidImg = document.getElementById('passcode-polaroid-img');
+        const polaroidLock = document.getElementById('passcode-polaroid-lock');
+        polaroidImg.src = testDataUrl;
+        polaroidImg.style.display = 'block';
+        if (polaroidLock) polaroidLock.style.display = 'none';
+
+        decryptedPhotos.length = 0;
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
 
         const remainingFetches = [];
@@ -789,18 +766,13 @@
         await Promise.all(remainingFetches);
         decryptedPhotos.sort((a, b) => a.id - b.id);
 
-        // Populate Welcome Screen Polaroids dynamically after successful decryption
-        if (decryptedPhotos.length > 0) {
-          if (decryptedPhotos[0]) document.getElementById('welcome-img-1').src = decryptedPhotos[0].src;
-          if (decryptedPhotos[1]) document.getElementById('welcome-img-2').src = decryptedPhotos[1].src;
-          if (decryptedPhotos[2]) document.getElementById('welcome-img-3').src = decryptedPhotos[2].src;
-        }
-
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        // Start Cinematic Calendar Animation Sequence
-        startCalendarAnimation();
+        // Brief delay so user sees the Polaroid unlock before calendar animation starts
+        setTimeout(() => {
+          startCalendarAnimation();
+        }, 800);
 
       } catch (err) {
         loadingEl.style.display = 'none';
