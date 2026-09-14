@@ -14,7 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
   <!-- =========================================================================
-        CUSTOM STYLES / CSS SECTION — ORIGINAL SOFT ROMANTIC ROSE THEME
+        CUSTOM STYLES / CSS SECTION — DARK ROMANTIC THEME
       ========================================================================= -->
   <style>
     /* Reset & Base Setup */
@@ -22,8 +22,8 @@
     
     body {
       font-family: 'Poppins', 'Cormorant Garamond', serif;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
-      color: #4a2e35;
+      background: linear-gradient(135deg, #0d0508 0%, #1a080e 50%, #2b0914 100%);
+      color: #e6c2cb;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -37,23 +37,23 @@
       content: '';
       position: absolute;
       border-radius: 50%;
-      filter: blur(90px);
+      filter: blur(100px);
       z-index: 0;
       pointer-events: none;
     }
 
     body::before {
-      width: 400px;
-      height: 400px;
-      background: rgba(255, 182, 193, 0.6);
+      width: 450px;
+      height: 450px;
+      background: rgba(139, 0, 41, 0.25);
       top: 10%;
       left: 10%;
     }
 
     body::after {
-      width: 450px;
-      height: 450px;
-      background: rgba(255, 223, 186, 0.5);
+      width: 500px;
+      height: 500px;
+      background: rgba(80, 0, 20, 0.35);
       bottom: 10%;
       right: 10%;
     }
@@ -84,8 +84,8 @@
     /* Calligraphy & Typography Settings */
     .romantic-heading {
       font-family: 'Alex Brush', cursive;
-      color: #8b263e;
-      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6);
+      color: #ff3366;
+      text-shadow: 0 0 15px rgba(255, 51, 102, 0.6), 0 0 30px rgba(139, 0, 41, 0.4);
       font-weight: 400;
       letter-spacing: 1px;
     }
@@ -93,7 +93,7 @@
     .serif-heading {
       font-family: 'Playfair Display', serif;
       letter-spacing: 1px;
-      color: #6b1d30;
+      color: #f5b3c2;
     }
 
     /* Highlighted Name Style */
@@ -101,15 +101,15 @@
       font-family: 'Playfair Display', serif;
       font-weight: 700;
       letter-spacing: 1px;
-      color: #8b263e;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      color: #ff4d79;
+      text-shadow: 0 0 15px rgba(255, 77, 121, 0.7);
     }
 
-    /* Premium Soft Romantic Buttons */
+    /* Premium Dark Romantic Buttons */
     .btn {
-      background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+      background: linear-gradient(135deg, #800020 0%, #b3003b 100%);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 102, 140, 0.4);
       padding: 14px 34px;
       font-size: 1.1rem;
       font-family: 'Playfair Display', serif;
@@ -117,14 +117,14 @@
       border-radius: 30px;
       cursor: pointer;
       margin-top: 20px;
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.35);
+      box-shadow: 0 8px 25px rgba(128, 0, 32, 0.5), 0 0 15px rgba(179, 0, 59, 0.3);
       transition: all 0.4s ease;
     }
 
     .btn:hover {
-      background: linear-gradient(135deg, #ff5277 0%, #ff63a5 100%);
+      background: linear-gradient(135deg, #a30029 0%, #e6004c 100%);
       transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 12px 25px rgba(255, 82, 119, 0.45);
+      box-shadow: 0 12px 30px rgba(230, 0, 76, 0.6), 0 0 20px rgba(255, 77, 121, 0.4);
     }
 
     /* Screen 0: Welcome Screen */
@@ -157,7 +157,7 @@
 
     .welcome-subtitle {
       font-size: 1.35rem;
-      color: #6b2d3e;
+      color: #d99bb0;
       font-style: italic;
       margin-bottom: 30px;
     }
@@ -169,13 +169,13 @@
     }
 
     .passcode-card {
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(20, 8, 14, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 77, 121, 0.25);
       border-radius: 20px;
       padding: 35px 30px;
-      box-shadow: 0 15px 35px rgba(139, 38, 62, 0.15);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(128, 0, 32, 0.25);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -183,25 +183,25 @@
 
     /* Mini Calendar Card */
     .journey-mini-calendar {
-      background: #ffffff;
-      color: #4a2e35;
+      background: #180a10;
+      color: #e6c2cb;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(139, 38, 62, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(179, 0, 59, 0.2);
       width: 170px;
       margin-bottom: 25px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 77, 121, 0.3);
       transform: rotate(-2deg);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
     .journey-mini-calendar:hover {
       transform: rotate(0deg) scale(1.05);
-      box-shadow: 0 14px 30px rgba(255, 117, 140, 0.3);
+      box-shadow: 0 14px 30px rgba(255, 51, 102, 0.4);
     }
 
     .journey-header {
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, #800020, #b3003b);
       color: #ffffff;
       padding: 6px;
       font-family: 'Poppins', sans-serif;
@@ -223,15 +223,16 @@
       font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
       font-weight: 700;
-      color: #8b263e;
+      color: #ff4d79;
       line-height: 1;
+      text-shadow: 0 0 10px rgba(255, 77, 121, 0.3);
     }
 
     .journey-month {
       font-family: 'Playfair Display', serif;
       font-size: 1rem;
       font-weight: 600;
-      color: #ff758c;
+      color: #ff80a0;
       text-transform: uppercase;
       margin-top: 2px;
     }
@@ -239,7 +240,7 @@
     .journey-year {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.95rem;
-      color: #7a3b4a;
+      color: #b37b8d;
     }
 
     .input-group { margin-top: 15px; width: 100%; }
@@ -248,10 +249,10 @@
       width: 100%;
       padding: 14px;
       font-size: 1.05rem;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 117, 140, 0.4);
+      background: rgba(10, 4, 7, 0.8);
+      border: 1px solid rgba(255, 77, 121, 0.3);
       border-radius: 10px;
-      color: #4a2e35;
+      color: #ffccd5;
       text-align: center;
       margin-bottom: 15px;
       outline: none;
@@ -259,9 +260,9 @@
     }
 
     input[type="password"]:focus {
-      border-color: #ff758c;
-      box-shadow: 0 0 12px rgba(255, 117, 140, 0.35);
-      background: rgba(255, 255, 255, 0.9);
+      border-color: #ff3366;
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+      background: rgba(15, 5, 10, 0.95);
     }
 
     .passcode-preview-container {
@@ -270,8 +271,8 @@
       margin-top: 15px;
       border-radius: 10px;
       overflow: hidden;
-      border: 2px solid #ffffff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      border: 2px solid rgba(255, 77, 121, 0.5);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     }
 
     .passcode-preview-container img {
@@ -281,8 +282,8 @@
       display: block;
     }
 
-    .error-msg { color: #d93856; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
-    .loading-msg { color: #8b263e; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
+    .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
+    .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
 
     /* Calendar Section */
     #screen-calendar { text-align: center; }
@@ -301,47 +302,47 @@
     .calendar-binder {
       width: 100%;
       height: 40px;
-      background: #ffffff;
+      background: #15070d;
       border-radius: 12px 12px 0 0;
-      border: 1px solid rgba(255, 117, 140, 0.3);
+      border: 1px solid rgba(255, 77, 121, 0.3);
       display: flex;
       justify-content: space-around;
       align-items: center;
       padding: 0 20px;
       z-index: 10;
       position: relative;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     }
 
     .ring {
       width: 12px;
       height: 20px;
-      background: linear-gradient(135deg, #ffd700, #d4af37);
+      background: linear-gradient(135deg, #d4af37, #8a7322);
       border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
 
     .calendar-page {
       width: 100%;
       height: 340px;
-      background: #ffffff;
-      color: #4a2e35;
+      background: #180910;
+      color: #e6c2cb;
       border-radius: 0 0 16px 16px;
       position: absolute;
       top: 40px;
       left: 0;
-      box-shadow: 0 15px 35px rgba(139, 38, 62, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(128, 0, 32, 0.3);
       transform-origin: top center;
       backface-visibility: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 77, 121, 0.25);
     }
 
     .calendar-header {
-      border-bottom: 2px solid #ff758c;
+      border-bottom: 2px solid #800020;
       padding-bottom: 10px;
     }
 
@@ -349,15 +350,16 @@
       font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
       font-weight: 700;
-      color: #8b263e;
+      color: #ff3366;
       text-transform: uppercase;
       letter-spacing: 2px;
+      text-shadow: 0 0 12px rgba(255, 51, 102, 0.4);
     }
 
     .calendar-year {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.2rem;
-      color: #ff758c;
+      color: #ff80a0;
       font-weight: 600;
     }
 
@@ -372,7 +374,7 @@
 
     .day-label {
       font-weight: 700;
-      color: #ff758c;
+      color: #ff4d79;
       font-size: 0.8rem;
     }
 
@@ -388,17 +390,17 @@
       position: absolute;
       width: 34px;
       height: 34px;
-      border: 3px solid #ff758c;
+      border: 3px solid #ff3366;
       border-radius: 50%;
-      box-shadow: 0 0 12px rgba(255, 117, 140, 0.6);
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
       animation: circlePulse 1.2s infinite alternate;
       transform: scale(0);
       transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     @keyframes circlePulse {
-      0% { box-shadow: 0 0 8px rgba(255, 117, 140, 0.4); }
-      100% { box-shadow: 0 0 18px rgba(255, 117, 140, 0.8); }
+      0% { box-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
+      100% { box-shadow: 0 0 22px rgba(255, 51, 102, 0.9); }
     }
 
     .tear-off-fly {
@@ -420,17 +422,18 @@
       }
     }
 
-    /* Photo 1 Reveal Screen - Soft Polaroid Design */
+    /* Photo 1 Reveal Screen - Dark Gothic Frame */
     #screen-photo1-reveal {
       text-align: center;
       max-width: 550px;
     }
 
     .photo1-frame {
-      background: #ffffff;
+      background: #180910;
       padding: 18px 18px 30px 18px;
       border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(139, 38, 62, 0.2);
+      border: 1px solid rgba(255, 77, 121, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(128, 0, 32, 0.3);
       transform: scale(0.92);
       opacity: 0;
       animation: photoRevealIn 1.2s forwards ease-out;
@@ -448,7 +451,7 @@
       max-height: 52vh;
       overflow: hidden;
       border-radius: 6px;
-      background: #f8ecee;
+      background: #0d0407;
     }
 
     .photo1-img-wrapper img {
@@ -460,10 +463,11 @@
 
     .photo1-caption {
       font-family: 'Alex Brush', cursive;
-      color: #8b263e;
+      color: #ff3366;
       font-size: 2.4rem;
       margin-top: 15px;
       display: block;
+      text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
     }
 
     /* Screen 2: Birthday Wish Page */
@@ -475,7 +479,7 @@
 
     .wish-title { 
       font-size: 3.8rem; 
-      color: #8b263e; 
+      color: #ff3366; 
       margin-bottom: 25px; 
       line-height: 1.3;
     }
@@ -483,7 +487,7 @@
     .wish-message { 
       font-size: 1.35rem; 
       line-height: 2; 
-      color: #5c2f3b;
+      color: #e6c2cb;
       margin-bottom: 35px; 
       font-weight: 400;
     }
@@ -502,10 +506,10 @@
       overflow: hidden;
       border-radius: 12px;
       cursor: pointer;
-      background: #ffffff;
+      background: #180910;
       padding: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 8px 20px rgba(139, 38, 62, 0.12);
+      border: 1px solid rgba(255, 77, 121, 0.25);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
@@ -519,7 +523,7 @@
 
     .gallery-item:hover {
       transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(255, 117, 140, 0.35);
+      box-shadow: 0 12px 28px rgba(255, 51, 102, 0.4);
     }
 
     .gallery-item:hover img { transform: scale(1.08); }
@@ -534,9 +538,9 @@
     }
 
     .filter-btn {
-      background: rgba(255, 255, 255, 0.5);
-      border: 1px solid rgba(255, 117, 140, 0.4);
-      color: #8b263e;
+      background: rgba(24, 9, 16, 0.7);
+      border: 1px solid rgba(255, 77, 121, 0.3);
+      color: #ff80a0;
       padding: 8px 22px;
       border-radius: 20px;
       cursor: pointer;
@@ -547,10 +551,10 @@
     }
 
     .filter-btn.active, .filter-btn:hover {
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      background: linear-gradient(135deg, #800020, #b3003b);
       color: #fff;
-      border-color: #ff758c;
-      box-shadow: 0 5px 15px rgba(255, 117, 140, 0.3);
+      border-color: #ff3366;
+      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
     }
 
     /* Lightbox Modal */
@@ -558,8 +562,8 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(74, 46, 53, 0.85);
-      backdrop-filter: blur(10px);
+      background: rgba(10, 4, 7, 0.92);
+      backdrop-filter: blur(12px);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -574,8 +578,8 @@
       max-width: 90%; 
       max-height: 82vh; 
       border-radius: 12px; 
-      border: 4px solid #ffffff;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      border: 2px solid rgba(255, 77, 121, 0.4);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px rgba(128, 0, 32, 0.4);
     }
 
     .lightbox-close {
@@ -585,7 +589,7 @@
       transition: color 0.3s;
     }
 
-    .lightbox-close:hover { color: #ff758c; }
+    .lightbox-close:hover { color: #ff3366; }
   </style>
 </head>
 <body>
@@ -618,7 +622,7 @@
       </div>
 
       <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
-      <p style="color: #6b2d3e; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
+      <p style="color: #d99bb0; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
       
       <div class="input-group">
         <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
@@ -658,7 +662,7 @@
           <div class="day-label">S</div>
           <div id="cal-days-container" style="display: contents;"></div>
         </div>
-        <div style="font-size: 0.85rem; color: #ff758c; font-style: italic;">Counting down to your day...</div>
+        <div style="font-size: 0.85rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
       </div>
     </div>
   </section>
@@ -668,7 +672,7 @@
       ========================================================================= -->
   <section id="screen-message" class="screen" style="text-align: center; max-width: 750px;">
     <h2 class="romantic-heading" style="font-size: 3.8rem; margin-bottom: 20px;">For My Dearest</h2>
-    <div style="font-size: 1.35rem; line-height: 2; color: #5c2f3b; margin-bottom: 30px;">
+    <div style="font-size: 1.35rem; line-height: 2; color: #e6c2cb; margin-bottom: 30px;">
       <p>[ Insert your beautiful custom message here ]</p>
     </div>
     <button class="btn" onclick="navigateTo('screen-photo1-reveal')">Our Memories &rarr;</button>
