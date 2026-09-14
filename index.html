@@ -12,8 +12,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
   <!-- =========================================================================
-       CUSTOM STYLES / CSS SECTION — DARK ROMANTIC THEME
-     ========================================================================= -->
+        CUSTOM STYLES / CSS SECTION — DARK ROMANTIC THEME
+      ========================================================================= -->
   <style>
     /* Reset & Base Setup */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -230,8 +230,8 @@
     .loading-msg { color: #e8a7b3; font-size: 0.95rem; margin-top: 15px; display: none; }
 
     /* =========================================================================
-       CINEMATIC CALENDAR ANIMATION STYLES
-     ========================================================================= */
+        CINEMATIC CALENDAR ANIMATION STYLES
+      ========================================================================= */
     #screen-calendar {
       text-align: center;
     }
@@ -472,8 +472,8 @@
   </style></head><body>
 
   <!-- =========================================================================
-       SCREEN 0: WELCOME SCREEN (CLEAN INTRO)
-     ========================================================================= -->
+        SCREEN 0: WELCOME SCREEN (CLEAN INTRO)
+      ========================================================================= -->
   <section id="screen-welcome" class="screen active">
     <h1 class="welcome-title">
       <span class="romantic-heading animated-calligraphy">Welcome Akshitha</span>
@@ -484,8 +484,8 @@
   </section>
 
   <!-- =========================================================================
-       SCREEN 1: PASSCODE ENTRY SCREEN (WITH SECURE POLAROID PREVIEW)
-     ========================================================================= -->
+        SCREEN 1: PASSCODE ENTRY SCREEN (WITH SECURE POLAROID PREVIEW)
+      ========================================================================= -->
   <section id="screen-passcode" class="screen">
     <div class="passcode-card">
       
@@ -512,8 +512,8 @@
   </section>
 
   <!-- =========================================================================
-       CINEMATIC CALENDAR SCREEN
-     ========================================================================= -->
+        CINEMATIC CALENDAR SCREEN
+      ========================================================================= -->
   <section id="screen-calendar" class="screen">
     <div class="calendar-container">
       <div class="calendar-binder">
@@ -540,8 +540,8 @@
   </section>
 
   <!-- =========================================================================
-       SCREEN 2: BIRTHDAY WISH PAGE
-     ========================================================================= -->
+        SCREEN 2: BIRTHDAY WISH PAGE
+      ========================================================================= -->
   <section id="screen-wish" class="screen">
     <h1 class="wish-title">
       <span class="romantic-heading">Happy Birthday,</span> 
@@ -556,8 +556,8 @@
   </section>
 
   <!-- =========================================================================
-       SCREEN 3 & 4: PHOTO GALLERY & ALBUM FILTER VIEW
-     ========================================================================= -->
+        SCREEN 3 & 4: PHOTO GALLERY & ALBUM FILTER VIEW
+      ========================================================================= -->
   <section id="screen-gallery" class="screen">
     <h2 class="romantic-heading" style="font-size: 4rem; text-align: center; margin-bottom: 10px;">Our Gallery</h2>
 
@@ -575,16 +575,16 @@
   </section>
 
   <!-- =========================================================================
-       SCREEN 5: LIGHTBOX / DETAIL VIEW MODAL
-     ========================================================================= -->
+        SCREEN 5: LIGHTBOX / DETAIL VIEW MODAL
+      ========================================================================= -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
     <span class="lightbox-close" onclick="closeLightbox(event, force=true)">&times;</span>
     <img id="lightbox-img" src="" alt="Full-size memory">
   </div>
 
   <!-- =========================================================================
-       FUNCTIONAL JAVASCRIPT LOGIC WITH COMPREHENSIVE OPENSSL DECRYPTION
-     ========================================================================= -->
+        FUNCTIONAL JAVASCRIPT LOGIC WITH COMPREHENSIVE OPENSSL DECRYPTION
+      ========================================================================= -->
   <script>
     const WIFE_NAME = "Akshitha";
     const TOTAL_PHOTOS = 50;
@@ -758,10 +758,10 @@
       loadingEl.style.display = 'block';
 
       try {
-        // Fetch photo1.enc from the 'enc/' subfolder
-        const testRes = await fetch('enc/photo1.enc');
+        // Fetch photo1.enc from the 'photos/' subfolder
+        const testRes = await fetch('photos/photo1.enc');
         if (!testRes.ok) {
-          errorEl.textContent = "Could not find enc/photo1.enc. Check folder path.";
+          errorEl.textContent = "Could not find photos/photo1.enc. Check folder path.";
           errorEl.style.display = 'block';
           loadingEl.style.display = 'none';
           return;
@@ -790,7 +790,7 @@
         const remainingFetches = [];
         for (let i = 2; i <= TOTAL_PHOTOS; i++) {
           remainingFetches.push(
-            fetch(`enc/photo${i}.enc`)
+            fetch(`photos/photo${i}.enc`)
               .then(res => res.arrayBuffer())
               .then(buf => {
                 const dataUrl = decryptOpenSSLAES(buf, passcode);
