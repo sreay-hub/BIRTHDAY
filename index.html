@@ -164,48 +164,59 @@
       align-items: center;
     }
 
-    /* Creative Secure Polaroid Container Inside Passcode Card */
-    .passcode-polaroid {
-      background: #fff;
-      padding: 10px 10px 16px 10px;
-      border-radius: 4px;
+    /* Mini Calendar Card for "Our Journey Started On" */
+    .journey-mini-calendar {
+      background: #faf4f5;
+      color: #2b181d;
+      border-radius: 10px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      width: 170px;
+      margin-bottom: 25px;
+      overflow: hidden;
+      border: 1px solid rgba(232, 167, 179, 0.4);
       transform: rotate(-2deg);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      width: 150px;
-      margin-bottom: 25px;
     }
-    .passcode-polaroid:hover {
+    .journey-mini-calendar:hover {
       transform: rotate(0deg) scale(1.05);
       box-shadow: 0 12px 30px rgba(232, 167, 179, 0.35);
     }
-    .passcode-polaroid-wrapper {
-      width: 130px;
-      height: 130px;
-      background-color: #1a0b10;
-      border-radius: 2px;
-      overflow: hidden;
+    .journey-header {
+      background: #6e2a39;
+      color: #e8a7b3;
+      padding: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .journey-body {
+      padding: 12px 10px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
     }
-    .passcode-polaroid-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .passcode-polaroid-placeholder {
-      color: #e8a7b3;
+    .journey-day {
+      font-family: 'Playfair Display', serif;
       font-size: 2.2rem;
-      opacity: 0.6;
+      font-weight: 700;
+      color: #6e2a39;
+      line-height: 1;
     }
-    .passcode-polaroid-caption {
-      display: block;
-      font-family: 'Alex Brush', cursive;
-      color: #2b181d;
-      font-size: 1.35rem;
-      text-align: center;
-      margin-top: 6px;
+    .journey-month {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #a3485e;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .journey-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: #853344;
     }
 
     .input-group { margin-top: 15px; width: 100%; }
@@ -242,6 +253,11 @@
       position: relative;
       perspective: 1000px;
       margin: 20px auto;
+      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .calendar-container.zoom-in {
+      transform: scale(2.2);
     }
 
     .calendar-binder {
@@ -346,23 +362,68 @@
       100% { box-shadow: 0 0 18px rgba(217, 56, 86, 0.9); }
     }
 
-    .tear-off {
-      animation: tearAnim 0.7s forwards ease-in;
+    .tear-off-fly {
+      animation: flyAwayAnim 0.75s forwards ease-in;
     }
 
-    @keyframes tearAnim {
+    @keyframes flyAwayAnim {
       0% {
-        transform: rotateX(0deg);
+        transform: rotateX(0deg) translate(0, 0) rotateZ(0deg);
         opacity: 1;
       }
       50% {
-        transform: rotateX(-90deg) rotateZ(-5deg);
+        transform: rotateX(-60deg) translate(var(--flyX, 50px), -40px) rotateZ(var(--flyRot, 15deg));
         opacity: 0.8;
       }
       100% {
-        transform: rotateX(-180deg) translateY(200px) rotateZ(-15deg);
+        transform: rotateX(-160deg) translate(var(--flyXFar, 250px), 300px) rotateZ(var(--flyRotFar, 45deg));
         opacity: 0;
       }
+    }
+
+    /* Dedicated Photo 1 Reveal Screen */
+    #screen-photo1-reveal {
+      text-align: center;
+      max-width: 550px;
+    }
+    .photo1-frame {
+      background: #fff;
+      padding: 15px 15px 25px 15px;
+      border-radius: 6px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px rgba(232, 167, 179, 0.2);
+      transform: scale(0.92);
+      opacity: 0;
+      animation: photoRevealIn 1.2s forwards ease-out;
+    }
+
+    @keyframes photoRevealIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .photo1-img-wrapper {
+      width: 100%;
+      max-height: 52vh;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #1a0b10;
+    }
+
+    .photo1-img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo1-caption {
+      font-family: 'Alex Brush', cursive;
+      color: #2b181d;
+      font-size: 2.2rem;
+      margin-top: 12px;
+      display: block;
     }
 
     /* Screen 2: Birthday Wish Page Styles */
@@ -484,18 +545,19 @@
   </section>
 
   <!-- =========================================================================
-        SCREEN 1: PASSCODE ENTRY SCREEN (WITH SECURE POLAROID PREVIEW)
+        SCREEN 1: PASSCODE ENTRY SCREEN (WITH JOURNEY MINI-CALENDAR)
       ========================================================================= -->
   <section id="screen-passcode" class="screen">
     <div class="passcode-card">
       
-      <!-- Polaroid Preview frame inside Unlock Card -->
-      <div class="passcode-polaroid">
-        <div class="passcode-polaroid-wrapper">
-          <span id="passcode-polaroid-lock" class="passcode-polaroid-placeholder">🔒</span>
-          <img id="passcode-polaroid-img" src="" alt="First Memory" style="display: none;">
+      <!-- Mini Calendar Container: Our Journey Started On -->
+      <div class="journey-mini-calendar">
+        <div class="journey-header">Our Journey Started On</div>
+        <div class="journey-body">
+          <div class="journey-day">28</div>
+          <div class="journey-month">April</div>
+          <div class="journey-year">2022</div>
         </div>
-        <span class="passcode-polaroid-caption">Us ❤️</span>
       </div>
 
       <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
@@ -515,7 +577,7 @@
         CINEMATIC CALENDAR SCREEN
       ========================================================================= -->
   <section id="screen-calendar" class="screen">
-    <div class="calendar-container">
+    <div id="calendar-container" class="calendar-container">
       <div class="calendar-binder">
         <div class="ring"></div>
         <div class="ring"></div>
@@ -537,6 +599,19 @@
         <div style="font-size: 0.85rem; color: #853344; font-style: italic;">Counting down to your day...</div>
       </div>
     </div>
+  </section>
+
+  <!-- =========================================================================
+        DEDICATED PHOTO 1 REVEAL SCREEN
+      ========================================================================= -->
+  <section id="screen-photo1-reveal" class="screen">
+    <div class="photo1-frame">
+      <div class="photo1-img-wrapper">
+        <img id="reveal-photo1-img" src="" alt="Special Memory">
+      </div>
+      <span class="photo1-caption">Our Special Beginning ❤️</span>
+    </div>
+    <button class="btn" onclick="navigateTo('screen-wish')" style="margin-top: 25px;">Continue to Wish &rarr;</button>
   </section>
 
   <!-- =========================================================================
@@ -583,7 +658,7 @@
   </div>
 
   <!-- =========================================================================
-        FUNCTIONAL JAVASCRIPT LOGIC WITH COMPREHENSIVE OPENSSL DECRYPTION
+        FUNCTIONAL JAVASCRIPT LOGIC
       ========================================================================= -->
   <script>
     const WIFE_NAME = "Akshitha";
@@ -605,7 +680,7 @@
     }
 
     /* -------------------------------------------------------------------------
-       CINEMATIC CALENDAR ANIMATION LOGIC
+        CINEMATIC CALENDAR ANIMATION WITH RANDOMIZED FLY AWAY & ZOOM
        ------------------------------------------------------------------------- */
     const monthsList = [
       "January", "February", "March", "April", "May", "June", 
@@ -635,6 +710,8 @@
 
     function startCalendarAnimation() {
       navigateTo('screen-calendar');
+      const containerEl = document.getElementById('calendar-container');
+      containerEl.classList.remove('zoom-in');
       let currentMonthIndex = 0;
 
       function stepAnimation() {
@@ -644,16 +721,28 @@
 
           setTimeout(() => {
             const page = document.getElementById('active-page');
-            page.classList.add('tear-off');
+            
+            // Generate randomized fly-off trajectory for page tearing effect
+            const randomX = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 80);
+            const randomXFar = randomX * 3;
+            const randomRot = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.random() * 25);
+            
+            page.style.setProperty('--flyX', `${randomX}px`);
+            page.style.setProperty('--flyRot', `${randomRot}deg`);
+            page.style.setProperty('--flyXFar', `${randomXFar}px`);
+            page.style.setProperty('--flyRotFar', `${randomRot * 2}deg`);
+
+            page.classList.add('tear-off-fly');
 
             setTimeout(() => {
-              page.classList.remove('tear-off');
+              page.classList.remove('tear-off-fly');
               currentMonthIndex++;
               stepAnimation();
-            }, 550);
-          }, 350);
+            }, 650);
+          }, 400);
 
         } else {
+          // September Highlight & Zoom Logic
           document.getElementById('cal-month-title').textContent = "September";
           renderMonthDays(8);
 
@@ -662,8 +751,14 @@
             if (circle) circle.style.transform = 'scale(1)';
 
             setTimeout(() => {
-              navigateTo('screen-wish');
-            }, 2200);
+              // Smooth Zoom into September 24
+              containerEl.classList.add('zoom-in');
+
+              setTimeout(() => {
+                // Transition cleanly to Photo 1 reveal page
+                navigateTo('screen-photo1-reveal');
+              }, 1200);
+            }, 1400);
           }, 600);
         }
       }
@@ -672,19 +767,18 @@
     }
 
     /* -------------------------------------------------------------------------
-       MULTI-MODE OPENSSL AES DECRYPTION HANDLER
+        MULTI-MODE OPENSSL AES DECRYPTION HANDLER
        ------------------------------------------------------------------------- */
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
       try {
         const u8 = new Uint8Array(encryptedArrayBuffer);
         const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
         
-        // Mode 1: Standard OpenSSL Salted binary output
         if (headerStr === "Salted__") {
           const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
           const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
 
-          // Strategy A: OpenSSL PBKDF2 with 100,000 iterations (OpenSSL 3.0 default)
+          // OpenSSL PBKDF2 100,000 iterations
           try {
             const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 100000, hasher: CryptoJS.algo.SHA256 });
             const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
@@ -694,7 +788,7 @@
             if (b64 && b64.length > 50) return 'data:image/jpeg;base64,' + b64;
           } catch(e) {}
 
-          // Strategy B: OpenSSL PBKDF2 with 10,000 iterations (OpenSSL 1.1 default)
+          // OpenSSL PBKDF2 10,000 iterations
           try {
             const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
             const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
@@ -704,7 +798,7 @@
             if (b64 && b64.length > 50) return 'data:image/jpeg;base64,' + b64;
           } catch(e) {}
 
-          // Strategy C: Legacy OpenSSL EVP_BytesToKey (MD5 derivation)
+          // Legacy MD5 Key Derivation
           try {
             let passWordArray = CryptoJS.enc.Utf8.parse(password);
             let hasher = CryptoJS.algo.MD5.create();
@@ -730,7 +824,6 @@
           } catch(e) {}
         }
 
-        // Mode 2: Direct Ciphertext / Base64 Encrypted String
         const rawString = String.fromCharCode.apply(null, u8);
         const decDirect = CryptoJS.AES.decrypt(rawString, password);
         const b64Direct = CryptoJS.enc.Base64.stringify(decDirect);
@@ -758,7 +851,6 @@
       loadingEl.style.display = 'block';
 
       try {
-        // Fetch photo1.enc from the 'photos/' subfolder
         const testRes = await fetch('photos/photo1.enc');
         if (!testRes.ok) {
           errorEl.textContent = "Could not find photos/photo1.enc. Check folder path.";
@@ -777,12 +869,8 @@
           return;
         }
 
-        // Show decrypted photo1 inside passcode Polaroid preview frame
-        const polaroidImg = document.getElementById('passcode-polaroid-img');
-        const polaroidLock = document.getElementById('passcode-polaroid-lock');
-        polaroidImg.src = testDataUrl;
-        polaroidImg.style.display = 'block';
-        if (polaroidLock) polaroidLock.style.display = 'none';
+        // Set decrypted photo1.enc source on the standalone reveal screen
+        document.getElementById('reveal-photo1-img').src = testDataUrl;
 
         decryptedPhotos.length = 0;
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
@@ -808,9 +896,8 @@
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        setTimeout(() => {
-          startCalendarAnimation();
-        }, 800);
+        // Start calendar sequence leading directly to photo1 reveal screen
+        startCalendarAnimation();
 
       } catch (err) {
         loadingEl.style.display = 'none';
@@ -820,7 +907,7 @@
     }
 
     /* -------------------------------------------------------------------------
-       GALLERY & LIGHTBOX LOGIC
+        GALLERY & LIGHTBOX LOGIC
        ------------------------------------------------------------------------- */
     function renderGallery(filterCategory) {
       const container = document.getElementById('gallery-container');
