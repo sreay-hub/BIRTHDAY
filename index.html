@@ -161,6 +161,146 @@
     .error-msg { color: #e66a77; font-size: 0.95rem; margin-top: 15px; display: none; }
     .loading-msg { color: #e8a7b3; font-size: 0.95rem; margin-top: 15px; display: none; }
 
+    /* =========================================================================
+       CINEMATIC CALENDAR ANIMATION STYLES
+     ========================================================================= */
+    #screen-calendar {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .calendar-container {
+      width: 320px;
+      height: 380px;
+      position: relative;
+      perspective: 1000px;
+      margin: 20px auto;
+    }
+
+    .calendar-binder {
+      width: 100%;
+      height: 40px;
+      background: #2a151b;
+      border-radius: 8px 8px 0 0;
+      border: 1px solid rgba(232, 167, 179, 0.3);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 10;
+      position: relative;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .ring {
+      width: 12px;
+      height: 20px;
+      background: linear-gradient(135deg, #d4af37, #8a7322);
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    }
+
+    .calendar-page {
+      width: 100%;
+      height: 340px;
+      background: #faf4f5;
+      color: #2b181d;
+      border-radius: 0 0 12px 12px;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transform-origin: top center;
+      backface-visibility: hidden;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .calendar-header {
+      border-bottom: 2px solid #6e2a39;
+      padding-bottom: 10px;
+    }
+
+    .calendar-month {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #6e2a39;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .calendar-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: #853344;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-top: 15px;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+    }
+
+    .day-label {
+      font-weight: 700;
+      color: #a3485e;
+      font-size: 0.8rem;
+    }
+
+    .day-number {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .highlight-circle {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border: 3px solid #d93856;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(217, 56, 86, 0.6);
+      animation: circlePulse 1.2s infinite alternate;
+      transform: scale(0);
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes circlePulse {
+      0% { box-shadow: 0 0 8px rgba(217, 56, 86, 0.5); }
+      100% { box-shadow: 0 0 18px rgba(217, 56, 86, 0.9); }
+    }
+
+    .tear-off {
+      animation: tearAnim 0.7s forwards ease-in;
+    }
+
+    @keyframes tearAnim {
+      0% {
+        transform: rotateX(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: rotateX(-90deg) rotateZ(-5deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: rotateX(-180deg) translateY(200px) rotateZ(-15deg);
+        opacity: 0;
+      }
+    }
+
     /* Screen 2: Birthday Wish Page Styles */
     #screen-wish { 
       text-align: center; 
@@ -276,7 +416,7 @@
       <span class="romantic-heading">Welcome</span> 
       <span class="highlight-name">Akshitha</span>
     </h1>
-    <p class="welcome-subtitle">A special space created with love, just for you.</p>
+    <p class="welcome-subtitle">A special space created with and for my LOVE</p>
     <button class="btn" onclick="navigateTo('screen-passcode')">Begin Experience &rarr;</button>
   </section>
 
@@ -299,6 +439,36 @@
   </section>
 
   <!-- =========================================================================
+       CINEMATIC CALENDAR SCREEN
+     ========================================================================= -->
+  <section id="screen-calendar" class="screen">
+    <div class="calendar-container">
+      <div class="calendar-binder">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+      </div>
+
+      <!-- Current Displaying Calendar Page -->
+      <div id="active-page" class="calendar-page">
+        <div class="calendar-header">
+          <div id="cal-month-title" class="calendar-month">January</div>
+          <div class="calendar-year">2026</div>
+        </div>
+        
+        <div class="calendar-grid">
+          <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
+          <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
+          <div class="day-label">S</div>
+          <!-- Days populated dynamically via JavaScript -->
+          <div id="cal-days-container" style="display: contents;"></div>
+        </div>
+        <div style="font-size: 0.85rem; color: #853344; font-style: italic;">Counting down to your day...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
        SCREEN 2: BIRTHDAY WISH PAGE
      ========================================================================= -->
   <section id="screen-wish" class="screen">
@@ -308,12 +478,8 @@
     </h1>
     
     <div class="wish-message">
-      <!-- REPLACE WITH YOUR PERSONAL MESSAGE -->
       <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every single day with you is a gift I cherish deeply.</p>
     </div>
-
-    <!-- Optional Background Music Element -->
-    <!-- <audio id="bg-music" src="path/to/music.mp3" loop></audio> -->
 
     <button class="btn" onclick="navigateTo('screen-gallery')">View Our Memories &rarr;</button>
   </section>
@@ -324,14 +490,12 @@
   <section id="screen-gallery" class="screen">
     <h2 class="romantic-heading" style="font-size: 4rem; text-align: center; margin-bottom: 10px;">Our Gallery</h2>
 
-    <!-- Sub-grouping / Category Filters -->
     <div class="album-filters">
       <button class="filter-btn active" onclick="filterAlbum('all')">All Photos</button>
       <button class="filter-btn" onclick="filterAlbum('trips')">Our Trips</button>
       <button class="filter-btn" onclick="filterAlbum('favorites')">Favorites</button>
     </div>
 
-    <!-- Photo Thumbnails Grid -->
     <div id="gallery-container" class="gallery-grid"></div>
 
     <div style="text-align: center; margin-top: 35px;">
@@ -347,21 +511,14 @@
     <img id="lightbox-img" src="" alt="Full-size memory">
   </div>
 
-
   <!-- =========================================================================
        FUNCTIONAL JAVASCRIPT LOGIC
      ========================================================================= -->
   <script>
-    /* -------------------------------------------------------------------------
-       CONFIG & METADATA
-       ------------------------------------------------------------------------- */
-    const WIFE_NAME = "Akshitha"; // Configurable placeholder name
-    const TOTAL_PHOTOS = 50; // Total count of photo1.enc ... photo50.enc
-
-    // Store in-memory decrypted image data URLs once processed
+    const WIFE_NAME = "Akshitha";
+    const TOTAL_PHOTOS = 50;
     const decryptedPhotos = [];
 
-    // Optional album categories (maps photo index to category)
     function getCategoryForPhoto(index) {
       if (index % 3 === 0) return 'trips';
       if (index % 2 === 0) return 'favorites';
@@ -370,9 +527,6 @@
 
     document.getElementById('wife-name-placeholder').textContent = WIFE_NAME;
 
-    /* -------------------------------------------------------------------------
-       SCREEN NAVIGATION CONTROLLER
-       ------------------------------------------------------------------------- */
     function navigateTo(screenId) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const targetScreen = document.getElementById(screenId);
@@ -380,23 +534,92 @@
     }
 
     /* -------------------------------------------------------------------------
-       OPENSSL-COMPATIBLE AES DECRYPTION FUNCTION
-       Handles decryption of AES-256-CBC files encrypted via PBKDF2 with Salt
+       CINEMATIC CALENDAR ANIMATION LOGIC
+       ------------------------------------------------------------------------- */
+    const monthsList = [
+      "January", "February", "March", "April", "May", "June", 
+      "July", "August", "September"
+    ];
+
+    function renderMonthDays(monthIdx) {
+      const container = document.getElementById('cal-days-container');
+      container.innerHTML = '';
+      
+      // Standard days count for simulation
+      const daysInMonth = monthIdx === 1 ? 28 : (monthIdx % 2 === 0 ? 31 : 30);
+      
+      for (let i = 1; i <= daysInMonth; i++) {
+        const div = document.createElement('div');
+        div.className = 'day-number';
+        div.textContent = i;
+        
+        if (monthIdx === 8 && i === 24) { // September 24
+          const circle = document.createElement('div');
+          circle.className = 'highlight-circle';
+          circle.id = 'date-highlight-circle';
+          div.appendChild(circle);
+        }
+        container.appendChild(div);
+      }
+    }
+
+    function startCalendarAnimation() {
+      navigateTo('screen-calendar');
+      let currentMonthIndex = 0;
+
+      function stepAnimation() {
+        if (currentMonthIndex < monthsList.length - 1) {
+          // Update month display
+          document.getElementById('cal-month-title').textContent = monthsList[currentMonthIndex];
+          renderMonthDays(currentMonthIndex);
+
+          // Trigger page tear animation after delay
+          setTimeout(() => {
+            const page = document.getElementById('active-page');
+            page.classList.add('tear-off');
+
+            setTimeout(() => {
+              page.classList.remove('tear-off');
+              currentMonthIndex++;
+              stepAnimation();
+            }, 550);
+          }, 350);
+
+        } else {
+          // Reached September!
+          document.getElementById('cal-month-title').textContent = "September";
+          renderMonthDays(8);
+
+          // Animate red circle marking on September 24
+          setTimeout(() => {
+            const circle = document.getElementById('date-highlight-circle');
+            if (circle) circle.style.transform = 'scale(1)';
+
+            // Transition to Welcome/Wish screen after marking
+            setTimeout(() => {
+              navigateTo('screen-wish');
+            }, 2200);
+          }, 600);
+        }
+      }
+
+      stepAnimation();
+    }
+
+    /* -------------------------------------------------------------------------
+       DECRYPTION & UNLOCK HANDLERS
        ------------------------------------------------------------------------- */
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
       try {
         const u8 = new Uint8Array(encryptedArrayBuffer);
-        
-        // OpenSSL files start with "Salted__" header (8 bytes) + 8-byte salt
         const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
-        if (headerStr !== "Salted__") return null; // Invalid OpenSSL payload
+        if (headerStr !== "Salted__") return null;
 
         const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
         const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
 
-        // Derive key and IV matching OpenSSL -pbkdf2 behavior
         const derivedKeys = CryptoJS.PBKDF2(password, salt, {
-          keySize: (256 + 128) / 32, // 256 bits key + 128 bits IV
+          keySize: (256 + 128) / 32,
           iterations: 10000,
           hasher: CryptoJS.algo.SHA256
         });
@@ -404,14 +627,12 @@
         const key = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(0, 8));
         const iv = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(8, 12));
 
-        // Decrypt
         const decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, {
           iv: iv,
           mode: CryptoJS.mode.CBC,
           padding: CryptoJS.pad.Pkcs7
         });
 
-        // Convert decrypted WordArray to base64
         const base64 = CryptoJS.enc.Base64.stringify(decrypted);
         if (!base64 || base64.length === 0) return null;
 
@@ -421,9 +642,6 @@
       }
     }
 
-    /* -------------------------------------------------------------------------
-       PASSCODE SUBMISSION & DATA FETCHING LOGIC
-       ------------------------------------------------------------------------- */
     document.getElementById('passcode-submit-btn').addEventListener('click', handleUnlock);
     document.getElementById('passcode-input').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleUnlock();
@@ -440,24 +658,20 @@
       loadingEl.style.display = 'block';
 
       try {
-        // Step 1: Fetch photo1.enc to test passcode validity
         const testRes = await fetch('photo1.enc');
         if (!testRes.ok) throw new Error("File fetch failed");
         const testBuffer = await testRes.arrayBuffer();
         
         const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
 
-        // Step 2: Validate decryption
         if (!testDataUrl) {
           errorEl.style.display = 'block';
           loadingEl.style.display = 'none';
           return;
         }
 
-        // Store first decrypted photo
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
 
-        // Step 3: Passcode is verified! Fetch and decrypt remaining files in background
         const remainingFetches = [];
         for (let i = 2; i <= TOTAL_PHOTOS; i++) {
           remainingFetches.push(
@@ -469,23 +683,18 @@
                   decryptedPhotos.push({ id: i, src: dataUrl, category: getCategoryForPhoto(i) });
                 }
               })
-              .catch(() => {}) // Skip missing files gracefully
+              .catch(() => {})
           );
         }
 
         await Promise.all(remainingFetches);
-
-        // Sort by photo ID to maintain sequence
         decryptedPhotos.sort((a, b) => a.id - b.id);
 
-        // Step 4: Populate Gallery & Navigate to Wish Page
         renderGallery('all');
         loadingEl.style.display = 'none';
-        
-        // Optional music playback trigger:
-        // document.getElementById('bg-music').play();
 
-        navigateTo('screen-wish');
+        // Start Cinematic Calendar Animation Sequence
+        startCalendarAnimation();
 
       } catch (err) {
         loadingEl.style.display = 'none';
@@ -494,7 +703,7 @@
     }
 
     /* -------------------------------------------------------------------------
-       GALLERY RENDER & ALBUM FILTERING
+       GALLERY & LIGHTBOX LOGIC
        ------------------------------------------------------------------------- */
     function renderGallery(filterCategory) {
       const container = document.getElementById('gallery-container');
@@ -522,9 +731,6 @@
       renderGallery(category);
     }
 
-    /* -------------------------------------------------------------------------
-       LIGHTBOX HANDLERS
-       ------------------------------------------------------------------------- */
     function openLightbox(src) {
       document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox').classList.add('active');
