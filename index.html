@@ -3,12 +3,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A Special Surprise</title>
 
-  <!-- Google Fonts: Alex Brush for elegant calligraphy headers, Playfair Display for readable serif titles, Cormorant Garamond for subtexts -->
+  <!-- Google Fonts: Alex Brush for calligraphy headers, Playfair Display for serif titles, Cormorant Garamond for subtexts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <!-- CryptoJS Library for AES PBKDF2 Client-Side Decryption -->
+  <!-- CryptoJS Library for AES Client-Side Decryption -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
   <!-- =========================================================================
@@ -472,7 +472,7 @@
   </style></head><body>
 
   <!-- =========================================================================
-       SCREEN 0: WELCOME SCREEN (CLEAN, NO POLAROIDS PRE-UNLOCK)
+       SCREEN 0: WELCOME SCREEN (CLEAN INTRO)
      ========================================================================= -->
   <section id="screen-welcome" class="screen active">
     <h1 class="welcome-title">
@@ -506,7 +506,7 @@
         <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 5px;">Unlock</button>
       </div>
       
-      <div id="error-message" class="error-msg">Incorrect passcode. Please try again.</div>
+      <div id="error-message" class="error-msg">Incorrect passcode or file path error.</div>
       <div id="loading-message" class="loading-msg">Decrypting memory gallery... Please wait.</div>
     </div>
   </section>
@@ -522,7 +522,6 @@
         <div class="ring"></div>
       </div>
 
-      <!-- Current Displaying Calendar Page -->
       <div id="active-page" class="calendar-page">
         <div class="calendar-header">
           <div id="cal-month-title" class="calendar-month">January</div>
@@ -533,7 +532,6 @@
           <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
           <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
           <div class="day-label">S</div>
-          <!-- Days populated dynamically via JavaScript -->
           <div id="cal-days-container" style="display: contents;"></div>
         </div>
         <div style="font-size: 0.85rem; color: #853344; font-style: italic;">Counting down to your day...</div>
@@ -585,7 +583,7 @@
   </div>
 
   <!-- =========================================================================
-       FUNCTIONAL JAVASCRIPT LOGIC
+       FUNCTIONAL JAVASCRIPT LOGIC WITH COMPREHENSIVE OPENSSL DECRYPTION
      ========================================================================= -->
   <script>
     const WIFE_NAME = "Akshitha";
@@ -674,36 +672,71 @@
     }
 
     /* -------------------------------------------------------------------------
-       DECRYPTION & UNLOCK HANDLERS
+       MULTI-MODE OPENSSL AES DECRYPTION HANDLER
        ------------------------------------------------------------------------- */
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
       try {
         const u8 = new Uint8Array(encryptedArrayBuffer);
         const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
-        if (headerStr !== "Salted__") return null;
+        
+        // Mode 1: Standard OpenSSL Salted binary output
+        if (headerStr === "Salted__") {
+          const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
+          const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
 
-        const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
-        const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
+          // Strategy A: OpenSSL PBKDF2 with 100,000 iterations (OpenSSL 3.0 default)
+          try {
+            const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 100000, hasher: CryptoJS.algo.SHA256 });
+            const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
+            const iv = CryptoJS.lib.WordArray.create(dKeys.words.slice(8, 12));
+            const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            const b64 = CryptoJS.enc.Base64.stringify(dec);
+            if (b64 && b64.length > 50) return 'data:image/jpeg;base64,' + b64;
+          } catch(e) {}
 
-        const derivedKeys = CryptoJS.PBKDF2(password, salt, {
-          keySize: (256 + 128) / 32,
-          iterations: 10000,
-          hasher: CryptoJS.algo.SHA256
-        });
+          // Strategy B: OpenSSL PBKDF2 with 10,000 iterations (OpenSSL 1.1 default)
+          try {
+            const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
+            const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
+            const iv = CryptoJS.lib.WordArray.create(dKeys.words.slice(8, 12));
+            const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            const b64 = CryptoJS.enc.Base64.stringify(dec);
+            if (b64 && b64.length > 50) return 'data:image/jpeg;base64,' + b64;
+          } catch(e) {}
 
-        const key = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(0, 8));
-        const iv = CryptoJS.lib.WordArray.create(derivedKeys.words.slice(8, 12));
+          // Strategy C: Legacy OpenSSL EVP_BytesToKey (MD5 derivation)
+          try {
+            let passWordArray = CryptoJS.enc.Utf8.parse(password);
+            let hasher = CryptoJS.algo.MD5.create();
+            hasher.update(passWordArray);
+            hasher.update(salt);
+            let result = hasher.finalize();
+            let dKey = result.clone();
+            
+            while (dKey.words.length < 12) {
+              hasher = CryptoJS.algo.MD5.create();
+              hasher.update(result);
+              hasher.update(passWordArray);
+              hasher.update(salt);
+              result = hasher.finalize();
+              dKey.concat(result);
+            }
+            
+            const key = CryptoJS.lib.WordArray.create(dKey.words.slice(0, 8));
+            const iv = CryptoJS.lib.WordArray.create(dKey.words.slice(8, 12));
+            const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            const b64 = CryptoJS.enc.Base64.stringify(dec);
+            if (b64 && b64.length > 50) return 'data:image/jpeg;base64,' + b64;
+          } catch(e) {}
+        }
 
-        const decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, {
-          iv: iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-        });
+        // Mode 2: Direct Ciphertext / Base64 Encrypted String
+        const rawString = String.fromCharCode.apply(null, u8);
+        const decDirect = CryptoJS.AES.decrypt(rawString, password);
+        const b64Direct = CryptoJS.enc.Base64.stringify(decDirect);
+        if (b64Direct && b64Direct.length > 50) return 'data:image/jpeg;base64,' + b64Direct;
 
-        const base64 = CryptoJS.enc.Base64.stringify(decrypted);
-        if (!base64 || base64.length === 0) return null;
-
-        return 'data:image/jpeg;base64,' + base64;
+        return null;
       } catch (e) {
         return null;
       }
@@ -727,12 +760,18 @@
       try {
         // Fetch photo1.enc from the 'enc/' subfolder
         const testRes = await fetch('enc/photo1.enc');
-        if (!testRes.ok) throw new Error("File fetch failed");
-        const testBuffer = await testRes.arrayBuffer();
+        if (!testRes.ok) {
+          errorEl.textContent = "Could not find enc/photo1.enc. Check folder path.";
+          errorEl.style.display = 'block';
+          loadingEl.style.display = 'none';
+          return;
+        }
         
+        const testBuffer = await testRes.arrayBuffer();
         const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
 
         if (!testDataUrl) {
+          errorEl.textContent = "Incorrect passcode. Key derivation mismatch.";
           errorEl.style.display = 'block';
           loadingEl.style.display = 'none';
           return;
@@ -769,13 +808,13 @@
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        // Brief delay so user sees the Polaroid unlock before calendar animation starts
         setTimeout(() => {
           startCalendarAnimation();
         }, 800);
 
       } catch (err) {
         loadingEl.style.display = 'none';
+        errorEl.textContent = "Error reading encrypted photo file.";
         errorEl.style.display = 'block';
       }
     }
