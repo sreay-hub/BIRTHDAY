@@ -610,7 +610,7 @@
        SCREEN 5: LIGHTBOX / DETAIL VIEW MODAL
      ========================================================================= -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <span class="lightbox-close" onclick="closeLightbox(force=true)">&times;</span>
+    <span class="lightbox-close" onclick="closeLightbox(event, force=true)">&times;</span>
     <img id="lightbox-img" src="" alt="Full-size memory">
   </div>
 
@@ -755,7 +755,8 @@
       loadingEl.style.display = 'block';
 
       try {
-        const testRes = await fetch('photo1.enc');
+        // Fetch test photo from the 'enc/' subfolder
+        const testRes = await fetch('enc/photo1.enc');
         if (!testRes.ok) throw new Error("File fetch failed");
         const testBuffer = await testRes.arrayBuffer();
         
@@ -767,12 +768,13 @@
           return;
         }
 
+        decryptedPhotos.length = 0; // Clear previous array
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
 
         const remainingFetches = [];
         for (let i = 2; i <= TOTAL_PHOTOS; i++) {
           remainingFetches.push(
-            fetch(`photo${i}.enc`)
+            fetch(`enc/photo${i}.enc`)
               .then(res => res.arrayBuffer())
               .then(buf => {
                 const dataUrl = decryptOpenSSLAES(buf, passcode);
@@ -787,7 +789,7 @@
         await Promise.all(remainingFetches);
         decryptedPhotos.sort((a, b) => a.id - b.id);
 
-        // Populate Welcome Screen Polaroids if photos decoded
+        // Populate Welcome Screen Polaroids dynamically after successful decryption
         if (decryptedPhotos.length > 0) {
           if (decryptedPhotos[0]) document.getElementById('welcome-img-1').src = decryptedPhotos[0].src;
           if (decryptedPhotos[1]) document.getElementById('welcome-img-2').src = decryptedPhotos[1].src;
