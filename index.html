@@ -694,150 +694,300 @@
   <!-- =========================================================================
         FUNCTIONAL JAVASCRIPT LOGIC
       ========================================================================= -->
+  <!-- =========================================================================
+        FUNCTIONAL JAVASCRIPT LOGIC
+      ========================================================================= -->
   <script>
-    /* 1. STRICT DECRYPTION FUNCTION WITH JPEG HEADER VALIDATION */
-function decryptOpenSSLAES(encryptedArrayBuffer, password) {
-  try {
-    const u8 = new Uint8Array(encryptedArrayBuffer);
-    const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
-    
-    let decBytes = null;
+    const WIFE_NAME = "Akshitha";
+    const TOTAL_PHOTOS = 50;
+    const decryptedPhotos = [];
 
-    if (headerStr === "Salted__") {
-      const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
-      const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
-
-      // Attempt 1: Standard OpenSSL PBKDF2 (10,000 iterations)
-      try {
-        const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
-        const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
-        const iv = CryptoJS.lib.WordArray.create(dKeys.words.slice(8, 12));
-        const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
-        if (dec.sigBytes > 0) decBytes = dec;
-      } catch(e) {}
-
-      // Attempt 2: Legacy MD5 Key Derivation (Default for older OpenSSL CLI)
-      if (!decBytes) {
-        try {
-          let passWordArray = CryptoJS.enc.Utf8.parse(password);
-          let hasher = CryptoJS.algo.MD5.create();
-          hasher.update(passWordArray);
-          hasher.update(salt);
-          let result = hasher.finalize();
-          let dKey = result.clone();
-          
-          while (dKey.words.length < 12) {
-            hasher = CryptoJS.algo.MD5.create();
-            hasher.update(result);
-            hasher.update(passWordArray);
-            hasher.update(salt);
-            result = hasher.finalize();
-            dKey.concat(result);
-          }
-          
-          const key = CryptoJS.lib.WordArray.create(dKey.words.slice(0, 8));
-          const iv = CryptoJS.lib.WordArray.create(dKey.words.slice(8, 12));
-          const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
-          if (dec.sigBytes > 0) decBytes = dec;
-        } catch(e) {}
-      }
+    function getCategoryForPhoto(index) {
+      if (index % 3 === 0) return 'trips';
+      if (index % 2 === 0) return 'favorites';
+      return 'general';
     }
 
-    if (!decBytes) return null;
+    document.getElementById('wife-name-placeholder').textContent = WIFE_NAME;
 
-    const b64 = CryptoJS.enc.Base64.stringify(decBytes);
-    
-    // CRITICAL: Check for JPEG magic header in Base64 ("/9j/")
-    if (b64 && b64.startsWith('/9j/')) {
-      return 'data:image/jpeg;base64,' + b64;
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) targetScreen.classList.add('active');
     }
-
-    return null; // Return null if password produced garbage data
-  } catch (e) {
-    return null;
-  }
-}
-
-/* 2. STRICT UNLOCK HANDLER */
-async function handleUnlock() {
-  const passcode = document.getElementById('passcode-input').value.trim();
-  const errorEl = document.getElementById('error-message');
-  const loadingEl = document.getElementById('loading-message');
-  const previewContainer = document.getElementById('passcode-preview-container');
-  const previewImg = document.getElementById('passcode-preview-img');
-
-  if (!passcode) return;
-
-  errorEl.style.display = 'none';
-  loadingEl.style.display = 'block';
-
-  try {
-    const testRes = await fetch('photos/photo1.enc');
-    if (!testRes.ok) {
-      errorEl.textContent = "Could not load photos/photo1.enc. Check file location.";
-      errorEl.style.display = 'block';
-      loadingEl.style.display = 'none';
-      return;
-    }
-    
-    const testBuffer = await testRes.arrayBuffer();
-    const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
-
-    // HARD STOP: If photo1 fails to decrypt correctly, STOP EVERYTHING immediately.
-    if (!testDataUrl) {
-      errorEl.textContent = "Incorrect passcode! Please try again.";
-      errorEl.style.display = 'block';
-      loadingEl.style.display = 'none';
-      previewContainer.style.display = 'none';
-      return; // Execution ends here—will not open any next screen.
-    }
-
-    // Passcode is verified! Show preview & assign image
-    previewImg.src = testDataUrl;
-    previewContainer.style.display = 'block';
-    document.getElementById('reveal-photo1-img').src = testDataUrl;
-
-    // Decrypt remaining gallery photos
-    decryptedPhotos.length = 0;
-    decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
-
-    const remainingFetches = [];
-    for (let i = 2; i <= TOTAL_PHOTOS; i++) {
-      remainingFetches.push(
-        fetch(`photos/photo${i}.enc`)
-          .then(res => res.ok ? res.arrayBuffer() : null)
-          .then(buf => {
-            if (!buf) return;
-            const dataUrl = decryptOpenSSLAES(buf, passcode);
-            if (dataUrl) {
-              decryptedPhotos.push({ id: i, src: dataUrl, category: getCategoryForPhoto(i) });
-            }
-          })
-          .catch(() => {})
-      );
-    }
-
-    await Promise.all(remainingFetches);
-    decryptedPhotos.sort((a, b) => a.id - b.id);
-
-    renderGallery('all');
-    loadingEl.style.display = 'none';
-
-    // Transition to calendar animation ONLY after correct password verification
-    setTimeout(() => {
-      startCalendarAnimation();
-    }, 1000);
-
-  } catch (err) {
-    loadingEl.style.display = 'none';
-    errorEl.textContent = "Error loading encrypted files.";
-    errorEl.style.display = 'block';
-  }
-}
 
     /* -------------------------------------------------------------------------
         CINEMATIC CALENDAR ANIMATION WITH RANDOMIZED FLY AWAY & ZOOM
        ------------------------------------------------------------------------- */
+    const monthsList = [
+      "January", "February", "March", "April", "May", "June", 
+      "July", "August", "September"
+    ];
+
+    function renderMonthDays(monthIdx) {
+      const container = document.getElementById('cal-days-container');
+      container.innerHTML = '';
+      
+      const daysInMonth = monthIdx === 1 ? 28 : (monthIdx % 2 === 0 ? 31 : 30);
+      
+      for (let i = 1; i <= daysInMonth; i++) {
+        const div = document.createElement('div');
+        div.className = 'day-number';
+        div.textContent = i;
+        
+        if (monthIdx === 8 && i === 24) { // September 24
+          const circle = document.createElement('div');
+          circle.className = 'highlight-circle';
+          circle.id = 'date-highlight-circle';
+          div.appendChild(circle);
+        }
+        container.appendChild(div);
+      }
+    }
+
+    function startCalendarAnimation() {
+      navigateTo('screen-calendar');
+      const containerEl = document.getElementById('calendar-container');
+      containerEl.classList.remove('zoom-in');
+      let currentMonthIndex = 0;
+
+      function stepAnimation() {
+        if (currentMonthIndex < monthsList.length - 1) {
+          document.getElementById('cal-month-title').textContent = monthsList[currentMonthIndex];
+          renderMonthDays(currentMonthIndex);
+
+          setTimeout(() => {
+            const page = document.getElementById('active-page');
+            
+            const randomX = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 80);
+            const randomXFar = randomX * 3;
+            const randomRot = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.random() * 25);
+            
+            page.style.setProperty('--flyX', `${randomX}px`);
+            page.style.setProperty('--flyRot', `${randomRot}deg`);
+            page.style.setProperty('--flyXFar', `${randomXFar}px`);
+            page.style.setProperty('--flyRotFar', `${randomRot * 2}deg`);
+
+            page.classList.add('tear-off-fly');
+
+            setTimeout(() => {
+              page.classList.remove('tear-off-fly');
+              currentMonthIndex++;
+              stepAnimation();
+            }, 650);
+          }, 400);
+
+        } else {
+          document.getElementById('cal-month-title').textContent = "September";
+          renderMonthDays(8);
+
+          setTimeout(() => {
+            const circle = document.getElementById('date-highlight-circle');
+            if (circle) circle.style.transform = 'scale(1)';
+
+            setTimeout(() => {
+              containerEl.classList.add('zoom-in');
+
+              setTimeout(() => {
+                navigateTo('screen-message');
+              }, 1200);
+            }, 1400);
+          }, 600);
+        }
+      }
+
+      stepAnimation();
+    }
+
+    /* 1. STRICT DECRYPTION FUNCTION WITH JPEG HEADER VALIDATION */
+    function decryptOpenSSLAES(encryptedArrayBuffer, password) {
+      try {
+        const u8 = new Uint8Array(encryptedArrayBuffer);
+        const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
+        
+        let decBytes = null;
+
+        if (headerStr === "Salted__") {
+          const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
+          const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
+
+          // Attempt 1: Standard OpenSSL PBKDF2 (10,000 iterations)
+          try {
+            const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
+            const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
+            const iv = CryptoJS.lib.WordArray.create(dKeys.words.slice(8, 12));
+            const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            if (dec.sigBytes > 0) decBytes = dec;
+          } catch(e) {}
+
+          // Attempt 2: Legacy MD5 Key Derivation (Default for older OpenSSL CLI)
+          if (!decBytes) {
+            try {
+              let passWordArray = CryptoJS.enc.Utf8.parse(password);
+              let hasher = CryptoJS.algo.MD5.create();
+              hasher.update(passWordArray);
+              hasher.update(salt);
+              let result = hasher.finalize();
+              let dKey = result.clone();
+              
+              while (dKey.words.length < 12) {
+                hasher = CryptoJS.algo.MD5.create();
+                hasher.update(result);
+                hasher.update(passWordArray);
+                hasher.update(salt);
+                result = hasher.finalize();
+                dKey.concat(result);
+              }
+              
+              const key = CryptoJS.lib.WordArray.create(dKey.words.slice(0, 8));
+              const iv = CryptoJS.lib.WordArray.create(dKey.words.slice(8, 12));
+              const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+              if (dec.sigBytes > 0) decBytes = dec;
+            } catch(e) {}
+          }
+        }
+
+        if (!decBytes) return null;
+
+        const b64 = CryptoJS.enc.Base64.stringify(decBytes);
+        
+        // CRITICAL: Check for JPEG magic header in Base64 ("/9j/")
+        if (b64 && b64.startsWith('/9j/')) {
+          return 'data:image/jpeg;base64,' + b64;
+        }
+
+        return null; // Return null if password produced garbage data
+      } catch (e) {
+        return null;
+      }
+    }
+
+    document.getElementById('passcode-submit-btn').addEventListener('click', handleUnlock);
+    document.getElementById('passcode-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleUnlock();
+    });
+
+    /* 2. STRICT UNLOCK HANDLER */
+    async function handleUnlock() {
+      const passcode = document.getElementById('passcode-input').value.trim();
+      const errorEl = document.getElementById('error-message');
+      const loadingEl = document.getElementById('loading-message');
+      const previewContainer = document.getElementById('passcode-preview-container');
+      const previewImg = document.getElementById('passcode-preview-img');
+
+      if (!passcode) return;
+
+      errorEl.style.display = 'none';
+      loadingEl.style.display = 'block';
+
+      try {
+        const testRes = await fetch('photos/photo1.enc');
+        if (!testRes.ok) {
+          errorEl.textContent = "Could not load photos/photo1.enc. Check file location.";
+          errorEl.style.display = 'block';
+          loadingEl.style.display = 'none';
+          return;
+        }
+        
+        const testBuffer = await testRes.arrayBuffer();
+        const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
+
+        // HARD STOP: If photo1 fails to decrypt correctly, STOP EVERYTHING immediately.
+        if (!testDataUrl) {
+          errorEl.textContent = "Incorrect passcode! Please try again.";
+          errorEl.style.display = 'block';
+          loadingEl.style.display = 'none';
+          previewContainer.style.display = 'none';
+          return; // Execution ends here—will not open any next screen.
+        }
+
+        // Passcode is verified! Show preview & assign image
+        previewImg.src = testDataUrl;
+        previewContainer.style.display = 'block';
+        document.getElementById('reveal-photo1-img').src = testDataUrl;
+
+        // Decrypt remaining gallery photos
+        decryptedPhotos.length = 0;
+        decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
+
+        const remainingFetches = [];
+        for (let i = 2; i <= TOTAL_PHOTOS; i++) {
+          remainingFetches.push(
+            fetch(`photos/photo${i}.enc`)
+              .then(res => res.ok ? res.arrayBuffer() : null)
+              .then(buf => {
+                if (!buf) return;
+                const dataUrl = decryptOpenSSLAES(buf, passcode);
+                if (dataUrl) {
+                  decryptedPhotos.push({ id: i, src: dataUrl, category: getCategoryForPhoto(i) });
+                }
+              })
+              .catch(() => {})
+          );
+        }
+
+        await Promise.all(remainingFetches);
+        decryptedPhotos.sort((a, b) => a.id - b.id);
+
+        renderGallery('all');
+        loadingEl.style.display = 'none';
+
+        // Transition to calendar animation ONLY after correct password verification
+        setTimeout(() => {
+          startCalendarAnimation();
+        }, 1000);
+
+      } catch (err) {
+        loadingEl.style.display = 'none';
+        errorEl.textContent = "Error loading encrypted files.";
+        errorEl.style.display = 'block';
+      }
+    }
+
+    /* -------------------------------------------------------------------------
+        GALLERY & LIGHTBOX LOGIC
+       ------------------------------------------------------------------------- */
+    function renderGallery(filterCategory) {
+      const container = document.getElementById('gallery-container');
+      container.innerHTML = '';
+
+      decryptedPhotos.forEach(photo => {
+        if (filterCategory === 'all' || photo.category === filterCategory) {
+          const item = document.createElement('div');
+          item.className = 'gallery-item';
+          item.onclick = () => openLightbox(photo.src);
+
+          const img = document.createElement('img');
+          img.src = photo.src;
+          img.alt = `Memory ${photo.id}`;
+
+          item.appendChild(img);
+          container.appendChild(item);
+        }
+      });
+    }
+
+    function filterAlbum(category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderGallery(category);
+    }
+
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox(event, force = false) {
+      if (force || event.target.id === 'lightbox') {
+        document.getElementById('lightbox').classList.remove('active');
+      }
+    }
+  </script>
+    /* -------------------------------------------------------------------------
+        CINEMATIC CALENDAR ANIMATION WITH RANDOMIZED FLY AWAY & ZOOM
+     ------------------------------------------------------------------------- */
+  <script>
     const monthsList = [
       "January", "February", "March", "April", "May", "June", 
       "July", "August", "September"
