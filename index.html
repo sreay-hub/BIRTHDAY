@@ -164,6 +164,23 @@
       align-items: center;
     }
 
+    /* Passcode Image Preview Style */
+    .passcode-preview-container {
+      display: none;
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(232, 167, 179, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .passcode-preview-container img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
     /* Mini Calendar Card for "Our Journey Started On" */
     .journey-mini-calendar {
       background: #faf4f5;
@@ -545,7 +562,7 @@
   </section>
 
   <!-- =========================================================================
-        SCREEN 1: PASSCODE ENTRY SCREEN (WITH JOURNEY MINI-CALENDAR)
+        SCREEN 1: PASSCODE ENTRY SCREEN (WITH JOURNEY MINI-CALENDAR & PREVIEW)
       ========================================================================= -->
   <section id="screen-passcode" class="screen">
     <div class="passcode-card">
@@ -565,7 +582,13 @@
       
       <div class="input-group">
         <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
-        <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 5px;">Unlock</button>
+        
+        <!-- Live Preview Image Box after entering decryption passcode -->
+        <div id="passcode-preview-container" class="passcode-preview-container">
+          <img id="passcode-preview-img" src="" alt="Decrypted Preview">
+        </div>
+
+        <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 10px;">Unlock</button>
       </div>
       
       <div id="error-message" class="error-msg">Incorrect passcode or file path error.</div>
@@ -599,6 +622,17 @@
         <div style="font-size: 0.85rem; color: #853344; font-style: italic;">Counting down to your day...</div>
       </div>
     </div>
+  </section>
+
+  <!-- =========================================================================
+        SCREEN: BEAUTIFUL MESSAGE PAGE
+      ========================================================================= -->
+  <section id="screen-message" class="screen" style="text-align: center; max-width: 750px;">
+    <h2 class="romantic-heading" style="font-size: 3.8rem; margin-bottom: 20px;">For My Dearest</h2>
+    <div style="font-size: 1.35rem; line-height: 2; color: #e6d3d7; margin-bottom: 30px;">
+      <p>[ Insert your beautiful custom message here ]</p>
+    </div>
+    <button class="btn" onclick="navigateTo('screen-photo1-reveal')">Our Memories &rarr;</button>
   </section>
 
   <!-- =========================================================================
@@ -755,8 +789,8 @@
               containerEl.classList.add('zoom-in');
 
               setTimeout(() => {
-                // Transition cleanly to Photo 1 reveal page
-                navigateTo('screen-photo1-reveal');
+                // Transition cleanly to the new Message screen
+                navigateTo('screen-message');
               }, 1200);
             }, 1400);
           }, 600);
@@ -844,6 +878,8 @@
       const passcode = document.getElementById('passcode-input').value.trim();
       const errorEl = document.getElementById('error-message');
       const loadingEl = document.getElementById('loading-message');
+      const previewContainer = document.getElementById('passcode-preview-container');
+      const previewImg = document.getElementById('passcode-preview-img');
 
       if (!passcode) return;
 
@@ -866,8 +902,13 @@
           errorEl.textContent = "Incorrect passcode. Key derivation mismatch.";
           errorEl.style.display = 'block';
           loadingEl.style.display = 'none';
+          previewContainer.style.display = 'none';
           return;
         }
+
+        // Show decrypted image directly in password entry area as requested
+        previewImg.src = testDataUrl;
+        previewContainer.style.display = 'block';
 
         // Set decrypted photo1.enc source on the standalone reveal screen
         document.getElementById('reveal-photo1-img').src = testDataUrl;
@@ -896,8 +937,10 @@
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        // Start calendar sequence leading directly to photo1 reveal screen
-        startCalendarAnimation();
+        // Short pause so user can see preview before transition
+        setTimeout(() => {
+          startCalendarAnimation();
+        }, 800);
 
       } catch (err) {
         loadingEl.style.display = 'none';
