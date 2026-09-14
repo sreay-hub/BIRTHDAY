@@ -7,22 +7,132 @@
   <!-- CryptoJS for AES Decryption -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <style>
-    /* CSS theme styles remain intact */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #12090d;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
     .screen {
       display: none;
-    }
-    .screen.active {
-      display: flex;
+      min-height: 100vh;
+      width: 100%;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 20px;
+      text-align: center;
+    }
+    .screen.active {
+      display: flex !important;
+    }
+    h1 {
+      font-family: 'Georgia', serif;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #f8c8dc;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #d1a7b9;
+      margin-bottom: 25px;
+    }
+    button {
+      background: #8b263e;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ab3350;
+    }
+    input[type="password"] {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid #8b263e;
+      background: #231219;
+      color: #fff;
+      outline: none;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    #error-message {
+      color: #ff6b6b;
+      margin-top: 10px;
+      display: none;
+    }
+    #loading-message {
+      color: #ffd166;
+      margin-top: 10px;
+      display: none;
+    }
+    #passcode-preview-container {
+      margin-top: 20px;
+      display: none;
+    }
+    #passcode-preview-img {
+      max-width: 200px;
+      border-radius: 10px;
+      border: 2px solid #8b263e;
     }
   </style>
 </head>
 <body>
 
+  <!-- Screen 1: Welcome -->
+  <div id="screen-welcome" class="screen active">
+    <h1>Welcome <span id="wife-name-placeholder">Akshitha</span></h1>
+    <p>A special space created with and for my LOVE</p>
+    <button onclick="navigateTo('screen-passcode')">Begin Experience →</button>
+  </div>
+
+  <!-- Screen 2: Passcode Verification -->
+  <div id="screen-passcode" class="screen">
+    <h1>Enter Passcode</h1>
+    <p>Enter the secret password to decrypt your memory</p>
+    <input type="password" id="passcode-input" placeholder="Passcode">
+    <br>
+    <button id="passcode-submit-btn">Unlock Experience</button>
+    <div id="error-message"></div>
+    <div id="loading-message">Decrypting memory...</div>
+    <div id="passcode-preview-container">
+      <img id="passcode-preview-img" src="" alt="Unlocked Preview">
+    </div>
+  </div>
+
+  <!-- Screen 3: Calendar Animation -->
+  <div id="screen-calendar" class="screen">
+    <div id="calendar-container">
+      <h2 id="cal-month-title">January</h2>
+      <div id="cal-days-container" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px;"></div>
+      <div id="active-page"></div>
+    </div>
+  </div>
+
+  <!-- Screen 4: Message & Photo Reveal -->
+  <div id="screen-message" class="screen">
+    <h1>Surprise Revealed!</h1>
+    <img id="reveal-photo1-img" src="" style="max-width: 300px; border-radius: 12px; margin-bottom: 20px;">
+    <div id="gallery-container" style="display: flex; flex-wrap: wrap; gap: 10px; justify-center;"></div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" onclick="closeLightbox(event)" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); align-items:center; justify-content:center;">
+    <img id="lightbox-img" src="" style="max-width:90%; max-height:90%; border-radius:8px;">
+  </div>
+
   <!-- =========================================================================
-        FUNCTIONAL JAVASCRIPT LOGIC
+        JAVASCRIPT LOGIC
       ========================================================================= -->
   <script>
     const WIFE_NAME = "Akshitha";
@@ -37,7 +147,6 @@
 
     document.getElementById('wife-name-placeholder').textContent = WIFE_NAME;
 
-    /* UPDATED: FORCES INACTIVE SCREENS TO HIDE PERFECTLY */
     function navigateTo(screenId) {
       document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -46,13 +155,9 @@
       const targetScreen = document.getElementById(screenId);
       if (targetScreen) {
         targetScreen.classList.add('active');
-        targetScreen.style.display = 'flex';
       }
     }
 
-    /* -------------------------------------------------------------------------
-        CINEMATIC CALENDAR ANIMATION WITH RANDOMIZED FLY AWAY & ZOOM
-       ------------------------------------------------------------------------- */
     const monthsList = [
       "January", "February", "March", "April", "May", "June", 
       "July", "August", "September"
@@ -69,7 +174,7 @@
         div.className = 'day-number';
         div.textContent = i;
         
-        if (monthIdx === 8 && i === 24) { // September 24
+        if (monthIdx === 8 && i === 24) {
           const circle = document.createElement('div');
           circle.className = 'highlight-circle';
           circle.id = 'date-highlight-circle';
@@ -82,7 +187,6 @@
     function startCalendarAnimation() {
       navigateTo('screen-calendar');
       const containerEl = document.getElementById('calendar-container');
-      containerEl.classList.remove('zoom-in');
       let currentMonthIndex = 0;
 
       function stepAnimation() {
@@ -91,49 +195,22 @@
           renderMonthDays(currentMonthIndex);
 
           setTimeout(() => {
-            const page = document.getElementById('active-page');
-            
-            const randomX = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 80);
-            const randomXFar = randomX * 3;
-            const randomRot = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.random() * 25);
-            
-            page.style.setProperty('--flyX', `${randomX}px`);
-            page.style.setProperty('--flyRot', `${randomRot}deg`);
-            page.style.setProperty('--flyXFar', `${randomXFar}px`);
-            page.style.setProperty('--flyRotFar', `${randomRot * 2}deg`);
-
-            page.classList.add('tear-off-fly');
-
-            setTimeout(() => {
-              page.classList.remove('tear-off-fly');
-              currentMonthIndex++;
-              stepAnimation();
-            }, 650);
+            currentMonthIndex++;
+            stepAnimation();
           }, 400);
-
         } else {
           document.getElementById('cal-month-title').textContent = "September";
           renderMonthDays(8);
 
           setTimeout(() => {
-            const circle = document.getElementById('date-highlight-circle');
-            if (circle) circle.style.transform = 'scale(1)';
-
-            setTimeout(() => {
-              containerEl.classList.add('zoom-in');
-
-              setTimeout(() => {
-                navigateTo('screen-message');
-              }, 1200);
-            }, 1400);
-          }, 600);
+            navigateTo('screen-message');
+          }, 1200);
         }
       }
 
       stepAnimation();
     }
 
-    /* 1. STRICT DECRYPTION FUNCTION WITH JPEG HEADER VALIDATION */
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
       try {
         const u8 = new Uint8Array(encryptedArrayBuffer);
@@ -145,7 +222,6 @@
           const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
           const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
 
-          // Attempt 1: Standard OpenSSL PBKDF2 (10,000 iterations)
           try {
             const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
             const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
@@ -154,7 +230,6 @@
             if (dec.sigBytes > 0) decBytes = dec;
           } catch(e) {}
 
-          // Attempt 2: Legacy MD5 Key Derivation (Default for older OpenSSL CLI)
           if (!decBytes) {
             try {
               let passWordArray = CryptoJS.enc.Utf8.parse(password);
@@ -185,7 +260,6 @@
 
         const b64 = CryptoJS.enc.Base64.stringify(decBytes);
         
-        // CRITICAL: Check for JPEG magic header in Base64 ("/9j/")
         if (b64 && b64.startsWith('/9j/')) {
           return 'data:image/jpeg;base64,' + b64;
         }
@@ -201,7 +275,6 @@
       if (e.key === 'Enter') handleUnlock();
     });
 
-    /* 2. STRICT UNLOCK HANDLER */
     async function handleUnlock() {
       const passcode = document.getElementById('passcode-input').value.trim();
       const errorEl = document.getElementById('error-message');
@@ -226,7 +299,6 @@
         const testBuffer = await testRes.arrayBuffer();
         const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
 
-        // HARD STOP: If photo1 fails to decrypt correctly, STOP EVERYTHING immediately.
         if (!testDataUrl) {
           errorEl.textContent = "Incorrect passcode! Please try again.";
           errorEl.style.display = 'block';
@@ -235,12 +307,10 @@
           return;
         }
 
-        // Passcode is verified! Show preview & assign image
         previewImg.src = testDataUrl;
         previewContainer.style.display = 'block';
         document.getElementById('reveal-photo1-img').src = testDataUrl;
 
-        // Decrypt remaining gallery photos
         decryptedPhotos.length = 0;
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
 
@@ -266,7 +336,6 @@
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        // Transition to calendar animation ONLY after correct password verification
         setTimeout(() => {
           startCalendarAnimation();
         }, 1000);
@@ -278,9 +347,6 @@
       }
     }
 
-    /* -------------------------------------------------------------------------
-        GALLERY & LIGHTBOX LOGIC
-       ------------------------------------------------------------------------- */
     function renderGallery(filterCategory) {
       const container = document.getElementById('gallery-container');
       container.innerHTML = '';
@@ -294,6 +360,8 @@
           const img = document.createElement('img');
           img.src = photo.src;
           img.alt = `Memory ${photo.id}`;
+          img.style.maxWidth = '150px';
+          img.style.borderRadius = '8px';
 
           item.appendChild(img);
           container.appendChild(item);
@@ -301,21 +369,13 @@
       });
     }
 
-    function filterAlbum(category) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderGallery(category);
-    }
-
     function openLightbox(src) {
       document.getElementById('lightbox-img').src = src;
-      document.getElementById('lightbox').classList.add('active');
+      document.getElementById('lightbox').style.display = 'flex';
     }
 
-    function closeLightbox(event, force = false) {
-      if (force || event.target.id === 'lightbox') {
-        document.getElementById('lightbox').classList.remove('active');
-      }
+    function closeLightbox(event) {
+      document.getElementById('lightbox').style.display = 'none';
     }
   </script>
 </body>
