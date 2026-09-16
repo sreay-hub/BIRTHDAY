@@ -265,23 +265,6 @@
       background: rgba(15, 5, 10, 0.95);
     }
 
-    .passcode-preview-container {
-      display: none;
-      width: 100%;
-      margin-top: 15px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 2px solid rgba(255, 77, 121, 0.5);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-    }
-
-    .passcode-preview-container img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      display: block;
-    }
-
     .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
     .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
 
@@ -297,7 +280,7 @@
       transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .calendar-container.zoom-in { transform: scale(2.2); }
+    .calendar-container.zoom-in { transform: scale(2.4); }
 
     .calendar-binder {
       width: 100%;
@@ -332,8 +315,6 @@
       top: 40px;
       left: 0;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(128, 0, 32, 0.3);
-      transform-origin: top center;
-      backface-visibility: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -370,6 +351,7 @@
       margin-top: 15px;
       font-family: 'Playfair Display', serif;
       font-size: 0.95rem;
+      position: relative;
     }
 
     .day-label {
@@ -386,40 +368,24 @@
       position: relative;
     }
 
-    .highlight-circle {
+    /* Flowing Red Circle */
+    .flowing-circle {
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border: 3px solid #ff3366;
       border-radius: 50%;
-      box-shadow: 0 0 15px rgba(255, 51, 102, 0.8);
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.9);
       animation: circlePulse 1.2s infinite alternate;
-      transform: scale(0);
-      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+      z-index: 5;
+      transform: translate(-50%, -50%);
+      display: none;
     }
 
     @keyframes circlePulse {
-      0% { box-shadow: 0 0 10px rgba(255, 51, 102, 0.5); }
-      100% { box-shadow: 0 0 22px rgba(255, 51, 102, 0.9); }
-    }
-
-    .tear-off-fly {
-      animation: flyAwayAnim 0.75s forwards ease-in;
-    }
-
-    @keyframes flyAwayAnim {
-      0% {
-        transform: rotateX(0deg) translate(0, 0) rotateZ(0deg);
-        opacity: 1;
-      }
-      50% {
-        transform: rotateX(-60deg) translate(var(--flyX, 50px), -40px) rotateZ(var(--flyRot, 15deg));
-        opacity: 0.8;
-      }
-      100% {
-        transform: rotateX(-160deg) translate(var(--flyXFar, 250px), 300px) rotateZ(var(--flyRotFar, 45deg));
-        opacity: 0;
-      }
+      0% { box-shadow: 0 0 10px rgba(255, 51, 102, 0.6); }
+      100% { box-shadow: 0 0 22px rgba(255, 51, 102, 1); }
     }
 
     /* Photo 1 Reveal Screen - Dark Gothic Frame */
@@ -626,11 +592,6 @@
       
       <div class="input-group">
         <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
-        
-        <div id="passcode-preview-container" class="passcode-preview-container">
-          <img id="passcode-preview-img" src="" alt="Decrypted Preview">
-        </div>
-
         <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 10px;">Unlock</button>
       </div>
       
@@ -652,15 +613,16 @@
 
       <div id="active-page" class="calendar-page">
         <div class="calendar-header">
-          <div id="cal-month-title" class="calendar-month">January</div>
+          <div id="cal-month-title" class="calendar-month">September</div>
           <div class="calendar-year">2026</div>
         </div>
         
-        <div class="calendar-grid">
+        <div class="calendar-grid" id="calendar-grid">
           <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
           <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
           <div class="day-label">S</div>
           <div id="cal-days-container" style="display: contents;"></div>
+          <div id="flowing-circle" class="flowing-circle"></div>
         </div>
         <div style="font-size: 0.85rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
       </div>
@@ -675,7 +637,7 @@
     <div style="font-size: 1.35rem; line-height: 2; color: #e6c2cb; margin-bottom: 30px;">
       <p>[ Insert your beautiful custom message here ]</p>
     </div>
-    <button class="btn" onclick="navigateTo('screen-photo1-reveal')">Our Memories &rarr;</button>
+    <button class="btn" onclick="navigateTo('screen-gallery')">Our Gallery &rarr;</button>
   </section>
 
   <!-- =========================================================================
@@ -722,7 +684,7 @@
     <div id="gallery-container" class="gallery-grid"></div>
 
     <div style="text-align: center; margin-top: 35px;">
-      <button class="btn" onclick="navigateTo('screen-wish')">&larr; Back to Message</button>
+      <button class="btn" onclick="navigateTo('screen-message')">&larr; Back to Message</button>
     </div>
   </section>
 
@@ -756,28 +718,22 @@
       if (targetScreen) targetScreen.classList.add('active');
     }
 
-    const monthsList = [
-      "January", "February", "March", "April", "May", "June", 
-      "July", "August", "September"
-    ];
-
-    function renderMonthDays(monthIdx) {
+    function renderSeptemberDays() {
       const container = document.getElementById('cal-days-container');
       container.innerHTML = '';
-      
-      const daysInMonth = monthIdx === 1 ? 28 : (monthIdx % 2 === 0 ? 31 : 30);
-      
-      for (let i = 1; i <= daysInMonth; i++) {
+
+      // Sept 1, 2026 is Tuesday -> 2 blank offset cells (Sun, Mon)
+      for (let b = 0; b < 2; b++) {
+        const blank = document.createElement('div');
+        blank.className = 'day-number';
+        container.appendChild(blank);
+      }
+
+      for (let i = 1; i <= 30; i++) {
         const div = document.createElement('div');
         div.className = 'day-number';
+        div.id = `day-node-${i}`;
         div.textContent = i;
-        
-        if (monthIdx === 8 && i === 24) { // September 24
-          const circle = document.createElement('div');
-          circle.className = 'highlight-circle';
-          circle.id = 'date-highlight-circle';
-          div.appendChild(circle);
-        }
         container.appendChild(div);
       }
     }
@@ -786,54 +742,66 @@
       navigateTo('screen-calendar');
       const containerEl = document.getElementById('calendar-container');
       containerEl.classList.remove('zoom-in');
-      let currentMonthIndex = 0;
+      containerEl.style.transformOrigin = 'center center';
+      
+      document.getElementById('cal-month-title').textContent = "September";
+      renderSeptemberDays();
 
-      function stepAnimation() {
-        if (currentMonthIndex < monthsList.length - 1) {
-          document.getElementById('cal-month-title').textContent = monthsList[currentMonthIndex];
-          renderMonthDays(currentMonthIndex);
+      const circle = document.getElementById('flowing-circle');
+      const grid = document.getElementById('calendar-grid');
 
-          setTimeout(() => {
-            const page = document.getElementById('active-page');
+      let currentDay = 1;
+      circle.style.display = 'block';
+
+      function updateCirclePosition(dayNum) {
+        const dayEl = document.getElementById(`day-node-${dayNum}`);
+        if (!dayEl) return;
+        const gridRect = grid.getBoundingClientRect();
+        const dayRect = dayEl.getBoundingClientRect();
+
+        const x = (dayRect.left + dayRect.width / 2) - gridRect.left;
+        const y = (dayRect.top + dayRect.height / 2) - gridRect.top;
+
+        circle.style.left = `${x}px`;
+        circle.style.top = `${y}px`;
+      }
+
+      // Initial alignment at Day 1 without transition delay
+      circle.style.transition = 'none';
+      updateCirclePosition(1);
+
+      // Smooth flow from date 1 to 24
+      setTimeout(() => {
+        circle.style.transition = 'left 0.12s linear, top 0.12s linear';
+
+        const flowInterval = setInterval(() => {
+          currentDay++;
+          updateCirclePosition(currentDay);
+
+          if (currentDay >= 24) {
+            clearInterval(flowInterval);
             
-            const randomX = (Math.random() > 0.5 ? 1 : -1) * (40 + Math.random() * 80);
-            const randomXFar = randomX * 3;
-            const randomRot = (Math.random() > 0.5 ? 1 : -1) * (15 + Math.random() * 25);
-            
-            page.style.setProperty('--flyX', `${randomX}px`);
-            page.style.setProperty('--flyRot', `${randomRot}deg`);
-            page.style.setProperty('--flyXFar', `${randomXFar}px`);
-            page.style.setProperty('--flyRotFar', `${randomRot * 2}deg`);
-
-            page.classList.add('tear-off-fly');
-
+            // Stop at 24, calculate zoom origin on date 24, then zoom in
             setTimeout(() => {
-              page.classList.remove('tear-off-fly');
-              currentMonthIndex++;
-              stepAnimation();
-            }, 650);
-          }, 400);
+              const day24 = document.getElementById('day-node-24');
+              if (day24) {
+                const containerRect = containerEl.getBoundingClientRect();
+                const dayRect = day24.getBoundingClientRect();
+                const originX = (((dayRect.left + dayRect.width / 2) - containerRect.left) / containerRect.width) * 100;
+                const originY = (((dayRect.top + dayRect.height / 2) - containerRect.top) / containerRect.height) * 100;
+                containerEl.style.transformOrigin = `${originX}% ${originY}%`;
+              }
 
-        } else {
-          document.getElementById('cal-month-title').textContent = "September";
-          renderMonthDays(8);
-
-          setTimeout(() => {
-            const circle = document.getElementById('date-highlight-circle');
-            if (circle) circle.style.transform = 'scale(1)';
-
-            setTimeout(() => {
               containerEl.classList.add('zoom-in');
 
+              // Transition to Message Page
               setTimeout(() => {
                 navigateTo('screen-message');
               }, 1200);
-            }, 1400);
-          }, 600);
-        }
-      }
-
-      stepAnimation();
+            }, 500);
+          }
+        }, 120);
+      }, 100);
     }
 
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
@@ -904,8 +872,6 @@
       const passcode = document.getElementById('passcode-input').value.trim();
       const errorEl = document.getElementById('error-message');
       const loadingEl = document.getElementById('loading-message');
-      const previewContainer = document.getElementById('passcode-preview-container');
-      const previewImg = document.getElementById('passcode-preview-img');
 
       if (!passcode) return;
 
@@ -928,12 +894,9 @@
           errorEl.textContent = "Incorrect passcode! Please try again.";
           errorEl.style.display = 'block';
           loadingEl.style.display = 'none';
-          previewContainer.style.display = 'none';
           return;
         }
 
-        previewImg.src = testDataUrl;
-        previewContainer.style.display = 'block';
         document.getElementById('reveal-photo1-img').src = testDataUrl;
 
         decryptedPhotos.length = 0;
@@ -961,9 +924,7 @@
         renderGallery('all');
         loadingEl.style.display = 'none';
 
-        setTimeout(() => {
-          startCalendarAnimation();
-        }, 1000);
+        startCalendarAnimation();
 
       } catch (err) {
         loadingEl.style.display = 'none';
