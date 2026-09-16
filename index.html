@@ -268,19 +268,24 @@
     .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
     .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
 
-    /* Calendar Section */
+    /* Calendar Section & Layout */
     #screen-calendar { text-align: center; }
+
+    .calendar-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 35px;
+      width: 100%;
+      margin: 10px 0;
+    }
 
     .calendar-container {
       width: 320px;
       height: 380px;
       position: relative;
-      perspective: 1000px;
-      margin: 20px auto;
-      transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0;
     }
-
-    .calendar-container.zoom-in { transform: scale(2.4); }
 
     .calendar-binder {
       width: 100%;
@@ -388,52 +393,120 @@
       100% { box-shadow: 0 0 22px rgba(255, 51, 102, 1); }
     }
 
-    /* Photo 1 Reveal Screen - Dark Gothic Frame */
-    #screen-photo1-reveal {
-      text-align: center;
-      max-width: 550px;
+    /* Polaroid Layout Styling */
+    .polaroid-col {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
     }
 
-    .photo1-frame {
-      background: #180910;
-      padding: 18px 18px 30px 18px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 77, 121, 0.3);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(128, 0, 32, 0.3);
-      transform: scale(0.92);
-      opacity: 0;
-      animation: photoRevealIn 1.2s forwards ease-out;
-    }
-
-    @keyframes photoRevealIn {
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .photo1-img-wrapper {
-      width: 100%;
-      max-height: 52vh;
-      overflow: hidden;
+    .polaroid-card {
+      background: rgba(22, 9, 15, 0.9);
+      padding: 8px 8px 18px 8px;
       border-radius: 6px;
+      border: 1px solid rgba(255, 77, 121, 0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(128, 0, 32, 0.25);
+      width: 120px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: polaroidFade 0.8s forwards ease-out;
+    }
+
+    @keyframes polaroidFade {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .polaroid-card:hover {
+      box-shadow: 0 12px 30px rgba(255, 51, 102, 0.5);
+    }
+
+    .polaroid-img-box {
+      width: 100%;
+      height: 100px;
+      border-radius: 4px;
+      overflow: hidden;
       background: #0d0407;
     }
 
-    .photo1-img-wrapper img {
+    .polaroid-img-box img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .photo1-caption {
+    .polaroid-tag {
+      font-family: 'Alex Brush', cursive;
+      color: #ff80a0;
+      font-size: 1.15rem;
+      margin-top: 5px;
+      text-align: center;
+      display: block;
+    }
+
+    /* Left Side Tilts */
+    .tilt-left-1 { transform: rotate(5deg); }
+    .tilt-left-2 { transform: rotate(-6deg); }
+    .tilt-left-3 { transform: rotate(4deg); }
+
+    /* Right Side Tilts */
+    .tilt-right-1 { transform: rotate(-5deg); }
+    .tilt-right-2 { transform: rotate(6deg); }
+    .tilt-right-3 { transform: rotate(-4deg); }
+
+    /* Post-Calendar Sequence */
+    .calendar-reveal-content {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.2s ease;
+    }
+
+    .calendar-reveal-content.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .bday-calligraphy-text {
       font-family: 'Alex Brush', cursive;
       color: #ff3366;
-      font-size: 2.4rem;
-      margin-top: 15px;
-      display: block;
-      text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+      font-size: 3.4rem;
+      text-shadow: 0 0 15px rgba(255, 51, 102, 0.6), 0 0 30px rgba(139, 0, 41, 0.4);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0%;
+      margin-bottom: 10px;
+    }
+
+    .bday-calligraphy-text.write {
+      animation: writeCalligraphySlow 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes writeCalligraphySlow {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+    .glowing-love-btn {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1s ease 2s, transform 1s ease 2s;
+      animation: glowingBtnPulse 2s infinite alternate;
+    }
+
+    .glowing-love-btn.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes glowingBtnPulse {
+      0% { box-shadow: 0 0 15px rgba(255, 51, 102, 0.5), 0 0 25px rgba(128, 0, 32, 0.4); }
+      100% { box-shadow: 0 0 25px rgba(255, 51, 102, 0.9), 0 0 45px rgba(230, 0, 76, 0.8); }
     }
 
     /* Screen 2: Birthday Wish Page */
@@ -556,6 +629,12 @@
     }
 
     .lightbox-close:hover { color: #ff3366; }
+
+    @media (max-width: 850px) {
+      .calendar-wrapper { flex-direction: column; gap: 20px; }
+      .polaroid-col { flex-direction: row; }
+      .bday-calligraphy-text { font-size: 2.2rem; }
+    }
   </style>
 </head>
 <body>
@@ -601,32 +680,75 @@
   </section>
 
   <!-- =========================================================================
-        CINEMATIC CALENDAR SCREEN
+        CINEMATIC CALENDAR SCREEN WITH POLAROIDS & CALLIGRAPHY REVEAL
       ========================================================================= -->
   <section id="screen-calendar" class="screen">
-    <div id="calendar-container" class="calendar-container">
-      <div class="calendar-binder">
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
+    
+    <div class="calendar-wrapper">
+      <!-- 3 Left Polaroids -->
+      <div class="polaroid-col">
+        <div class="polaroid-card tilt-left-1">
+          <div class="polaroid-img-box"><img id="polaroid-img-1" src="" alt="Memory 1"></div>
+          <span class="polaroid-tag">Love</span>
+        </div>
+        <div class="polaroid-card tilt-left-2">
+          <div class="polaroid-img-box"><img id="polaroid-img-2" src="" alt="Memory 2"></div>
+          <span class="polaroid-tag">Forever</span>
+        </div>
+        <div class="polaroid-card tilt-left-3">
+          <div class="polaroid-img-box"><img id="polaroid-img-3" src="" alt="Memory 3"></div>
+          <span class="polaroid-tag">Together</span>
+        </div>
       </div>
 
-      <div id="active-page" class="calendar-page">
-        <div class="calendar-header">
-          <div id="cal-month-title" class="calendar-month">September</div>
-          <div class="calendar-year">2026</div>
+      <!-- Center Calendar -->
+      <div id="calendar-container" class="calendar-container">
+        <div class="calendar-binder">
+          <div class="ring"></div>
+          <div class="ring"></div>
+          <div class="ring"></div>
         </div>
-        
-        <div class="calendar-grid" id="calendar-grid">
-          <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
-          <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
-          <div class="day-label">S</div>
-          <div id="cal-days-container" style="display: contents;"></div>
-          <div id="flowing-circle" class="flowing-circle"></div>
+
+        <div id="active-page" class="calendar-page">
+          <div class="calendar-header">
+            <div id="cal-month-title" class="calendar-month">September</div>
+            <div class="calendar-year">2026</div>
+          </div>
+          
+          <div class="calendar-grid" id="calendar-grid">
+            <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
+            <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
+            <div class="day-label">S</div>
+            <div id="cal-days-container" style="display: contents;"></div>
+            <div id="flowing-circle" class="flowing-circle"></div>
+          </div>
+          <div style="font-size: 0.85rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
         </div>
-        <div style="font-size: 0.85rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
+      </div>
+
+      <!-- 3 Right Polaroids -->
+      <div class="polaroid-col">
+        <div class="polaroid-card tilt-right-1">
+          <div class="polaroid-img-box"><img id="polaroid-img-4" src="" alt="Memory 4"></div>
+          <span class="polaroid-tag">Memories</span>
+        </div>
+        <div class="polaroid-card tilt-right-2">
+          <div class="polaroid-img-box"><img id="polaroid-img-5" src="" alt="Memory 5"></div>
+          <span class="polaroid-tag">Smile</span>
+        </div>
+        <div class="polaroid-card tilt-right-3">
+          <div class="polaroid-img-box"><img id="polaroid-img-6" src="" alt="Memory 6"></div>
+          <span class="polaroid-tag">Always</span>
+        </div>
       </div>
     </div>
+
+    <!-- Post-Calendar Animation Sequence (Reveals below calendar) -->
+    <div id="calendar-reveal-content" class="calendar-reveal-content">
+      <div id="bday-calligraphy-text" class="bday-calligraphy-text">Happy Birthday My Dear LOVE</div>
+      <button id="calendar-next-btn" class="btn glowing-love-btn" onclick="navigateTo('screen-message')">Open Love Message &rarr;</button>
+    </div>
+
   </section>
 
   <!-- =========================================================================
@@ -635,22 +757,9 @@
   <section id="screen-message" class="screen" style="text-align: center; max-width: 750px;">
     <h2 class="romantic-heading" style="font-size: 3.8rem; margin-bottom: 20px;">For My Dearest</h2>
     <div style="font-size: 1.35rem; line-height: 2; color: #e6c2cb; margin-bottom: 30px;">
-      <p>[ Insert your beautiful custom message here ]</p>
+      <p>[ Insert your beautiful custom love letter here ]</p>
     </div>
-    <button class="btn" onclick="navigateTo('screen-gallery')">Our Gallery &rarr;</button>
-  </section>
-
-  <!-- =========================================================================
-        DEDICATED PHOTO 1 REVEAL SCREEN
-      ========================================================================= -->
-  <section id="screen-photo1-reveal" class="screen">
-    <div class="photo1-frame">
-      <div class="photo1-img-wrapper">
-        <img id="reveal-photo1-img" src="" alt="Special Memory">
-      </div>
-      <span class="photo1-caption">Our Special Beginning ❤️</span>
-    </div>
-    <button class="btn" onclick="navigateTo('screen-wish')" style="margin-top: 25px;">Continue to Wish &rarr;</button>
+    <button class="btn" onclick="navigateTo('screen-wish')">Continue to Birthday Wish &rarr;</button>
   </section>
 
   <!-- =========================================================================
@@ -666,7 +775,7 @@
       <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every single day with you is a gift I cherish deeply.</p>
     </div>
 
-    <button class="btn" onclick="navigateTo('screen-gallery')">View Our Memories &rarr;</button>
+    <button class="btn" onclick="navigateTo('screen-gallery')">View Our Full Gallery &rarr;</button>
   </section>
 
   <!-- =========================================================================
@@ -738,14 +847,22 @@
       }
     }
 
+    function populateCalendarPolaroids() {
+      for (let i = 1; i <= 6; i++) {
+        const photoObj = decryptedPhotos.find(p => p.id === i);
+        const imgEl = document.getElementById(`polaroid-img-${i}`);
+        if (imgEl && photoObj) {
+          imgEl.src = photoObj.src;
+        }
+      }
+    }
+
     function startCalendarAnimation() {
       navigateTo('screen-calendar');
-      const containerEl = document.getElementById('calendar-container');
-      containerEl.classList.remove('zoom-in');
-      containerEl.style.transformOrigin = 'center center';
       
       document.getElementById('cal-month-title').textContent = "September";
       renderSeptemberDays();
+      populateCalendarPolaroids();
 
       const circle = document.getElementById('flowing-circle');
       const grid = document.getElementById('calendar-grid');
@@ -770,9 +887,9 @@
       circle.style.transition = 'none';
       updateCirclePosition(1);
 
-      // Smooth flow from date 1 to 24
+      // Slowed down flow from date 1 to 24 (450ms per step)
       setTimeout(() => {
-        circle.style.transition = 'left 0.12s linear, top 0.12s linear';
+        circle.style.transition = 'left 0.4s ease-in-out, top 0.4s ease-in-out';
 
         const flowInterval = setInterval(() => {
           currentDay++;
@@ -781,27 +898,19 @@
           if (currentDay >= 24) {
             clearInterval(flowInterval);
             
-            // Stop at 24, calculate zoom origin on date 24, then zoom in
+            // Stop at 24 without zooming in. Reveal calligraphy & button below calendar.
             setTimeout(() => {
-              const day24 = document.getElementById('day-node-24');
-              if (day24) {
-                const containerRect = containerEl.getBoundingClientRect();
-                const dayRect = day24.getBoundingClientRect();
-                const originX = (((dayRect.left + dayRect.width / 2) - containerRect.left) / containerRect.width) * 100;
-                const originY = (((dayRect.top + dayRect.height / 2) - containerRect.top) / containerRect.height) * 100;
-                containerEl.style.transformOrigin = `${originX}% ${originY}%`;
-              }
+              const revealEl = document.getElementById('calendar-reveal-content');
+              const calligraphyEl = document.getElementById('bday-calligraphy-text');
+              const btnEl = document.getElementById('calendar-next-btn');
 
-              containerEl.classList.add('zoom-in');
-
-              // Transition to Message Page
-              setTimeout(() => {
-                navigateTo('screen-message');
-              }, 1200);
+              revealEl.classList.add('active');
+              calligraphyEl.classList.add('write');
+              btnEl.classList.add('show');
             }, 500);
           }
-        }, 120);
-      }, 100);
+        }, 450);
+      }, 300);
     }
 
     function decryptOpenSSLAES(encryptedArrayBuffer, password) {
@@ -896,8 +1005,6 @@
           loadingEl.style.display = 'none';
           return;
         }
-
-        document.getElementById('reveal-photo1-img').src = testDataUrl;
 
         decryptedPhotos.length = 0;
         decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
