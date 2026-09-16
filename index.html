@@ -285,13 +285,66 @@
       margin: 0;
     }
 
-    /* Center Column containing Calendar + Reveal Content directly underneath */
+    /* Center Column containing Top Calligraphy + Calendar + Reveal Button */
     .calendar-center-col {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       flex-shrink: 0;
+    }
+
+    /* TOP CALLIGRAPHY HEADER STYLING */
+    .top-calligraphy-container {
+      min-height: 95px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease;
+    }
+
+    .top-calligraphy-container.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .bday-line {
+      font-family: 'Alex Brush', cursive;
+      color: #ff4d88;
+      text-shadow: 0 0 14px rgba(255, 77, 136, 0.85), 0 0 28px rgba(255, 26, 117, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0%;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .bday-line-1 {
+      font-size: 3rem;
+      line-height: 1.15;
+    }
+
+    .bday-line-2 {
+      font-size: 2.7rem;
+      line-height: 1.15;
+      color: #ff66a3;
+    }
+
+    .top-calligraphy-container.write .bday-line-1 {
+      animation: writeCalligraphySlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .top-calligraphy-container.write .bday-line-2 {
+      animation: writeCalligraphySlow 2.4s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
+    }
+
+    @keyframes writeCalligraphySlow {
+      from { width: 0%; }
+      to { width: 100%; }
     }
 
     .calendar-container {
@@ -428,13 +481,13 @@
       transform: scale(0.9);
     }
 
-    /* Dynamic Dynamic Glows for Polaroid Blocks */
+    /* Dynamic Alternating Pink & Romantic Color Glows */
     .polaroid-card.odd-glow {
-      animation: polaroidFade 0.8s forwards ease-out, themeGlowOdd 5s infinite ease-in-out 0.8s;
+      animation: polaroidFade 0.8s forwards ease-out, themeGlowOdd 5.5s infinite ease-in-out 0.8s;
     }
 
     .polaroid-card.even-glow {
-      animation: polaroidFade 0.8s forwards ease-out, themeGlowEven 5s infinite ease-in-out 0.8s;
+      animation: polaroidFade 0.8s forwards ease-out, themeGlowEven 5.5s infinite ease-in-out 0.8s;
     }
 
     @keyframes polaroidFade {
@@ -442,23 +495,23 @@
     }
 
     @keyframes themeGlowOdd {
-      0% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 51, 102, 0.5); }
-      25% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(255, 128, 160, 0.7); }
-      50% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 32px rgba(212, 175, 55, 0.65); }
-      75% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 25px rgba(230, 0, 76, 0.75); }
-      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 51, 102, 0.5); }
+      0%   { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
+      25%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 128, 179, 0.75); }
+      50%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
+      75%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 22px rgba(230, 0, 76, 0.8); }
+      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
     }
 
     @keyframes themeGlowEven {
-      0% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 32px rgba(212, 175, 55, 0.65); }
-      25% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 25px rgba(230, 0, 76, 0.75); }
-      50% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(255, 51, 102, 0.5); }
-      75% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(255, 128, 160, 0.7); }
-      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 32px rgba(212, 175, 55, 0.65); }
+      0%   { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
+      25%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 22px rgba(230, 0, 76, 0.8); }
+      50%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
+      75%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 128, 179, 0.75); }
+      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
     }
 
     .polaroid-card:hover {
-      box-shadow: 0 14px 35px rgba(255, 51, 102, 0.85) !important;
+      box-shadow: 0 14px 35px rgba(255, 51, 102, 0.9) !important;
     }
 
     .polaroid-img-box {
@@ -495,9 +548,9 @@
     .tilt-right-2 { transform: rotate(5deg); }
     .tilt-right-3 { transform: rotate(-3deg); }
 
-    /* Post-Calendar Sequence (Fits under calendar, between bottom polaroids) */
+    /* Post-Calendar Button Reveal */
     .calendar-reveal-content {
-      margin-top: 14px;
+      margin-top: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -511,52 +564,9 @@
       visibility: visible;
     }
 
-    .bday-calligraphy-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-
-    .bday-line {
-      font-family: 'Alex Brush', cursive;
-      color: #ff3366;
-      text-shadow: 0 0 12px rgba(255, 51, 102, 0.6), 0 0 25px rgba(139, 0, 41, 0.4);
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0%;
-      text-align: center;
-    }
-
-    .bday-line-1 {
-      font-size: 2.4rem;
-      line-height: 1.25;
-    }
-
-    .bday-line-2 {
-      font-size: 2.5rem;
-      line-height: 1.15;
-      color: #ff4d79;
-    }
-
-    /* Slow, elegant Calligraphy Animation speeds */
-    .bday-calligraphy-container.write .bday-line-1 {
-      animation: writeCalligraphySlow 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .bday-calligraphy-container.write .bday-line-2 {
-      animation: writeCalligraphySlow 2.3s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards;
-    }
-
-    @keyframes writeCalligraphySlow {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
-
     .calendar-reveal-btn {
-      padding: 9px 24px !important;
+      padding: 10px 26px !important;
       font-size: 0.95rem !important;
-      margin-top: 8px !important;
     }
 
     .glowing-love-btn {
@@ -702,7 +712,7 @@
       .polaroid-col { flex-direction: row; }
       .polaroid-card { width: 150px; }
       .polaroid-img-box { height: 105px; }
-      .bday-line-1 { font-size: 1.8rem; }
+      .bday-line-1 { font-size: 2.2rem; }
       .bday-line-2 { font-size: 2rem; }
     }
   </style>
@@ -755,7 +765,7 @@
   <section id="screen-calendar" class="screen">
     
     <div class="calendar-wrapper">
-      <!-- 3 Left Polaroids -->
+      <!-- 3 Left Polaroids (Alternating Glows) -->
       <div class="polaroid-col">
         <div class="polaroid-card tilt-left-1 odd-glow">
           <div class="polaroid-img-box"><img id="polaroid-img-1" src="" alt="Memory 1"></div>
@@ -771,8 +781,15 @@
         </div>
       </div>
 
-      <!-- Center Column: Calendar + Revealed Text/Button directly beneath -->
+      <!-- Center Column: TOP Calligraphy + Calendar + Revealed Action Button -->
       <div class="calendar-center-col">
+        
+        <!-- CALLIGRAPHY WRITING WRITTEN DIRECTLY ON TOP OF THE CALENDAR -->
+        <div id="top-calligraphy-container" class="top-calligraphy-container">
+          <div class="bday-line bday-line-1">Happyyy 18 !</div>
+          <div class="bday-line bday-line-2">Finally Legal !</div>
+        </div>
+
         <div id="calendar-container" class="calendar-container">
           <div class="calendar-binder">
             <div class="ring"></div>
@@ -797,17 +814,13 @@
           </div>
         </div>
 
-        <!-- Post-Calendar Animation Sequence (Reveals directly under calendar, between bottom polaroids) -->
+        <!-- Action Button Sequence (Reveals directly under calendar after reaching 24) -->
         <div id="calendar-reveal-content" class="calendar-reveal-content">
-          <div id="bday-calligraphy-text" class="bday-calligraphy-container">
-            <div class="bday-line bday-line-1">Happyyy 18 !</div>
-            <div class="bday-line bday-line-2">Finally Legal !!!</div>
-          </div>
           <button id="calendar-next-btn" class="btn glowing-love-btn calendar-reveal-btn" onclick="navigateTo('screen-message')">Open Letter and more gifts &rarr;</button>
         </div>
       </div>
 
-      <!-- 3 Right Polaroids -->
+      <!-- 3 Right Polaroids (Alternating Glows) -->
       <div class="polaroid-col">
         <div class="polaroid-card tilt-right-1 even-glow">
           <div class="polaroid-img-box"><img id="polaroid-img-4" src="" alt="Memory 4"></div>
@@ -962,7 +975,7 @@
       circle.style.transition = 'none';
       updateCirclePosition(1);
 
-      // Flow from date 1 to 24 (450ms per step)
+      // Circle flows through dates (450ms per step)
       setTimeout(() => {
         circle.style.transition = 'left 0.4s ease-in-out, top 0.4s ease-in-out';
 
@@ -970,22 +983,23 @@
           currentDay++;
           updateCirclePosition(currentDay);
 
-          // AT DAY 15: Trigger Calligraphy text writing WITHOUT stopping circle movement
+          // AT DAY 15: Start cursive calligraphy writing ON THE TOP OF THE CALENDAR without stopping circle movement
           if (currentDay === 15) {
-            const revealEl = document.getElementById('calendar-reveal-content');
-            const calligraphyEl = document.getElementById('bday-calligraphy-text');
-            revealEl.classList.add('active');
-            calligraphyEl.classList.add('write');
+            const topCalligraphy = document.getElementById('top-calligraphy-container');
+            topCalligraphy.classList.add('active');
+            topCalligraphy.classList.add('write');
           }
 
-          // AT DAY 24: Stop flow and activate proceed button
+          // AT DAY 24: Circle stops, action button reveals underneath calendar
           if (currentDay >= 24) {
             clearInterval(flowInterval);
             
             setTimeout(() => {
+              const revealEl = document.getElementById('calendar-reveal-content');
               const btnEl = document.getElementById('calendar-next-btn');
+              revealEl.classList.add('active');
               btnEl.classList.add('show');
-            }, 500);
+            }, 400);
           }
         }, 450);
       }, 300);
