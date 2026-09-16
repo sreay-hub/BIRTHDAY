@@ -342,6 +342,23 @@
       animation: writeCalligraphySlow 2.4s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
     }
 
+    /* REVEAL CALLIGRAPHY CONTAINER STYLING UNDER CALENDAR */
+    .bday-calligraphy-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .calendar-reveal-content.active .bday-calligraphy-container .bday-line-1 {
+      animation: writeCalligraphySlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .calendar-reveal-content.active .bday-calligraphy-container .bday-line-2 {
+      animation: writeCalligraphySlow 2.4s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
+    }
+
     @keyframes writeCalligraphySlow {
       from { width: 0%; }
       to { width: 100%; }
@@ -818,7 +835,7 @@
         <!-- Post-Calendar Animation Sequence (Reveals directly under calendar, between bottom polaroids) -->
         <div id="calendar-reveal-content" class="calendar-reveal-content">
           <div id="bday-calligraphy-text" class="bday-calligraphy-container">
-            <div class="bday-line bday-line-1">Happy Birthday My Dear</div>
+            <div class="bday-line bday-line-1">Happy 18th Birthday My Dear</div>
             <div class="bday-line bday-line-2">Love</div>
           </div>
           <button id="calendar-next-btn" class="btn glowing-love-btn calendar-reveal-btn" onclick="navigateTo('screen-message')">A Letter for Love &rarr;</button>
