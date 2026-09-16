@@ -64,7 +64,7 @@
       width: 100%;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 30px 20px;
+      padding: 20px 15px;
       position: relative;
       z-index: 1;
       opacity: 0;
@@ -110,13 +110,13 @@
       background: linear-gradient(135deg, #800020 0%, #b3003b 100%);
       color: #fff;
       border: 1px solid rgba(255, 102, 140, 0.4);
-      padding: 14px 34px;
-      font-size: 1.1rem;
+      padding: 12px 30px;
+      font-size: 1.05rem;
       font-family: 'Playfair Display', serif;
       letter-spacing: 1px;
       border-radius: 30px;
       cursor: pointer;
-      margin-top: 20px;
+      margin-top: 15px;
       box-shadow: 0 8px 25px rgba(128, 0, 32, 0.5), 0 0 15px rgba(179, 0, 59, 0.3);
       transition: all 0.4s ease;
     }
@@ -272,21 +272,31 @@
     #screen-calendar { 
       text-align: center; 
       width: 100%;
-      max-width: 1400px;
+      max-width: 1350px;
+      padding: 10px 15px;
     }
 
     .calendar-wrapper {
       display: flex;
       align-items: center;
       justify-content: space-around;
-      gap: 30px;
+      gap: 20px;
       width: 100%;
-      margin: 10px 0;
+      margin: 0;
+    }
+
+    /* Center Column containing Calendar + Reveal Content directly underneath */
+    .calendar-center-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      flex-shrink: 0;
     }
 
     .calendar-container {
-      width: 320px;
-      height: 380px;
+      width: 300px;
+      height: 330px;
       position: relative;
       margin: 0;
       flex-shrink: 0;
@@ -294,7 +304,7 @@
 
     .calendar-binder {
       width: 100%;
-      height: 40px;
+      height: 36px;
       background: #15070d;
       border-radius: 12px 12px 0 0;
       border: 1px solid rgba(255, 77, 121, 0.3);
@@ -308,24 +318,24 @@
     }
 
     .ring {
-      width: 12px;
-      height: 20px;
+      width: 11px;
+      height: 18px;
       background: linear-gradient(135deg, #d4af37, #8a7322);
-      border-radius: 6px;
+      border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
 
     .calendar-page {
       width: 100%;
-      height: 340px;
+      height: 294px;
       background: #180910;
       color: #e6c2cb;
       border-radius: 0 0 16px 16px;
       position: absolute;
-      top: 40px;
+      top: 36px;
       left: 0;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(128, 0, 32, 0.3);
-      padding: 20px;
+      padding: 15px 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -334,12 +344,12 @@
 
     .calendar-header {
       border-bottom: 2px solid #800020;
-      padding-bottom: 10px;
+      padding-bottom: 6px;
     }
 
     .calendar-month {
       font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
+      font-size: 1.9rem;
       font-weight: 700;
       color: #ff3366;
       text-transform: uppercase;
@@ -349,7 +359,7 @@
 
     .calendar-year {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
+      font-size: 1.05rem;
       color: #ff80a0;
       font-weight: 600;
     }
@@ -357,21 +367,21 @@
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      margin-top: 15px;
+      gap: 6px;
+      margin-top: 10px;
       font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       position: relative;
     }
 
     .day-label {
       font-weight: 700;
       color: #ff4d79;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
 
     .day-number {
-      height: 32px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -381,9 +391,9 @@
     /* Flowing Red Circle */
     .flowing-circle {
       position: absolute;
-      width: 32px;
-      height: 32px;
-      border: 3px solid #ff3366;
+      width: 28px;
+      height: 28px;
+      border: 2.5px solid #ff3366;
       border-radius: 50%;
       box-shadow: 0 0 15px rgba(255, 51, 102, 0.9);
       animation: circlePulse 1.2s infinite alternate;
@@ -398,22 +408,22 @@
       100% { box-shadow: 0 0 22px rgba(255, 51, 102, 1); }
     }
 
-    /* Polaroid Layout Styling — Scaled up to fill vacant side spaces */
+    /* Polaroid Layout Styling */
     .polaroid-col {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 12px;
       align-items: center;
       flex: 1;
     }
 
     .polaroid-card {
       background: rgba(22, 9, 15, 0.9);
-      padding: 10px 10px 22px 10px;
+      padding: 8px 8px 14px 8px;
       border-radius: 8px;
       border: 1px solid rgba(255, 77, 121, 0.3);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(128, 0, 32, 0.3);
-      width: 240px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 18px rgba(128, 0, 32, 0.3);
+      width: 210px;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
       opacity: 0;
       transform: scale(0.9);
@@ -425,12 +435,12 @@
     }
 
     .polaroid-card:hover {
-      box-shadow: 0 16px 35px rgba(255, 51, 102, 0.55);
+      box-shadow: 0 14px 30px rgba(255, 51, 102, 0.55);
     }
 
     .polaroid-img-box {
       width: 100%;
-      height: 185px;
+      height: 145px;
       border-radius: 6px;
       overflow: hidden;
       background: #0d0407;
@@ -446,8 +456,8 @@
     .polaroid-tag {
       font-family: 'Alex Brush', cursive;
       color: #ff80a0;
-      font-size: 1.55rem;
-      margin-top: 8px;
+      font-size: 1.35rem;
+      margin-top: 5px;
       text-align: center;
       display: block;
     }
@@ -462,15 +472,15 @@
     .tilt-right-2 { transform: rotate(5deg); }
     .tilt-right-3 { transform: rotate(-3deg); }
 
-    /* Post-Calendar Sequence */
+    /* Post-Calendar Sequence (Fits under calendar, between bottom polaroids) */
     .calendar-reveal-content {
-      margin-top: 25px;
+      margin-top: 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 1.2s ease;
+      transition: opacity 1s ease;
     }
 
     .calendar-reveal-content.active {
@@ -478,24 +488,51 @@
       visibility: visible;
     }
 
-    .bday-calligraphy-text {
+    .bday-calligraphy-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .bday-line {
       font-family: 'Alex Brush', cursive;
       color: #ff3366;
-      font-size: 3.4rem;
-      text-shadow: 0 0 15px rgba(255, 51, 102, 0.6), 0 0 30px rgba(139, 0, 41, 0.4);
+      text-shadow: 0 0 12px rgba(255, 51, 102, 0.6), 0 0 25px rgba(139, 0, 41, 0.4);
       white-space: nowrap;
       overflow: hidden;
       width: 0%;
-      margin-bottom: 10px;
+      text-align: center;
     }
 
-    .bday-calligraphy-text.write {
-      animation: writeCalligraphySlow 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    .bday-line-1 {
+      font-size: 2.1rem;
+      line-height: 1.25;
+    }
+
+    .bday-line-2 {
+      font-size: 2.3rem;
+      line-height: 1.15;
+      color: #ff4d79;
+    }
+
+    .bday-calligraphy-container.write .bday-line-1 {
+      animation: writeCalligraphySlow 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    .bday-calligraphy-container.write .bday-line-2 {
+      animation: writeCalligraphySlow 1.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
     }
 
     @keyframes writeCalligraphySlow {
       from { width: 0%; }
       to { width: 100%; }
+    }
+
+    .calendar-reveal-btn {
+      padding: 9px 24px !important;
+      font-size: 0.95rem !important;
+      margin-top: 8px !important;
     }
 
     .glowing-love-btn {
@@ -637,11 +674,12 @@
     .lightbox-close:hover { color: #ff3366; }
 
     @media (max-width: 950px) {
-      .calendar-wrapper { flex-direction: column; gap: 20px; }
+      .calendar-wrapper { flex-direction: column; gap: 15px; }
       .polaroid-col { flex-direction: row; }
-      .polaroid-card { width: 160px; }
-      .polaroid-img-box { height: 120px; }
-      .bday-calligraphy-text { font-size: 2.2rem; }
+      .polaroid-card { width: 150px; }
+      .polaroid-img-box { height: 105px; }
+      .bday-line-1 { font-size: 1.7rem; }
+      .bday-line-2 { font-size: 1.9rem; }
     }
   </style>
 </head>
@@ -709,28 +747,39 @@
         </div>
       </div>
 
-      <!-- Center Calendar -->
-      <div id="calendar-container" class="calendar-container">
-        <div class="calendar-binder">
-          <div class="ring"></div>
-          <div class="ring"></div>
-          <div class="ring"></div>
+      <!-- Center Column: Calendar + Revealed Text/Button directly beneath -->
+      <div class="calendar-center-col">
+        <div id="calendar-container" class="calendar-container">
+          <div class="calendar-binder">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+          </div>
+
+          <div id="active-page" class="calendar-page">
+            <div class="calendar-header">
+              <div id="cal-month-title" class="calendar-month">September</div>
+              <div class="calendar-year">2026</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendar-grid">
+              <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
+              <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
+              <div class="day-label">S</div>
+              <div id="cal-days-container" style="display: contents;"></div>
+              <div id="flowing-circle" class="flowing-circle"></div>
+            </div>
+            <div style="font-size: 0.8rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
+          </div>
         </div>
 
-        <div id="active-page" class="calendar-page">
-          <div class="calendar-header">
-            <div id="cal-month-title" class="calendar-month">September</div>
-            <div class="calendar-year">2026</div>
+        <!-- Post-Calendar Animation Sequence (Reveals directly under calendar, between bottom polaroids) -->
+        <div id="calendar-reveal-content" class="calendar-reveal-content">
+          <div id="bday-calligraphy-text" class="bday-calligraphy-container">
+            <div class="bday-line bday-line-1">Happy Birthday My Dear</div>
+            <div class="bday-line bday-line-2">Love</div>
           </div>
-          
-          <div class="calendar-grid" id="calendar-grid">
-            <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
-            <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
-            <div class="day-label">S</div>
-            <div id="cal-days-container" style="display: contents;"></div>
-            <div id="flowing-circle" class="flowing-circle"></div>
-          </div>
-          <div style="font-size: 0.85rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
+          <button id="calendar-next-btn" class="btn glowing-love-btn calendar-reveal-btn" onclick="navigateTo('screen-message')">Open Letter and more gifts &rarr;</button>
         </div>
       </div>
 
@@ -749,12 +798,6 @@
           <span class="polaroid-tag">Always</span>
         </div>
       </div>
-    </div>
-
-    <!-- Post-Calendar Animation Sequence (Reveals below calendar) -->
-    <div id="calendar-reveal-content" class="calendar-reveal-content">
-      <div id="bday-calligraphy-text" class="bday-calligraphy-text">Happy Birthday My Dear love</div>
-      <button id="calendar-next-btn" class="btn glowing-love-btn" onclick="navigateTo('screen-message')">Open Letter and more gifts &rarr;</button>
     </div>
 
   </section>
@@ -906,7 +949,7 @@
           if (currentDay >= 24) {
             clearInterval(flowInterval);
             
-            // Stop at 24 without zooming in. Reveal calligraphy & button below calendar.
+            // Stop at 24. Reveal calligraphy & button directly below calendar.
             setTimeout(() => {
               const revealEl = document.getElementById('calendar-reveal-content');
               const calligraphyEl = document.getElementById('bday-calligraphy-text');
