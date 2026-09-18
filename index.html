@@ -88,6 +88,7 @@
       text-shadow: 0 0 15px rgba(255, 51, 102, 0.6), 0 0 30px rgba(139, 0, 41, 0.4);
       font-weight: 400;
       letter-spacing: 1px;
+      text-align: center;
     }
 
     .serif-heading {
@@ -175,10 +176,22 @@
       text-align: center;
     }
 
-    /* Screen 1: Passcode Screen */
+    /* Screen 1: Passcode Screen - Fixed Viewport, Centered, Non-Scrollable */
     #screen-passcode { 
-      text-align: center; 
-      max-width: 440px; 
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      max-width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      z-index: 100;
     }
 
     .passcode-card {
@@ -188,10 +201,14 @@
       border: 1px solid rgba(255, 77, 121, 0.25);
       border-radius: 20px;
       padding: 35px 30px;
+      width: 100%;
+      max-width: 440px;
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(128, 0, 32, 0.25);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     /* Mini Calendar Card */
@@ -201,7 +218,7 @@
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(179, 0, 59, 0.2);
       width: 170px;
-      margin-bottom: 25px;
+      margin: 0 auto 25px auto;
       overflow: hidden;
       border: 1px solid rgba(255, 77, 121, 0.3);
       transform: rotate(-2deg);
@@ -230,6 +247,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     .journey-day {
@@ -239,6 +258,7 @@
       color: #ff4d79;
       line-height: 1;
       text-shadow: 0 0 10px rgba(255, 77, 121, 0.3);
+      text-align: center;
     }
 
     .journey-month {
@@ -248,15 +268,23 @@
       color: #ff80a0;
       text-transform: uppercase;
       margin-top: 2px;
+      text-align: center;
     }
 
     .journey-year {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.95rem;
       color: #b37b8d;
+      text-align: center;
     }
 
-    .input-group { margin-top: 15px; width: 100%; }
+    .input-group { 
+      margin-top: 15px; 
+      width: 100%; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     input[type="password"] {
       width: 100%;
@@ -278,8 +306,8 @@
       background: rgba(15, 5, 10, 0.95);
     }
 
-    .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
-    .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
+    .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; text-align: center; }
+    .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; text-align: center; }
 
     /* Calendar Section & Layout */
     #screen-calendar { 
@@ -821,7 +849,7 @@
       </div>
 
       <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
-      <p style="color: #d99bb0; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
+      <p style="color: #d99bb0; font-size: 1.05rem; text-align: center;">Enter the secret passcode to reveal your gift.</p>
       
       <div class="input-group">
         <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
