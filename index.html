@@ -66,10 +66,10 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 #screen-calendar{min-height:100vh;justify-content:center;align-items:center;}
 .calendar-wrapper{display:flex;align-items:center;justify-content:center;gap:26px;width:100%;max-width:1300px;flex-wrap:wrap;}
 .polaroid-col{display:flex;flex-direction:column;gap:14px;align-items:center;}
-.polaroid-card{background:rgba(22,9,15,.9);padding:8px 8px 12px;border-radius:8px;border:1px solid rgba(255,77,121,.35);width:150px;opacity:0;transform:scale(.9);animation:polaroidFade .8s forwards ease-out;box-shadow:0 10px 25px rgba(0,0,0,.7),0 0 18px rgba(255,51,102,.35);}
+.polaroid-card{background:rgba(22,9,15,.9);padding:9px 9px 14px;border-radius:8px;border:1px solid rgba(255,77,121,.35);width:190px;opacity:0;transform:scale(.9);animation:polaroidFade .8s forwards ease-out;box-shadow:0 10px 25px rgba(0,0,0,.7),0 0 18px rgba(255,51,102,.35);}
 @keyframes polaroidFade{to{opacity:1;transform:scale(1);}}
-.polaroid-card img{width:100%;height:105px;object-fit:cover;border-radius:6px;display:block;background:#0d0407;}
-.polaroid-tag{font-family:'Alex Brush',cursive;color:#ff80a0;font-size:1.2rem;text-align:center;display:block;margin-top:5px;}
+.polaroid-card img{width:100%;height:135px;object-fit:cover;border-radius:6px;display:block;background:#0d0407;}
+.polaroid-tag{font-family:'Alex Brush',cursive;color:#ff80a0;font-size:1.3rem;text-align:center;display:block;margin-top:6px;}
 .tilt-1{transform:rotate(4deg);}.tilt-2{transform:rotate(-5deg);}.tilt-3{transform:rotate(3deg);}
 .tilt-4{transform:rotate(-4deg);}.tilt-5{transform:rotate(5deg);}.tilt-6{transform:rotate(-3deg);}
 
@@ -78,17 +78,17 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 .bday-line{font-family:'Alex Brush',cursive;font-size:2.6rem;color:#ff4d88;text-shadow:0 0 14px rgba(255,77,136,.85);white-space:nowrap;overflow:hidden;width:0;}
 .top-calligraphy.write .bday-line{animation:writeCalligraphy 2.4s cubic-bezier(.4,0,.2,1) forwards;}
 
-.calendar-container{width:290px;position:relative;}
-.calendar-binder{height:34px;background:#15070d;border-radius:12px 12px 0 0;border:1px solid rgba(255,77,121,.3);display:flex;justify-content:space-around;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.5);}
-.ring{width:10px;height:16px;background:linear-gradient(135deg,#d4af37,#8a7322);border-radius:5px;}
-.calendar-page{background:#180910;border-radius:0 0 16px 16px;box-shadow:0 15px 35px rgba(0,0,0,.7);padding:16px;border:1px solid rgba(255,77,121,.25);}
-.calendar-month{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:#ff3366;text-transform:uppercase;letter-spacing:2px;}
-.calendar-year{font-family:'Cormorant Garamond',serif;color:#ff80a0;font-weight:600;}
-.calendar-header{border-bottom:2px solid #800020;padding-bottom:6px;}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px;font-family:'Playfair Display',serif;font-size:.82rem;position:relative;}
-.day-label{font-weight:700;color:#ff4d79;font-size:.7rem;text-align:center;}
-.day-number{height:26px;display:flex;align-items:center;justify-content:center;}
-.flowing-circle{position:absolute;width:26px;height:26px;border:2.5px solid #ff3366;border-radius:50%;box-shadow:0 0 15px rgba(255,51,102,.9);pointer-events:none;transform:translate(-50%,-50%);display:none;}
+.calendar-container{width:400px;position:relative;}
+.calendar-binder{height:42px;background:#15070d;border-radius:14px 14px 0 0;border:1px solid rgba(255,77,121,.3);display:flex;justify-content:space-around;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.5);}
+.ring{width:12px;height:20px;background:linear-gradient(135deg,#d4af37,#8a7322);border-radius:6px;}
+.calendar-page{background:#180910;border-radius:0 0 20px 20px;box-shadow:0 15px 35px rgba(0,0,0,.7);padding:24px;border:1px solid rgba(255,77,121,.25);}
+.calendar-month{font-family:'Playfair Display',serif;font-size:2.3rem;font-weight:700;color:#ff3366;text-transform:uppercase;letter-spacing:2px;}
+.calendar-year{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:#ff80a0;font-weight:600;}
+.calendar-header{border-bottom:2px solid #800020;padding-bottom:8px;}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px;font-family:'Playfair Display',serif;font-size:1.05rem;position:relative;}
+.day-label{font-weight:700;color:#ff4d79;font-size:.85rem;text-align:center;}
+.day-number{height:36px;display:flex;align-items:center;justify-content:center;}
+.flowing-circle{position:absolute;width:34px;height:34px;border:3px solid #ff3366;border-radius:50%;box-shadow:0 0 18px rgba(255,51,102,.9);pointer-events:none;transform:translate(-50%,-50%);display:none;}
 
 .calendar-reveal{margin-top:16px;display:flex;flex-direction:column;align-items:center;opacity:0;visibility:hidden;transition:opacity .8s ease;}
 .calendar-reveal.active{opacity:1;visibility:visible;}
@@ -99,9 +99,9 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 /* ---------- LETTER / POEM SCREENS ---------- */
 .letter-screen{min-height:100vh;padding:60px 20px;justify-content:flex-start;align-items:center;position:relative;}
 .letter-frame{position:relative;width:100%;max-width:1100px;display:flex;align-items:flex-start;justify-content:center;gap:20px;}
-.side-polaroids{display:flex;flex-direction:column;gap:60px;flex:0 0 130px;padding-top:60px;}
-.side-polaroids .polaroid-card{width:130px;}
-.side-polaroids .polaroid-card img{height:95px;}
+.side-polaroids{display:flex;flex-direction:column;gap:55px;flex:0 0 155px;padding-top:60px;}
+.side-polaroids .polaroid-card{width:155px;}
+.side-polaroids .polaroid-card img{height:115px;}
 .letter-card{flex:1;max-width:760px;background:rgba(22,9,15,.62);backdrop-filter:blur(24px) saturate(120%);border:2px solid rgba(255,128,160,.45);border-radius:22px;padding:45px 40px;box-shadow:0 25px 60px rgba(0,0,0,.75),0 0 30px rgba(179,0,59,.25);text-align:center;}
 .letter-title{font-size:3rem;margin-bottom:18px;}
 .letter-body{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.28rem;line-height:1.85;color:#fadadd;text-align:left;}
@@ -110,22 +110,24 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 
 /* ---------- GALLERY ---------- */
 #screen-gallery{min-height:100vh;align-items:center;padding:50px 16px;}
-.gallery-list{width:100%;max-width:880px;display:flex;flex-direction:column;gap:34px;margin-top:20px;}
-.gallery-block{display:flex;align-items:center;gap:26px;background:rgba(20,8,14,.4);border:1px solid rgba(255,77,121,.18);border-radius:18px;padding:16px;}
-.gallery-block:nth-child(even){flex-direction:row-reverse;}
-.gallery-photo-wrap{flex:0 0 220px;aspect-ratio:1/1;border-radius:14px;overflow:hidden;cursor:pointer;background:#180910;box-shadow:0 10px 22px rgba(0,0,0,.55);transition:transform .35s ease;}
-.gallery-photo-wrap:hover{transform:translateY(-4px) scale(1.02);}
+.gallery-list{width:100%;max-width:1220px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:26px;}
+@media(max-width:1050px){.gallery-list{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:720px){.gallery-list{grid-template-columns:repeat(2,1fr);gap:22px;}}
+@media(max-width:460px){.gallery-list{grid-template-columns:1fr;}}
+.gallery-block{display:flex;flex-direction:column;background:rgba(20,8,14,.45);border:1px solid rgba(255,77,121,.2);border-radius:16px;padding:14px;cursor:pointer;transition:transform .35s ease,box-shadow .35s ease;}
+.gallery-block.offset{margin-top:38px;}
+.gallery-block:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(255,51,102,.3);}
+.gallery-photo-wrap{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#180910;box-shadow:0 10px 22px rgba(0,0,0,.5);}
 .gallery-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
-.gallery-caption-wrap{flex:1;text-align:left;cursor:pointer;}
-.cap-title{font-family:'Playfair Display',serif;color:#ff80a0;font-size:1.15rem;margin-bottom:6px;}
-.cap-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#e6c2cb;line-height:1.5;}
+.gallery-caption-wrap{margin-top:12px;text-align:left;}
+.cap-title{font-family:'Playfair Display',serif;color:#ff80a0;font-size:1.1rem;margin-bottom:5px;}
+.cap-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#e6c2cb;line-height:1.45;}
 .read-more{color:#ff3366;font-weight:600;}
-@media(max-width:600px){.gallery-block,.gallery-block:nth-child(even){flex-direction:column;text-align:center;}.gallery-caption-wrap{text-align:center;}}
 
 /* Gallery popup */
 .gallery-modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,4,7,.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:1000;justify-content:center;align-items:center;padding:20px;}
 .gallery-modal-overlay.active{display:flex;}
-.gallery-modal-box{background:rgba(20,8,14,.9);border:1px solid rgba(255,128,160,.4);border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.8);position:relative;}
+.gallery-modal-box{background:rgba(20,8,14,.9);border:1px solid rgba(255,128,160,.4);border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.8);position:relative;}
 .modal-img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:20px 20px 0 0;}
 .modal-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
 .modal-caption-wrap{padding:22px 24px;}
@@ -242,6 +244,24 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 <section id="screen-gallery" class="screen">
   <h2 class="romantic-heading" style="font-size:3.6rem;text-align:center;">Our Gallery</h2>
   <div class="gallery-list" id="gallery-list"></div>
+  <button class="btn" style="margin-top:40px;" onclick="navigateTo('screen-final')">For My Love &rarr;</button>
+</section>
+
+<!-- ================= SCREEN 6: FOR MY LOVE ================= -->
+<section id="screen-final" class="screen letter-screen">
+  <div class="letter-frame">
+    <div class="side-polaroids" id="final-side-left"></div>
+    <div class="letter-card">
+      <h2 class="romantic-heading letter-title">For My Love</h2>
+      <div class="letter-body">
+        <!-- EDIT: write your closing note / small letter here -->
+        <p>Write a few closing lines here...</p>
+        <p>Add a bit more here, however much you'd like — the card grows with your text.</p>
+        <p>And end however feels right to you...</p>
+      </div>
+    </div>
+    <div class="side-polaroids" id="final-side-right"></div>
+  </div>
 </section>
 
 <!-- Gallery popup -->
@@ -271,7 +291,9 @@ const PHOTO_MAP = {
   letterRight: [9,10],
   poemLeft: [11,12],
   poemRight: [13,14],
-  gallery: Array.from({length:25}, (_,i)=> i+15) // photos 15-39
+  gallery: Array.from({length:25}, (_,i)=> i+15), // photos 15-39
+  finalLeft: [40,41],
+  finalRight: [42,43]
 };
 
 // EDIT: one caption per gallery photo (25 total, matches PHOTO_MAP.gallery order)
@@ -391,6 +413,8 @@ async function handleUnlock(){
     buildSidePolaroids('letter-side-right', PHOTO_MAP.letterRight);
     buildSidePolaroids('poem-side-left', PHOTO_MAP.poemLeft);
     buildSidePolaroids('poem-side-right', PHOTO_MAP.poemRight);
+    buildSidePolaroids('final-side-left', PHOTO_MAP.finalLeft);
+    buildSidePolaroids('final-side-right', PHOTO_MAP.finalRight);
     buildGallery();
 
     loadingEl.style.display='none';
@@ -482,7 +506,7 @@ function buildGallery(){
   PHOTO_MAP.gallery.forEach((photoId, idx)=>{
     const cap = GALLERY_CAPTIONS[idx] || {title:'Memory', text:''};
     const block = document.createElement('div');
-    block.className='gallery-block';
+    block.className='gallery-block' + (idx % 2 === 1 ? ' offset' : '');
 
     const photoWrap = document.createElement('div');
     photoWrap.className='gallery-photo-wrap';
@@ -493,14 +517,11 @@ function buildGallery(){
 
     const capWrap = document.createElement('div');
     capWrap.className='gallery-caption-wrap';
-    capWrap.innerHTML = `<div class="cap-title">${cap.title}</div><div class="cap-text">${cap.text.slice(0,70)}${cap.text.length>70?'... <span class="read-more">read more</span>':''}</div>`;
-
-    const openFn = ()=>openGalleryModal(photoId, cap);
-    photoWrap.onclick = openFn;
-    capWrap.onclick = openFn;
+    capWrap.innerHTML = `<div class="cap-title">${cap.title}</div><div class="cap-text">${cap.text.slice(0,60)}${cap.text.length>60?'... <span class="read-more">read more</span>':''}</div>`;
 
     block.appendChild(photoWrap);
     block.appendChild(capWrap);
+    block.onclick = ()=>openGalleryModal(photoId, cap);
     list.appendChild(block);
   });
 }
