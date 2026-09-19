@@ -1,702 +1,521 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise | Happy Birthday</title>
-    
-    <!-- Google Fonts: Playfair Display for elegant serif titles, Montserrat for clean body text -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome for romantic & UI icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        burgundy: {
-                            50: '#fdf2f4',
-                            100: '#fbe6e9',
-                            500: '#800020',
-                            700: '#5c0017',
-                            900: '#38000d',
-                        },
-                        rosegold: {
-                            300: '#f4c2c2',
-                            400: '#ea9999',
-                            500: '#b76e79',
-                        },
-                        champagne: {
-                            100: '#fdfbf7',
-                            200: '#f7f0e5',
-                            300: '#e8d8c3',
-                        }
-                    },
-                    fontFamily: {
-                        serif: ['"Playfair Display"', 'Cormorant Garamond', 'Georgia', 'serif'],
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        cursive: ['"Cormorant Garamond"', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Surprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+/* ============================================================
+   RESET
+============================================================ */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Poppins','Cormorant Garamond',serif;
+  background:linear-gradient(160deg,#0b0407 0%,#1a0710 45%,#280a15 100%);
+  color:#e9c7d0;min-height:100vh;overflow-x:hidden;position:relative;
+}
+body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(110px);z-index:0;pointer-events:none;}
+body::before{width:480px;height:480px;background:rgba(139,0,41,.22);top:5%;left:-5%;}
+body::after{width:520px;height:520px;background:rgba(80,0,20,.30);bottom:5%;right:-5%;}
 
-    <!-- CryptoJS Library for Client-Side AES-256 Decryption -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+/* Floating hearts layer */
+.heart-field{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden;}
+.floating-heart{position:absolute;bottom:-40px;color:#ff4d79;opacity:.55;font-size:18px;animation:floatUp linear infinite;filter:drop-shadow(0 0 6px rgba(255,77,121,.5));}
+@keyframes floatUp{
+  0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0;}
+  10%{opacity:.6;}
+  90%{opacity:.5;}
+  100%{transform:translateY(-110vh) translateX(var(--drift,20px)) rotate(25deg);opacity:0;}
+}
 
-    <!-- ========================================================================= -->
-    <!-- CUSTOM DESIGN & STYLING BLOCK (Customize your visual styles here)          -->
-    <!-- ========================================================================= -->
-    <style>
-        /* Ambient Animated Background Canvas */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+/* Screens */
+.screen{display:none;width:100%;min-height:100vh;position:relative;z-index:3;padding:40px 18px;opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease;}
+.screen.active{display:flex;flex-direction:column;align-items:center;opacity:1;transform:translateY(0);}
 
-        /* Glassmorphism styling */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-        }
+.romantic-heading{font-family:'Alex Brush',cursive;color:#ff3366;text-shadow:0 0 15px rgba(255,51,102,.6),0 0 30px rgba(139,0,41,.4);font-weight:400;letter-spacing:1px;}
+.serif-heading{font-family:'Playfair Display',serif;color:#f5b3c2;letter-spacing:.5px;}
+.highlight-name{font-family:'Playfair Display',serif;font-weight:700;color:#ff4d79;text-shadow:0 0 15px rgba(255,77,121,.7);}
 
-        .dark-glass-card {
-            background: rgba(30, 10, 18, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 182, 193, 0.2);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-        }
+.btn{background:linear-gradient(135deg,#800020 0%,#b3003b 100%);color:#fff;border:1px solid rgba(255,102,140,.4);padding:12px 30px;font-size:1.02rem;font-family:'Playfair Display',serif;letter-spacing:.5px;border-radius:30px;cursor:pointer;margin-top:18px;box-shadow:0 8px 25px rgba(128,0,32,.5);transition:.35s ease;}
+.btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 30px rgba(230,0,76,.55);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
-        /* Romantic Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #800020 0%, #b76e79 50%, #d4af37 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* ---------- SCREEN 0: WELCOME ---------- */
+#screen-welcome{justify-content:center;align-items:center;text-align:center;min-height:100vh;}
+.welcome-title{font-size:3.4rem;line-height:1.25;}
+.animated-calligraphy{display:inline-block;overflow:hidden;white-space:nowrap;width:0;animation:writeCalligraphy 3.4s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes writeCalligraphy{from{width:0;}to{width:100%;}}
+.welcome-subtitle{font-size:1.05rem;color:#d99bb0;font-style:italic;margin:18px 0 6px;}
 
-        /* Keyframe Animations */
-        @keyframes pulseSlow {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.04); opacity: 1; }
-        }
+/* ---------- SCREEN 1: PASSCODE ---------- */
+#screen-passcode{justify-content:center;align-items:center;min-height:100vh;text-align:center;}
+.passcode-card{background:rgba(20,8,14,.75);backdrop-filter:blur(20px);border:1px solid rgba(255,77,121,.25);border-radius:20px;padding:38px 30px;max-width:420px;width:100%;box-shadow:0 20px 45px rgba(0,0,0,.6);}
+.pass-row{position:relative;margin-top:18px;}
+input[type=password],input[type=text].pass-field{width:100%;padding:14px 48px 14px 14px;font-size:1.02rem;background:rgba(10,4,7,.8);border:1px solid rgba(255,77,121,.3);border-radius:10px;color:#ffccd5;text-align:center;outline:none;transition:.3s;}
+input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,.4);}
+.view-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#ff80a0;cursor:pointer;font-size:1.1rem;}
+.error-msg{color:#ff4d6d;font-size:.92rem;margin-top:14px;display:none;font-weight:500;}
+.loading-msg{color:#ff80a0;font-size:.92rem;margin-top:14px;display:none;font-weight:500;}
 
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-        }
+/* ---------- SCREEN 2: CALENDAR ---------- */
+#screen-calendar{min-height:100vh;justify-content:center;align-items:center;}
+.calendar-wrapper{display:flex;align-items:center;justify-content:center;gap:26px;width:100%;max-width:1300px;flex-wrap:wrap;}
+.polaroid-col{display:flex;flex-direction:column;gap:14px;align-items:center;}
+.polaroid-card{background:rgba(22,9,15,.9);padding:8px 8px 12px;border-radius:8px;border:1px solid rgba(255,77,121,.35);width:150px;opacity:0;transform:scale(.9);animation:polaroidFade .8s forwards ease-out;box-shadow:0 10px 25px rgba(0,0,0,.7),0 0 18px rgba(255,51,102,.35);}
+@keyframes polaroidFade{to{opacity:1;transform:scale(1);}}
+.polaroid-card img{width:100%;height:105px;object-fit:cover;border-radius:6px;display:block;background:#0d0407;}
+.polaroid-tag{font-family:'Alex Brush',cursive;color:#ff80a0;font-size:1.2rem;text-align:center;display:block;margin-top:5px;}
+.tilt-1{transform:rotate(4deg);}.tilt-2{transform:rotate(-5deg);}.tilt-3{transform:rotate(3deg);}
+.tilt-4{transform:rotate(-4deg);}.tilt-5{transform:rotate(5deg);}.tilt-6{transform:rotate(-3deg);}
 
-        .animate-pulse-slow {
-            animation: pulseSlow 4s ease-in-out infinite;
-        }
+.calendar-center-col{display:flex;flex-direction:column;align-items:center;}
+.top-calligraphy{min-height:80px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.bday-line{font-family:'Alex Brush',cursive;font-size:2.6rem;color:#ff4d88;text-shadow:0 0 14px rgba(255,77,136,.85);white-space:nowrap;overflow:hidden;width:0;}
+.top-calligraphy.write .bday-line{animation:writeCalligraphy 2.4s cubic-bezier(.4,0,.2,1) forwards;}
 
-        .animate-float {
-            animation: floatSlow 6s ease-in-out infinite;
-        }
+.calendar-container{width:290px;position:relative;}
+.calendar-binder{height:34px;background:#15070d;border-radius:12px 12px 0 0;border:1px solid rgba(255,77,121,.3);display:flex;justify-content:space-around;align-items:center;box-shadow:0 4px 10px rgba(0,0,0,.5);}
+.ring{width:10px;height:16px;background:linear-gradient(135deg,#d4af37,#8a7322);border-radius:5px;}
+.calendar-page{background:#180910;border-radius:0 0 16px 16px;box-shadow:0 15px 35px rgba(0,0,0,.7);padding:16px;border:1px solid rgba(255,77,121,.25);}
+.calendar-month{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:#ff3366;text-transform:uppercase;letter-spacing:2px;}
+.calendar-year{font-family:'Cormorant Garamond',serif;color:#ff80a0;font-weight:600;}
+.calendar-header{border-bottom:2px solid #800020;padding-bottom:6px;}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px;font-family:'Playfair Display',serif;font-size:.82rem;position:relative;}
+.day-label{font-weight:700;color:#ff4d79;font-size:.7rem;text-align:center;}
+.day-number{height:26px;display:flex;align-items:center;justify-content:center;}
+.flowing-circle{position:absolute;width:26px;height:26px;border:2.5px solid #ff3366;border-radius:50%;box-shadow:0 0 15px rgba(255,51,102,.9);pointer-events:none;transform:translate(-50%,-50%);display:none;}
 
-        /* Custom Scrollbar for Gallery */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #fdfbf7;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #b76e79;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #800020;
-        }
+.calendar-reveal{margin-top:16px;display:flex;flex-direction:column;align-items:center;opacity:0;visibility:hidden;transition:opacity .8s ease;}
+.calendar-reveal.active{opacity:1;visibility:visible;}
+.glow-btn{opacity:0;transform:translateY(10px);transition:.8s ease;}
+.glow-btn.show{opacity:1;transform:translateY(0);animation:glowPulse 2s infinite alternate;}
+@keyframes glowPulse{0%{box-shadow:0 0 15px rgba(255,51,102,.5);}100%{box-shadow:0 0 25px rgba(255,51,102,.9);}}
 
-        /* Screen transition utilities */
-        .view-section {
-            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
-            opacity: 0;
-            pointer-events: none;
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            min-height: 100vh;
-        }
+/* ---------- LETTER / POEM SCREENS ---------- */
+.letter-screen{min-height:100vh;padding:60px 20px;justify-content:flex-start;align-items:center;position:relative;}
+.letter-frame{position:relative;width:100%;max-width:1100px;display:flex;align-items:flex-start;justify-content:center;gap:20px;}
+.side-polaroids{display:flex;flex-direction:column;gap:60px;flex:0 0 130px;padding-top:60px;}
+.side-polaroids .polaroid-card{width:130px;}
+.side-polaroids .polaroid-card img{height:95px;}
+.letter-card{flex:1;max-width:760px;background:rgba(22,9,15,.62);backdrop-filter:blur(24px) saturate(120%);border:2px solid rgba(255,128,160,.45);border-radius:22px;padding:45px 40px;box-shadow:0 25px 60px rgba(0,0,0,.75),0 0 30px rgba(179,0,59,.25);text-align:center;}
+.letter-title{font-size:3rem;margin-bottom:18px;}
+.letter-body{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.28rem;line-height:1.85;color:#fadadd;text-align:left;}
+.letter-body p{margin-bottom:18px;}
+@media(max-width:900px){.side-polaroids{display:none;}}
 
-        .view-section.active {
-            opacity: 1;
-            pointer-events: auto;
-            position: relative;
-        }
-    </style>
+/* ---------- GALLERY ---------- */
+#screen-gallery{min-height:100vh;align-items:center;padding:50px 16px;}
+.gallery-list{width:100%;max-width:880px;display:flex;flex-direction:column;gap:34px;margin-top:20px;}
+.gallery-block{display:flex;align-items:center;gap:26px;background:rgba(20,8,14,.4);border:1px solid rgba(255,77,121,.18);border-radius:18px;padding:16px;}
+.gallery-block:nth-child(even){flex-direction:row-reverse;}
+.gallery-photo-wrap{flex:0 0 220px;aspect-ratio:1/1;border-radius:14px;overflow:hidden;cursor:pointer;background:#180910;box-shadow:0 10px 22px rgba(0,0,0,.55);transition:transform .35s ease;}
+.gallery-photo-wrap:hover{transform:translateY(-4px) scale(1.02);}
+.gallery-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.gallery-caption-wrap{flex:1;text-align:left;cursor:pointer;}
+.cap-title{font-family:'Playfair Display',serif;color:#ff80a0;font-size:1.15rem;margin-bottom:6px;}
+.cap-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#e6c2cb;line-height:1.5;}
+.read-more{color:#ff3366;font-weight:600;}
+@media(max-width:600px){.gallery-block,.gallery-block:nth-child(even){flex-direction:column;text-align:center;}.gallery-caption-wrap{text-align:center;}}
+
+/* Gallery popup */
+.gallery-modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,4,7,.35);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:1000;justify-content:center;align-items:center;padding:20px;}
+.gallery-modal-overlay.active{display:flex;}
+.gallery-modal-box{background:rgba(20,8,14,.9);border:1px solid rgba(255,128,160,.4);border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.8);position:relative;}
+.modal-img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:20px 20px 0 0;}
+.modal-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.modal-caption-wrap{padding:22px 24px;}
+.modal-caption-wrap .cap-title{font-size:1.4rem;}
+.modal-close{position:absolute;top:14px;right:18px;color:#fff;font-size:1.8rem;cursor:pointer;z-index:2;text-shadow:0 2px 6px rgba(0,0,0,.7);}
+
+/* Lightbox for calendar/letter polaroids not needed - simple */
+@media(max-width:600px){
+  .welcome-title{font-size:2.6rem;}
+  .letter-card{padding:30px 20px;}
+  .letter-title{font-size:2.3rem;}
+}
+</style>
 </head>
-<body class="bg-champagne-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-rosegold-300 selection:text-burgundy-900 relative overflow-x-hidden">
+<body>
+<div class="heart-field" id="heart-field"></div>
 
-    <!-- Background Canvas for Floating Romantic Hearts & Sparkles -->
-    <canvas id="bg-canvas"></canvas>
+<!-- ================= SCREEN 0: WELCOME ================= -->
+<section id="screen-welcome" class="screen active">
+  <h1 class="welcome-title"><span class="romantic-heading animated-calligraphy">Happy Birthday My Dear Love</span></h1>
+  <p class="welcome-subtitle">A space made for and with Love</p>
+  <button class="btn" onclick="navigateTo('screen-passcode')">Begin &rarr;</button>
+</section>
 
-    <!-- Optional Audio Element for Romantic Background Music -->
-    <!-- Replace the src with your wife's favorite song URL or a local MP3 file -->
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112189.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Top Music Controls Bar (Visible after passcode unlock) -->
-    <header id="top-controls" class="fixed top-4 right-4 z-50 hidden transition-all duration-300">
-        <button id="music-toggle-btn" onclick="toggleMusic()" class="glass-card px-4 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 transition-all shadow-md hover:scale-105 active:scale-95">
-            <i id="music-icon" class="fas fa-music text-rosegold-500 animate-pulse"></i>
-            <span id="music-text">Play Music</span>
-        </button>
-    </header>
-
-    <!-- Main Container wrapping all interactive view screens -->
-    <main class="relative z-10 flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
-
-        <!-- ========================================================================= -->
-        <!-- SCREEN 1: PASSCODE LOCK SCREEN                                            -->
-        <!-- ========================================================================= -->
-        <section id="passcode-screen" class="view-section active flex items-center justify-center min-h-[85vh]">
-            <div class="glass-card max-w-md w-full p-8 sm:p-10 rounded-3xl text-center relative overflow-hidden animate-float">
-                <!-- Decorative top heart accent -->
-                <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-burgundy-50 flex items-center justify-center shadow-inner text-burgundy-500">
-                    <i class="fas fa-lock text-2xl"></i>
-                </div>
-
-                <!-- Personal Welcome Header -->
-                <!-- USER CUSTOMIZATION: Edit Title & Subtitle below -->
-                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-burgundy-700 mb-2">A Private Message</h1>
-                <p class="text-xs sm:text-sm text-gray-600 mb-8 font-light">Enter our secret passcode to unlock your birthday surprise.</p>
-
-                <!-- Passcode Input Form -->
-                <form id="passcode-form" onsubmit="handlePasscodeSubmit(event)" class="space-y-5">
-                    <div class="relative">
-                        <input 
-                            type="password" 
-                            id="passcode-input" 
-                            placeholder="Enter secret passcode..." 
-                            required
-                            autocomplete="off"
-                            class="w-full px-5 py-3.5 pr-12 rounded-2xl bg-white/70 border border-rosegold-300 focus:border-burgundy-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-burgundy-500/20 text-center text-lg font-mono text-burgundy-900 placeholder-gray-400 transition-all shadow-sm"
-                        />
-                        <button 
-                            type="button" 
-                            onclick="togglePasscodeVisibility()" 
-                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-burgundy-700 transition-colors p-1"
-                            title="Toggle visibility"
-                        >
-                            <i id="eye-icon" class="fas fa-eye"></i>
-                        </button>
-                    </div>
-
-                    <!-- Error Feedback Banner -->
-                    <div id="passcode-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 py-2.5 px-4 rounded-xl font-medium animate-bounce">
-                        <i class="fas fa-heart-crack mr-1"></i> Incorrect passcode. Please try again, my love!
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button 
-                        type="submit" 
-                        id="unlock-btn"
-                        class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-burgundy-700 via-burgundy-500 to-rosegold-500 text-white font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl hover:opacity-95 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
-                    >
-                        <span id="btn-text">Unlock Surprise</span>
-                        <i id="btn-spinner" class="fas fa-spinner fa-spin hidden"></i>
-                    </button>
-                </form>
-
-                <p class="mt-8 text-[11px] text-gray-400 italic">Protected with end-to-end client-side AES-256 decryption.</p>
-            </div>
-        </section>
-
-        <!-- ========================================================================= -->
-        <!-- SCREEN 2: BIRTHDAY WISH PAGE                                              -->
-        <!-- ========================================================================= -->
-        <section id="wish-screen" class="view-section flex items-center justify-center min-h-[85vh]">
-            <div class="glass-card max-w-2xl w-full p-8 sm:p-12 rounded-3xl text-center relative my-8">
-                <!-- Subtle floating background element -->
-                <div class="absolute -top-10 -left-10 w-32 h-32 bg-rosegold-300/30 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-burgundy-500/20 rounded-full blur-2xl pointer-events-none"></div>
-
-                <div class="inline-block p-3 rounded-full bg-burgundy-50 text-burgundy-500 mb-6 animate-pulse-slow">
-                    <i class="fas fa-cake-candles text-3xl"></i>
-                </div>
-
-                <!-- USER CUSTOMIZATION: Wife's Name -->
-                <h2 class="text-sm uppercase tracking-widest text-rosegold-500 font-semibold mb-2">Happy Birthday To My Soulmate</h2>
-                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold gradient-text mb-6">
-                    Dearest <span id="wife-name-placeholder">My Wife</span>
-                </h1>
-
-                <!-- USER CUSTOMIZATION: Birthday Letter / Message -->
-                <div class="prose max-w-none text-gray-700 font-serif text-lg sm:text-xl leading-relaxed space-y-4 mb-8 text-left bg-white/40 p-6 sm:p-8 rounded-2xl border border-rosegold-300/30 shadow-inner italic">
-                    <p>
-                        Today is a celebration of the most beautiful soul in my life. Every smile you share brightens my world, and every moment with you is a cherished gift.
-                    </p>
-                    <p>
-                        I've gathered 50 of our most special memories—unlocked just for you. Here's to another wonderful year of adventures, laughter, and endless love together.
-                    </p>
-                    <p class="text-right font-sans not-italic text-sm font-semibold text-burgundy-700 mt-4">
-                        Forever & Always Yours ❤️
-                    </p>
-                </div>
-
-                <!-- Action Button to proceed to Photo Gallery -->
-                <button 
-                    onclick="switchScreen('gallery-screen')" 
-                    class="py-4 px-8 rounded-2xl bg-burgundy-700 hover:bg-burgundy-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 mx-auto"
-                >
-                    <span>View Our Memories Grid</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- ========================================================================= -->
-        <!-- SCREEN 3: PHOTO GALLERY GRID                                              -->
-        <!-- ========================================================================= -->
-        <section id="gallery-screen" class="view-section min-h-[85vh] py-8 w-full max-w-7xl mx-auto">
-            <!-- Gallery Header & Filters -->
-            <div class="glass-card p-6 sm:p-8 rounded-3xl mb-8 text-center">
-                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-burgundy-900 mb-2">Our Memory Album</h2>
-                <p class="text-gray-600 text-sm max-w-lg mx-auto mb-6">50 decrypted personal moments. Filter by album or tap any photo for a full experience.</p>
-
-                <!-- Album Category Filter Tabs -->
-                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="album-filters">
-                    <button onclick="filterAlbum('all')" class="album-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-burgundy-700 text-white shadow-md">All Photos (50)</button>
-                    <button onclick="filterAlbum('trips')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Our Trips</button>
-                    <button onclick="filterAlbum('special')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Special Moments</button>
-                    <button onclick="filterAlbum('daily')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Daily Life</button>
-                </div>
-            </div>
-
-            <!-- Responsive Photo Grid Container -->
-            <div id="photo-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Decrypted photo thumbnails will be dynamically injected here by JS -->
-            </div>
-        </section>
-
-    </main>
-
-    <!-- ========================================================================= -->
-    <!-- SCREEN 4: PHOTO LIGHTBOX MODAL                                           -->
-    <!-- ========================================================================= -->
-    <div id="lightbox-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-        <!-- Close Button -->
-        <button onclick="closeLightbox()" class="absolute top-5 right-5 text-white/80 hover:text-white text-2xl z-50 p-2 hover:bg-white/10 rounded-full transition-all">
-            <i class="fas fa-xmark"></i>
-        </button>
-
-        <!-- Navigation Buttons -->
-        <button onclick="navigateLightbox(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-2xl z-50 p-3 hover:bg-white/10 rounded-full transition-all">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button onclick="navigateLightbox(1)" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-2xl z-50 p-3 hover:bg-white/10 rounded-full transition-all">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-
-        <!-- Lightbox Content Card -->
-        <div class="max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center p-2 relative">
-            <div class="relative overflow-hidden rounded-2xl shadow-2xl bg-black/40 border border-white/10">
-                <img id="lightbox-img" src="" alt="Memory Detail" class="max-h-[75vh] w-auto object-contain mx-auto transition-transform duration-300">
-            </div>
-            
-            <div class="mt-4 text-center text-white">
-                <p id="lightbox-caption" class="font-serif text-lg text-champagne-200">Memory Caption</p>
-                <p id="lightbox-counter" class="text-xs text-gray-400 mt-1">1 of 50</p>
-            </div>
-        </div>
+<!-- ================= SCREEN 1: PASSCODE ================= -->
+<section id="screen-passcode" class="screen">
+  <div class="passcode-card">
+    <h2 class="romantic-heading" style="font-size:2.6rem;margin-bottom:6px;">Unlock Your Surprise</h2>
+    <p style="color:#d99bb0;font-size:1rem;">Enter the secret passcode to reveal your gift.</p>
+    <div class="pass-row">
+      <input type="password" id="passcode-input" class="pass-field" placeholder="Enter secret key" autocomplete="off">
+      <button type="button" class="view-toggle" id="view-toggle-btn" onclick="togglePasscodeView()">&#128065;</button>
     </div>
+    <button class="btn" id="passcode-submit-btn" style="width:100%;">Unlock Gift</button>
+    <div id="error-message" class="error-msg">Incorrect passcode. Please try again.</div>
+    <div id="loading-message" class="loading-msg">Decrypting your memories... please wait.</div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="relative z-10 py-4 text-center text-xs text-gray-500 font-light">
-        Designed with ❤️ for your special day.
-    </footer>
+<!-- ================= SCREEN 2: CALENDAR ================= -->
+<section id="screen-calendar" class="screen">
+  <div class="calendar-wrapper">
+    <div class="polaroid-col">
+      <div class="polaroid-card tilt-1"><img id="polaroid-img-1" src="" alt="Memory 1"><span class="polaroid-tag">Love</span></div>
+      <div class="polaroid-card tilt-2"><img id="polaroid-img-2" src="" alt="Memory 2"><span class="polaroid-tag">Forever</span></div>
+      <div class="polaroid-card tilt-3"><img id="polaroid-img-3" src="" alt="Memory 3"><span class="polaroid-tag">Together</span></div>
+    </div>
+    <div class="calendar-center-col">
+      <div id="top-calligraphy" class="top-calligraphy"><span class="bday-line" id="cal-line-1">Finally Legal</span></div>
+      <div class="calendar-container">
+        <div class="calendar-binder"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+        <div class="calendar-page">
+          <div class="calendar-header">
+            <div id="cal-month-title" class="calendar-month">September</div>
+            <div class="calendar-year">2026</div>
+          </div>
+          <div class="calendar-grid" id="calendar-grid">
+            <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
+            <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div><div class="day-label">S</div>
+            <div id="cal-days-container" style="display:contents;"></div>
+            <div id="flowing-circle" class="flowing-circle"></div>
+          </div>
+        </div>
+      </div>
+      <div id="calendar-reveal" class="calendar-reveal">
+        <div class="top-calligraphy" id="line2-wrap"><span class="bday-line" id="cal-line-2">Happy Bday Love</span></div>
+        <button id="calendar-next-btn" class="btn glow-btn" onclick="navigateTo('screen-letter')">Unlock Letter &rarr;</button>
+      </div>
+    </div>
+    <div class="polaroid-col">
+      <div class="polaroid-card tilt-4"><img id="polaroid-img-4" src="" alt="Memory 4"><span class="polaroid-tag">Memories</span></div>
+      <div class="polaroid-card tilt-5"><img id="polaroid-img-5" src="" alt="Memory 5"><span class="polaroid-tag">Smile</span></div>
+      <div class="polaroid-card tilt-6"><img id="polaroid-img-6" src="" alt="Memory 6"><span class="polaroid-tag">Always</span></div>
+    </div>
+  </div>
+</section>
 
-    <!-- ========================================================================= -->
-    <!-- JAVASCRIPT APPLICATION LOGIC & AES DECRYPTION                             -->
-    <!-- ========================================================================= -->
-    <script>
-        /* -------------------------------------------------------------------------
-         * USER CUSTOMIZATION CONFIGURATION
-         * ------------------------------------------------------------------------- */
-        const CONFIG = {
-            wifeName: "My Dearest Love",
-            
-            // Photo collection defining 50 encrypted photos with optional album groupings & captions.
-            // If .enc files are absent during preview testing, fallback generated romantic mock data is rendered.
-            photos: Array.from({ length: 50 }, (_, i) => {
-                const id = i + 1;
-                let album = "daily";
-                if (id % 3 === 0) album = "trips";
-                else if (id % 2 === 0) album = "special";
-                
-                return {
-                    id: id,
-                    fileName: `photo${id}.enc`,
-                    album: album,
-                    caption: `Memory #${id} — A priceless moment in our journey`
-                };
-            })
-        };
+<!-- ================= SCREEN 3: LETTER ================= -->
+<section id="screen-letter" class="screen letter-screen">
+  <div class="letter-frame">
+    <div class="side-polaroids" id="letter-side-left"></div>
+    <div class="letter-card">
+      <h2 class="romantic-heading letter-title">For My Dearest</h2>
+      <div class="letter-body">
+        <!-- EDIT: replace these paragraphs with your own letter text -->
+        <p>Write the first part of your letter here...</p>
+        <p>Continue your letter here...</p>
+        <p>Add as many paragraphs as you like — this box scrolls automatically as the page grows.</p>
+      </div>
+      <button class="btn" onclick="navigateTo('screen-poem')">A Poem For You &rarr;</button>
+    </div>
+    <div class="side-polaroids" id="letter-side-right"></div>
+  </div>
+</section>
 
-        // In-memory store for decrypted Data URLs
-        let decryptedPhotosMap = {}; // Maps photo id to decrypted base64 Data URL
-        let currentFilteredPhotos = [];
-        let currentLightboxIndex = 0;
+<!-- ================= SCREEN 4: POEM ================= -->
+<section id="screen-poem" class="screen letter-screen">
+  <div class="letter-frame">
+    <div class="side-polaroids" id="poem-side-left"></div>
+    <div class="letter-card">
+      <h2 class="romantic-heading letter-title">A Poem For You</h2>
+      <div class="letter-body">
+        <!-- EDIT: replace with your poem -->
+        <p>Write the first lines of your poem here...</p>
+        <p>Continue the poem here...</p>
+      </div>
+      <button class="btn" onclick="navigateTo('screen-gallery')">View Our Gallery &rarr;</button>
+    </div>
+    <div class="side-polaroids" id="poem-side-right"></div>
+  </div>
+</section>
 
-        /* -------------------------------------------------------------------------
-         * INIT & BACKGROUND CANVAS ANIMATION
-         * ------------------------------------------------------------------------- */
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('wife-name-placeholder').innerText = CONFIG.wifeName;
-            initBackgroundCanvas();
-            initKeyboardShortcuts();
-        });
+<!-- ================= SCREEN 5: GALLERY ================= -->
+<section id="screen-gallery" class="screen">
+  <h2 class="romantic-heading" style="font-size:3.6rem;text-align:center;">Our Gallery</h2>
+  <div class="gallery-list" id="gallery-list"></div>
+</section>
 
-        function initBackgroundCanvas() {
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
+<!-- Gallery popup -->
+<div class="gallery-modal-overlay" id="gallery-modal-overlay" onclick="closeGalleryModal(event)">
+  <div class="gallery-modal-box" onclick="event.stopPropagation()">
+    <span class="modal-close" onclick="closeGalleryModal(null,true)">&times;</span>
+    <div class="modal-img-wrap"><img id="modal-img" src="" alt=""></div>
+    <div class="modal-caption-wrap">
+      <div class="cap-title" id="modal-title"></div>
+      <div class="cap-text" id="modal-text"></div>
+    </div>
+  </div>
+</div>
 
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
+<script>
+/* ============================================================
+   EDIT ZONE — change names, captions, and photo groupings here
+============================================================ */
+const WIFE_NAME = "Akshitha";
+const TOTAL_PHOTOS = 50;
 
-            // Create soft floating heart & sparkle particles
-            for (let i = 0; i < 35; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 12 + 6,
-                    speedY: Math.random() * 0.6 + 0.2,
-                    opacity: Math.random() * 0.5 + 0.2,
-                    type: Math.random() > 0.3 ? 'heart' : 'sparkle'
-                });
-            }
+// Which encrypted photo IDs feed which part of the page.
+// Files must exist as enc/photo1.enc ... enc/photo50.enc
+const PHOTO_MAP = {
+  calendar: [1,2,3,4,5,6],
+  letterLeft: [7,8],
+  letterRight: [9,10],
+  poemLeft: [11,12],
+  poemRight: [13,14],
+  gallery: Array.from({length:25}, (_,i)=> i+15) // photos 15-39
+};
 
-            function drawHeart(x, y, size, opacity) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.fillStyle = `rgba(183, 110, 121, ${opacity})`;
-                const topCurveHeight = size * 0.3;
-                ctx.moveTo(x, y + topCurveHeight);
-                ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
-                ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + size, x, y + size);
-                ctx.bezierCurveTo(x, y + size, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
-                ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
-            }
+// EDIT: one caption per gallery photo (25 total, matches PHOTO_MAP.gallery order)
+const GALLERY_CAPTIONS = Array.from({length:25}, (_,i)=>({
+  title: "Memory " + (i+1),
+  text: "Write something about this memory here... (edit GALLERY_CAPTIONS in the code)"
+}));
 
-            function drawSparkle(x, y, size, opacity) {
-                ctx.save();
-                ctx.fillStyle = `rgba(212, 175, 55, ${opacity})`;
-                ctx.beginPath();
-                ctx.arc(x, y, size / 4, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            }
+/* ============================================================
+   FLOATING HEARTS
+============================================================ */
+(function spawnHearts(){
+  const field = document.getElementById('heart-field');
+  const count = 18;
+  for(let i=0;i<count;i++){
+    const h = document.createElement('span');
+    h.className='floating-heart';
+    h.innerHTML='&#10084;';
+    h.style.left = Math.random()*100 + 'vw';
+    h.style.fontSize = (12 + Math.random()*16) + 'px';
+    h.style.animationDuration = (9 + Math.random()*10) + 's';
+    h.style.animationDelay = (Math.random()*10) + 's';
+    h.style.setProperty('--drift', (Math.random()*80-40)+'px');
+    field.appendChild(h);
+  }
+})();
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.y -= p.speedY;
-                    if (p.y < -20) {
-                        p.y = canvas.height + 20;
-                        p.x = Math.random() * canvas.width;
-                    }
-                    if (p.type === 'heart') {
-                        drawHeart(p.x, p.y, p.size, p.opacity);
-                    } else {
-                        drawSparkle(p.x, p.y, p.size, p.opacity);
-                    }
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function navigateTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const t = document.getElementById(id);
+  if(t) t.classList.add('active');
+  if(id==='screen-calendar') startCalendarAnimation();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-        /* -------------------------------------------------------------------------
-         * SCREEN NAVIGATION CONTROLLER
-         * ------------------------------------------------------------------------- */
-        function switchScreen(screenId) {
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            const target = document.getElementById(screenId);
-            if (target) {
-                target.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+function togglePasscodeView(){
+  const inp = document.getElementById('passcode-input');
+  inp.type = inp.type==='password' ? 'text' : 'password';
+}
 
-            // Show top music bar after passcode screen
-            if (screenId !== 'passcode-screen') {
-                document.getElementById('top-controls').classList.remove('hidden');
-            }
-        }
+/* ============================================================
+   DECRYPTION (matches: openssl enc -aes-256-cbc -md sha256 -pbkdf2 -iter 10000)
+============================================================ */
+const decryptedPhotos = {}; // id -> dataURL
 
-        function togglePasscodeVisibility() {
-            const input = document.getElementById('passcode-input');
-            const icon = document.getElementById('eye-icon');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
+function wordArrayToUint8Array(wordArray){
+  const words = wordArray.words, sigBytes = wordArray.sigBytes;
+  const u8 = new Uint8Array(sigBytes);
+  for(let i=0;i<sigBytes;i++){ u8[i] = (words[i>>>2] >>> (24-(i%4)*8)) & 0xff; }
+  return u8;
+}
 
-        /* -------------------------------------------------------------------------
-         * AES DECRYPTION & PASSCODE VALIDATION ENGINE
-         * ------------------------------------------------------------------------- */
-        async function handlePasscodeSubmit(e) {
-            e.preventDefault();
-            const passcode = document.getElementById('passcode-input').value.trim();
-            const errorBanner = document.getElementById('passcode-error');
-            const btnText = document.getElementById('btn-text');
-            const btnSpinner = document.getElementById('btn-spinner');
+function decryptPhoto(buffer, passcode){
+  try{
+    const u8 = new Uint8Array(buffer);
+    const header = String.fromCharCode.apply(null, u8.subarray(0,8));
+    if(header !== "Salted__") return null;
+    const salt = CryptoJS.lib.WordArray.create(u8.subarray(8,16));
+    const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
+    const derived = CryptoJS.PBKDF2(passcode, salt, {keySize:12, iterations:10000, hasher:CryptoJS.algo.SHA256});
+    const key = CryptoJS.lib.WordArray.create(derived.words.slice(0,8));
+    const iv  = CryptoJS.lib.WordArray.create(derived.words.slice(8,12));
+    const dec = CryptoJS.AES.decrypt({ciphertext:ciphertext}, key, {iv:iv, mode:CryptoJS.mode.CBC, padding:CryptoJS.pad.Pkcs7});
+    if(dec.sigBytes <= 0) return null;
+    const bytes = wordArrayToUint8Array(dec);
+    if(bytes[0]===0xFF && bytes[1]===0xD8 && bytes[2]===0xFF){
+      return 'data:image/jpeg;base64,' + CryptoJS.enc.Base64.stringify(dec);
+    }
+    if(bytes[0]===0x89 && bytes[1]===0x50 && bytes[2]===0x4E && bytes[3]===0x47){
+      return 'data:image/png;base64,' + CryptoJS.enc.Base64.stringify(dec);
+    }
+    return null;
+  }catch(e){ return null; }
+}
 
-            if (!passcode) return;
+document.getElementById('passcode-submit-btn').addEventListener('click', handleUnlock);
+document.getElementById('passcode-input').addEventListener('keypress', e=>{ if(e.key==='Enter') handleUnlock(); });
 
-            errorBanner.classList.add('hidden');
-            btnText.innerText = "Decrypting Photos...";
-            btnSpinner.classList.remove('hidden');
+async function handleUnlock(){
+  const passcode = document.getElementById('passcode-input').value.trim();
+  const errorEl = document.getElementById('error-message');
+  const loadingEl = document.getElementById('loading-message');
+  const btn = document.getElementById('passcode-submit-btn');
+  if(!passcode) return;
+  errorEl.style.display='none'; loadingEl.style.display='block'; btn.disabled=true;
 
-            try {
-                // Attempt to fetch & decrypt all 50 photos using user's passcode as key
-                const success = await processAndDecryptPhotos(passcode);
+  try{
+    const testRes = await fetch('enc/photo1.enc');
+    if(!testRes.ok){
+      errorEl.textContent = "Could not load enc/photo1.enc — check the file location.";
+      errorEl.style.display='block'; loadingEl.style.display='none'; btn.disabled=false; return;
+    }
+    const testBuf = await testRes.arrayBuffer();
+    const testUrl = decryptPhoto(testBuf, passcode);
+    if(!testUrl){
+      errorEl.textContent = "Incorrect passcode. Please try again.";
+      errorEl.style.display='block'; loadingEl.style.display='none'; btn.disabled=false; return;
+    }
+    decryptedPhotos[1] = testUrl;
 
-                if (success) {
-                    renderGalleryGrid();
-                    switchScreen('wish-screen');
-                    attemptAutoPlayMusic();
-                } else {
-                    showPasscodeError();
-                }
-            } catch (err) {
-                console.error("Decryption pipeline error:", err);
-                showPasscodeError();
-            } finally {
-                btnText.innerText = "Unlock Surprise";
-                btnSpinner.classList.add('hidden');
-            }
-        }
+    const fetches = [];
+    for(let i=2;i<=TOTAL_PHOTOS;i++){
+      fetches.push(
+        fetch(`enc/photo${i}.enc`)
+          .then(r=> r.ok ? r.arrayBuffer() : null)
+          .then(buf=>{ if(!buf) return; const url = decryptPhoto(buf, passcode); if(url) decryptedPhotos[i]=url; })
+          .catch(()=>{})
+      );
+    }
+    await Promise.all(fetches);
 
-        function showPasscodeError() {
-            const errorBanner = document.getElementById('passcode-error');
-            errorBanner.classList.remove('hidden');
-            document.getElementById('passcode-input').focus();
-        }
+    populatePolaroids('calendar', id=>document.getElementById('polaroid-img-'+ (PHOTO_MAP.calendar.indexOf(id)+1)));
+    buildSidePolaroids('letter-side-left', PHOTO_MAP.letterLeft);
+    buildSidePolaroids('letter-side-right', PHOTO_MAP.letterRight);
+    buildSidePolaroids('poem-side-left', PHOTO_MAP.poemLeft);
+    buildSidePolaroids('poem-side-right', PHOTO_MAP.poemRight);
+    buildGallery();
 
-        /**
-         * Core Decryption Routine:
-         * 1. Fetches local .enc file (or uses synthesized fallback for local live-demo).
-         * 2. Runs CryptoJS.AES.decrypt(ciphertext, passcode).
-         * 3. Validates whether output forms a valid image data URL string.
-         */
-        async function processAndDecryptPhotos(passcode) {
-            decryptedPhotosMap = {};
-            let decryptedCount = 0;
+    loadingEl.style.display='none';
+    navigateTo('screen-calendar');
+  }catch(err){
+    loadingEl.style.display='none'; btn.disabled=false;
+    errorEl.textContent = "Error loading encrypted files.";
+    errorEl.style.display='block';
+  }
+}
 
-            for (const item of CONFIG.photos) {
-                try {
-                    let decryptedUrl = await fetchAndDecryptSingleFile(item.fileName, passcode);
-                    
-                    // Fallback generator for live preview if .enc files are not yet uploaded to local server
-                    if (!decryptedUrl) {
-                        decryptedUrl = generateMockDecryptedDataUrl(item.id, passcode);
-                    }
+function populatePolaroids(groupKey, getImgEl){
+  PHOTO_MAP[groupKey].forEach(id=>{
+    const el = getImgEl(id);
+    if(el && decryptedPhotos[id]) el.src = decryptedPhotos[id];
+  });
+}
 
-                    if (decryptedUrl) {
-                        decryptedPhotosMap[item.id] = decryptedUrl;
-                        decryptedCount++;
-                    }
-                } catch (e) {
-                    // Decryption failed for this item
-                }
-            }
+function buildSidePolaroids(containerId, photoIds){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML='';
+  photoIds.forEach((id,i)=>{
+    const div = document.createElement('div');
+    div.className = 'polaroid-card ' + (i%2===0?'tilt-1':'tilt-2');
+    const img = document.createElement('img');
+    img.src = decryptedPhotos[id] || '';
+    img.alt = 'Memory';
+    div.appendChild(img);
+    c.appendChild(div);
+  });
+}
 
-            // Return true if photos were successfully unlocked
-            return decryptedCount > 0;
-        }
+/* ============================================================
+   CALENDAR ANIMATION
+============================================================ */
+function renderSeptemberDays(){
+  const container = document.getElementById('cal-days-container');
+  container.innerHTML='';
+  for(let b=0;b<2;b++){ const blank=document.createElement('div'); blank.className='day-number'; container.appendChild(blank); }
+  for(let i=1;i<=30;i++){
+    const div=document.createElement('div'); div.className='day-number'; div.id='day-node-'+i; div.textContent=i;
+    container.appendChild(div);
+  }
+}
 
-        async function fetchAndDecryptSingleFile(fileName, passcode) {
-            try {
-                const response = await fetch(fileName);
-                if (!response.ok) return null; // File not found, trigger fallback mode
+let calendarStarted = false;
+function startCalendarAnimation(){
+  if(calendarStarted) return;
+  calendarStarted = true;
+  renderSeptemberDays();
+  const circle = document.getElementById('flowing-circle');
+  const grid = document.getElementById('calendar-grid');
+  let currentDay = 1;
+  circle.style.display='block';
 
-                const encryptedText = await response.text();
-                
-                // Perform AES Decryption via CryptoJS
-                const decryptedBytes = CryptoJS.AES.decrypt(encryptedText, passcode);
-                const decryptedStr = decryptedBytes.toString(CryptoJS.enc.Utf8);
+  function place(day){
+    const el = document.getElementById('day-node-'+day);
+    if(!el) return;
+    const gr = grid.getBoundingClientRect(), dr = el.getBoundingClientRect();
+    circle.style.left = (dr.left+dr.width/2-gr.left)+'px';
+    circle.style.top = (dr.top+dr.height/2-gr.top)+'px';
+  }
+  circle.style.transition='none'; place(1);
 
-                // Validation check: output must start with base64 image header or valid structure
-                if (decryptedStr && (decryptedStr.startsWith('data:image/') || decryptedStr.length > 100)) {
-                    return decryptedStr.startsWith('data:image/') ? decryptedStr : `data:image/jpeg;base64,${decryptedStr}`;
-                }
-            } catch (err) {
-                return null;
-            }
-            return null;
-        }
+  setTimeout(()=>{
+    circle.style.transition='left .4s ease-in-out, top .4s ease-in-out';
+    const interval = setInterval(()=>{
+      currentDay++; place(currentDay);
+      if(currentDay===10){ document.getElementById('top-calligraphy').classList.add('write'); }
+      if(currentDay>=24){
+        clearInterval(interval);
+        setTimeout(()=>{
+          document.getElementById('line2-wrap').classList.add('write');
+          document.getElementById('calendar-reveal').classList.add('active');
+          document.getElementById('calendar-next-btn').classList.add('show');
+        },400);
+      }
+    },380);
+  },300);
+}
 
-        /**
-         * Helper: Generates a deterministic encrypted mock image verification key check.
-         * For demonstration purposes, if test passcode is entered, it synthesizes romantic placeholders.
-         */
-        function generateMockDecryptedDataUrl(photoId, passcode) {
-            // Check if passcode is provided (passcode check validation)
-            if (passcode.length < 3) return null; 
+/* ============================================================
+   GALLERY
+============================================================ */
+function buildGallery(){
+  const list = document.getElementById('gallery-list');
+  list.innerHTML='';
+  PHOTO_MAP.gallery.forEach((photoId, idx)=>{
+    const cap = GALLERY_CAPTIONS[idx] || {title:'Memory', text:''};
+    const block = document.createElement('div');
+    block.className='gallery-block';
 
-            // Create pretty SVG Data URLs dynamically representing memories
-            const colors = ['#800020', '#b76e79', '#5c0017', '#d4af37', '#8b4513', '#4a0e17'];
-            const bgColor = colors[photoId % colors.length];
-            const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-                <rect width="100%" height="100%" fill="${bgColor}"/>
-                <circle cx="300" cy="260" r="120" fill="rgba(255,255,255,0.15)"/>
-                <path d="M300 320 C240 240, 180 200, 180 150 C180 110, 210 80, 250 80 C275 80, 292 92, 300 108 C308 92, 325 80, 350 80 C390 80, 420 110, 420 150 C420 200, 360 240, 300 320 Z" fill="rgba(255,255,255,0.85)"/>
-                <text x="50%" y="450" font-family="Playfair Display, serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">Memory #${photoId}</text>
-                <text x="50%" y="490" font-family="sans-serif" font-size="16" fill="rgba(255,255,255,0.8)" text-anchor="middle">Happy Birthday My Love</text>
-            </svg>`;
+    const photoWrap = document.createElement('div');
+    photoWrap.className='gallery-photo-wrap';
+    const img = document.createElement('img');
+    img.src = decryptedPhotos[photoId] || '';
+    img.alt = cap.title;
+    photoWrap.appendChild(img);
 
-            return `data:image/svg+xml;utf8,${encodeURIComponent(svgStr)}`;
-        }
+    const capWrap = document.createElement('div');
+    capWrap.className='gallery-caption-wrap';
+    capWrap.innerHTML = `<div class="cap-title">${cap.title}</div><div class="cap-text">${cap.text.slice(0,70)}${cap.text.length>70?'... <span class="read-more">read more</span>':''}</div>`;
 
-        /* -------------------------------------------------------------------------
-         * GALLERY & ALBUM FILTERING
-         * ------------------------------------------------------------------------- */
-        function renderGalleryGrid(filterTag = 'all') {
-            const grid = document.getElementById('photo-grid');
-            grid.innerHTML = '';
+    const openFn = ()=>openGalleryModal(photoId, cap);
+    photoWrap.onclick = openFn;
+    capWrap.onclick = openFn;
 
-            currentFilteredPhotos = CONFIG.photos.filter(p => filterTag === 'all' || p.album === filterTag);
+    block.appendChild(photoWrap);
+    block.appendChild(capWrap);
+    list.appendChild(block);
+  });
+}
 
-            currentFilteredPhotos.forEach((item, index) => {
-                const imgDataUrl = decryptedPhotosMap[item.id];
-                if (!imgDataUrl) return;
-
-                const card = document.createElement('div');
-                card.className = "group relative aspect-square rounded-2xl overflow-hidden glass-card cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl";
-                card.onclick = () => openLightbox(index);
-
-                card.innerHTML = `
-                    <img src="${imgDataUrl}" alt="${item.caption}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
-                    <div class="absolute inset-0 bg-gradient-to-t from-burgundy-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                        <p class="text-white text-xs font-serif truncate">${item.caption}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterAlbum(tag) {
-            document.querySelectorAll('.album-btn').forEach(btn => {
-                btn.classList.remove('bg-burgundy-700', 'text-white', 'shadow-md');
-                btn.classList.add('bg-white/70', 'text-gray-700');
-            });
-
-            event.currentTarget.classList.remove('bg-white/70', 'text-gray-700');
-            event.currentTarget.classList.add('bg-burgundy-700', 'text-white', 'shadow-md');
-
-            renderGalleryGrid(tag);
-        }
-
-        /* -------------------------------------------------------------------------
-         * LIGHTBOX MODAL & KEYBOARD CONTROLS
-         * ------------------------------------------------------------------------- */
-        function openLightbox(index) {
-            currentLightboxIndex = index;
-            updateLightboxContent();
-            
-            const modal = document.getElementById('lightbox-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-
-        function closeLightbox() {
-            const modal = document.getElementById('lightbox-modal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        function navigateLightbox(direction) {
-            currentLightboxIndex += direction;
-            if (currentLightboxIndex < 0) currentLightboxIndex = currentFilteredPhotos.length - 1;
-            if (currentLightboxIndex >= currentFilteredPhotos.length) currentLightboxIndex = 0;
-            updateLightboxContent();
-        }
-
-        function updateLightboxContent() {
-            const item = currentFilteredPhotos[currentLightboxIndex];
-            if (!item) return;
-
-            const img = document.getElementById('lightbox-img');
-            const caption = document.getElementById('lightbox-caption');
-            const counter = document.getElementById('lightbox-counter');
-
-            img.src = decryptedPhotosMap[item.id];
-            caption.innerText = item.caption;
-            counter.innerText = `${currentLightboxIndex + 1} of ${currentFilteredPhotos.length}`;
-        }
-
-        function initKeyboardShortcuts() {
-            document.addEventListener('keydown', (e) => {
-                const modal = document.getElementById('lightbox-modal');
-                if (modal.classList.contains('hidden')) return;
-
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowLeft') navigateLightbox(-1);
-                if (e.key === 'ArrowRight') navigateLightbox(1);
-            });
-        }
-
-        /* -------------------------------------------------------------------------
-         * AUDIO CONTROLS
-         * ------------------------------------------------------------------------- */
-        function toggleMusic() {
-            const audio = document.getElementById('bg-music');
-            const icon = document.getElementById('music-icon');
-            const text = document.getElementById('music-text');
-
-            if (audio.paused) {
-                audio.play();
-                icon.classList.add('animate-spin');
-                text.innerText = "Pause Music";
-            } else {
-                audio.pause();
-                icon.classList.remove('animate-spin');
-                text.innerText = "Play Music";
-            }
-        }
-
-        function attemptAutoPlayMusic() {
-            const audio = document.getElementById('bg-music');
-            audio.play().then(() => {
-                document.getElementById('music-icon').classList.add('animate-spin');
-                document.getElementById('music-text').innerText = "Pause Music";
-            }).catch(() => {
-                // Autoplay blocked by browser policy; user can tap toggle button
-            });
-        }
-    </script>
+function openGalleryModal(photoId, cap){
+  document.getElementById('modal-img').src = decryptedPhotos[photoId] || '';
+  document.getElementById('modal-title').textContent = cap.title;
+  document.getElementById('modal-text').textContent = cap.text;
+  document.getElementById('gallery-modal-overlay').classList.add('active');
+}
+function closeGalleryModal(e, force){
+  if(force || (e && e.target.id==='gallery-modal-overlay')){
+    document.getElementById('gallery-modal-overlay').classList.remove('active');
+  }
+}
+</script>
 </body>
 </html>
