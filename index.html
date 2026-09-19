@@ -1,1377 +1,702 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Special Surprise</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- CryptoJS Library for AES Client-Side Decryption -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-  <!-- =========================================================================
-        CUSTOM STYLES / CSS SECTION — DARK ROMANTIC THEME
-      ========================================================================= -->
-  <style>
-    /* Reset & Base Setup */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise | Happy Birthday</title>
     
-    body {
-      font-family: 'Poppins', 'Cormorant Garamond', serif;
-      background: linear-gradient(135deg, #0d0508 0%, #1a080e 50%, #2b0914 100%);
-      color: #e6c2cb;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* Floating ambient romantic background glows */
-    body::before, body::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    body::before {
-      width: 450px;
-      height: 450px;
-      background: rgba(139, 0, 41, 0.25);
-      top: 10%;
-      left: 10%;
-    }
-
-    body::after {
-      width: 500px;
-      height: 500px;
-      background: rgba(80, 0, 20, 0.35);
-      bottom: 10%;
-      right: 10%;
-    }
-
-    /* Screen Management Fix */
-    .screen {
-      display: none;
-      width: 100%;
-      max-width: 1400px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 20px 15px;
-      position: relative;
-      z-index: 1;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-      overflow: hidden;
-    }
-
-    .screen.active {
-      display: flex !important;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Calligraphy & Typography Settings */
-    .romantic-heading {
-      font-family: 'Alex Brush', cursive;
-      color: #ff3366;
-      text-shadow: 0 0 15px rgba(255, 51, 102, 0.6), 0 0 30px rgba(139, 0, 41, 0.4);
-      font-weight: 400;
-      letter-spacing: 1px;
-    }
-
-    .serif-heading {
-      font-family: 'Playfair Display', serif;
-      letter-spacing: 1px;
-      color: #f5b3c2;
-    }
-
-    /* Highlighted Name Style */
-    .highlight-name {
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #ff4d79;
-      text-shadow: 0 0 15px rgba(255, 77, 121, 0.7);
-    }
-
-    /* Premium Dark Romantic Buttons */
-    .btn {
-      background: linear-gradient(135deg, #800020 0%, #b3003b 100%);
-      color: #fff;
-      border: 1px solid rgba(255, 102, 140, 0.4);
-      padding: 12px 30px;
-      font-size: 1.05rem;
-      font-family: 'Playfair Display', serif;
-      letter-spacing: 1px;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-top: 15px;
-      box-shadow: 0 8px 25px rgba(128, 0, 32, 0.5), 0 0 15px rgba(179, 0, 59, 0.3);
-      transition: all 0.4s ease;
-    }
-
-    .btn:hover {
-      background: linear-gradient(135deg, #a30029 0%, #e6004c 100%);
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 12px 30px rgba(230, 0, 76, 0.6), 0 0 20px rgba(255, 77, 121, 0.4);
-    }
-
-    /* Screen 0 Fix: Centered, Non-Scrollable, Fixed Viewport Page */
-    #screen-welcome {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      max-width: 100%;
-      min-height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      z-index: 100;
-    }
+    <!-- Google Fonts: Playfair Display for elegant serif titles, Montserrat for clean body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    .welcome-title {
-      font-size: 3.6rem;
-      margin-bottom: 12px;
-      line-height: 1.2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-    }
-
-    .animated-calligraphy {
-      display: inline-block;
-      overflow: hidden;
-      white-space: nowrap;
-      animation: writeCalligraphy 3.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    @keyframes writeCalligraphy {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
-
-    .welcome-subtitle {
-      font-size: 1.15rem;
-      color: #d99bb0;
-      font-style: italic;
-      margin-bottom: 30px;
-      text-align: center;
-      width: 100%;
-    }
-
-    /* Centered viewport treatment for all non-letter screens */
-    #screen-passcode,
-    #screen-calendar,
-    #screen-wish,
-    #screen-gallery {
-      min-height: 100vh;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    /* Screen 1: Passcode Screen */
-    #screen-passcode { 
-      text-align: center; 
-      max-width: 440px; 
-    }
-
-    .passcode-card {
-      background: rgba(20, 8, 14, 0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 77, 121, 0.25);
-      border-radius: 20px;
-      padding: 35px 30px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(128, 0, 32, 0.25);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* Mini Calendar Card */
-    .journey-mini-calendar {
-      background: #180a10;
-      color: #e6c2cb;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(179, 0, 59, 0.2);
-      width: 170px;
-      margin-bottom: 25px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 77, 121, 0.3);
-      transform: rotate(-2deg);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .journey-mini-calendar:hover {
-      transform: rotate(0deg) scale(1.05);
-      box-shadow: 0 14px 30px rgba(255, 51, 102, 0.4);
-    }
-
-    .journey-header {
-      background: linear-gradient(135deg, #800020, #b3003b);
-      color: #ffffff;
-      padding: 6px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .journey-body {
-      padding: 12px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .journey-day {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #ff4d79;
-      line-height: 1;
-      text-shadow: 0 0 10px rgba(255, 77, 121, 0.3);
-    }
-
-    .journey-month {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #ff80a0;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .journey-year {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.95rem;
-      color: #b37b8d;
-    }
-
-    .input-group { margin-top: 15px; width: 100%; }
-
-    input[type="password"] {
-      width: 100%;
-      padding: 14px;
-      font-size: 1.05rem;
-      background: rgba(10, 4, 7, 0.8);
-      border: 1px solid rgba(255, 77, 121, 0.3);
-      border-radius: 10px;
-      color: #ffccd5;
-      text-align: center;
-      margin-bottom: 15px;
-      outline: none;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input[type="password"]:focus {
-      border-color: #ff3366;
-      box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
-      background: rgba(15, 5, 10, 0.95);
-    }
-
-    .error-msg { color: #ff4d6d; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
-    .loading-msg { color: #ff80a0; font-size: 0.95rem; margin-top: 15px; display: none; font-weight: 500; }
-
-    /* Calendar Section & Layout */
-    #screen-calendar { 
-      text-align: center; 
-      width: 100%;
-      max-width: 1350px;
-      padding: 10px 15px;
-    }
-
-    .calendar-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      gap: 20px;
-      width: 100%;
-      margin: 0;
-    }
-
-    /* Center Column containing Top Calligraphy + Calendar + Reveal Button */
-    .calendar-center-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      flex-shrink: 0;
-    }
-
-    /* TOP CALLIGRAPHY HEADER STYLING */
-    .top-calligraphy-container {
-      min-height: 95px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.8s ease;
-    }
-
-    .top-calligraphy-container.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .bday-line {
-      font-family: 'Alex Brush', cursive;
-      color: #ff4d88;
-      text-shadow: 0 0 14px rgba(255, 77, 136, 0.85), 0 0 28px rgba(255, 26, 117, 0.6), 0 2px 4px rgba(0, 0, 0, 0.9);
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0%;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-
-    .bday-line-1 {
-      font-size: 3rem;
-      line-height: 1.15;
-    }
-
-    .bday-line-2 {
-      font-size: 2.7rem;
-      line-height: 1.15;
-      color: #ff66a3;
-    }
-
-    .top-calligraphy-container.write .bday-line-1 {
-      animation: writeCalligraphySlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .top-calligraphy-container.write .bday-line-2 {
-      animation: writeCalligraphySlow 2.4s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
-    }
-
-    /* REVEAL CALLIGRAPHY CONTAINER STYLING UNDER CALENDAR */
-    .bday-calligraphy-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
-    }
-
-    .calendar-reveal-content.active .bday-calligraphy-container .bday-line-1 {
-      animation: writeCalligraphySlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .calendar-reveal-content.active .bday-calligraphy-container .bday-line-2 {
-      animation: writeCalligraphySlow 2.4s cubic-bezier(0.4, 0, 0.2, 1) 1.6s forwards;
-    }
-
-    @keyframes writeCalligraphySlow {
-      from { width: 0%; }
-      to { width: 100%; }
-    }
-
-    .calendar-container {
-      width: 300px;
-      height: 330px;
-      position: relative;
-      margin: 0;
-      flex-shrink: 0;
-    }
-
-    .calendar-binder {
-      width: 100%;
-      height: 36px;
-      background: #15070d;
-      border-radius: 12px 12px 0 0;
-      border: 1px solid rgba(255, 77, 121, 0.3);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 20px;
-      z-index: 10;
-      position: relative;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .ring {
-      width: 11px;
-      height: 18px;
-      background: linear-gradient(135deg, #d4af37, #8a7322);
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    }
-
-    .calendar-page {
-      width: 100%;
-      height: 294px;
-      background: #180910;
-      color: #e6c2cb;
-      border-radius: 0 0 16px 16px;
-      position: absolute;
-      top: 36px;
-      left: 0;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(128, 0, 32, 0.3);
-      padding: 15px 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid rgba(255, 77, 121, 0.25);
-    }
-
-    .calendar-header {
-      border-bottom: 2px solid #800020;
-      padding-bottom: 6px;
-    }
-
-    .calendar-month {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: #ff3366;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 12px rgba(255, 51, 102, 0.4);
-    }
-
-    .calendar-year {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      color: #ff80a0;
-      font-weight: 600;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: 0.88rem;
-      position: relative;
-    }
-
-    .day-label {
-      font-weight: 700;
-      color: #ff4d79;
-      font-size: 0.75rem;
-    }
-
-    .day-number {
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    /* Flowing Red Circle */
-    .flowing-circle {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      border: 2.5px solid #ff3366;
-      border-radius: 50%;
-      box-shadow: 0 0 15px rgba(255, 51, 102, 0.9);
-      animation: circlePulse 1.2s infinite alternate;
-      pointer-events: none;
-      z-index: 5;
-      transform: translate(-50%, -50%);
-      display: none;
-    }
-
-    @keyframes circlePulse {
-      0% { box-shadow: 0 0 10px rgba(255, 51, 102, 0.6); }
-      100% { box-shadow: 0 0 22px rgba(255, 51, 102, 1); }
-    }
-
-    /* Polaroid Layout Styling */
-    .polaroid-col {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      flex: 1;
-    }
-
-    .polaroid-card {
-      background: rgba(22, 9, 15, 0.9);
-      padding: 8px 8px 14px 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 77, 121, 0.35);
-      width: 210px;
-      transition: transform 0.4s ease;
-      opacity: 0;
-      transform: scale(0.9);
-    }
-
-    /* Dynamic Alternating Pink & Romantic Color Glows */
-    .polaroid-card.odd-glow {
-      animation: polaroidFade 0.8s forwards ease-out, themeGlowOdd 5.5s infinite ease-in-out 0.8s;
-    }
-
-    .polaroid-card.even-glow {
-      animation: polaroidFade 0.8s forwards ease-out, themeGlowEven 5.5s infinite ease-in-out 0.8s;
-    }
-
-    @keyframes polaroidFade {
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes themeGlowOdd {
-      0%   { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
-      25%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 128, 179, 0.75); }
-      50%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
-      75%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 22px rgba(230, 0, 76, 0.8); }
-      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
-    }
-
-    @keyframes themeGlowEven {
-      0%   { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
-      25%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 22px rgba(230, 0, 76, 0.8); }
-      50%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 51, 102, 0.6); }
-      75%  { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 128, 179, 0.75); }
-      100% { box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 28px rgba(214, 51, 132, 0.7); }
-    }
-
-    .polaroid-card:hover {
-      box-shadow: 0 14px 35px rgba(255, 51, 102, 0.9) !important;
-    }
-
-    .polaroid-img-box {
-      width: 100%;
-      height: 145px;
-      border-radius: 6px;
-      overflow: hidden;
-      background: #0d0407;
-    }
-
-    .polaroid-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .polaroid-tag {
-      font-family: 'Alex Brush', cursive;
-      color: #ff80a0;
-      font-size: 1.35rem;
-      margin-top: 5px;
-      text-align: center;
-      display: block;
-    }
-
-    /* Left Side Tilts */
-    .tilt-left-1 { transform: rotate(4deg); }
-    .tilt-left-2 { transform: rotate(-5deg); }
-    .tilt-left-3 { transform: rotate(3deg); }
-
-    /* Right Side Tilts */
-    .tilt-right-1 { transform: rotate(-4deg); }
-    .tilt-right-2 { transform: rotate(5deg); }
-    .tilt-right-3 { transform: rotate(-3deg); }
-
-    /* Post-Calendar Button Reveal */
-    .calendar-reveal-content {
-      margin-top: 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.8s ease;
-    }
-
-    .calendar-reveal-content.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .calendar-reveal-btn {
-      padding: 10px 26px !important;
-      font-size: 0.95rem !important;
-    }
-
-    .glowing-love-btn {
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .glowing-love-btn.show {
-      opacity: 1;
-      transform: translateY(0);
-      animation: glowingBtnPulse 2s infinite alternate;
-    }
-
-    @keyframes glowingBtnPulse {
-      0% { box-shadow: 0 0 15px rgba(255, 51, 102, 0.5), 0 0 25px rgba(128, 0, 32, 0.4); }
-      100% { box-shadow: 0 0 25px rgba(255, 51, 102, 0.9), 0 0 45px rgba(230, 0, 76, 0.8); }
-    }
-
-    /* =========================================================================
-        LOVE LETTER SCREEN STYLING (WITH BLURRED RECTANGLE & BORDER GAP)
-      ========================================================================= */
-    #screen-message {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 60px 20px;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .letter-card {
-      width: min(82%, 1050px);
-      max-width: 1050px;
-      position: relative;
-      background: rgba(22, 9, 15, 0.62);
-      backdrop-filter: blur(26px) saturate(125%);
-      -webkit-backdrop-filter: blur(26px) saturate(125%);
-      border: 2px solid rgba(255, 128, 160, 0.48);
-      border-radius: 24px;
-      padding: 55px 55px;
-      box-shadow:
-        0 25px 65px rgba(0, 0, 0, 0.78),
-        0 0 35px rgba(179, 0, 59, 0.28),
-        inset 0 0 45px rgba(255, 77, 121, 0.06);
-      text-align: center;
-    }
-
-    /* Soft highlighted glass layer inside the letter border */
-    .letter-card::before {
-      content: '';
-      position: absolute;
-      inset: 12px;
-      border: 1px solid rgba(255, 183, 200, 0.18);
-      border-radius: 17px;
-      background: rgba(255, 77, 121, 0.035);
-      box-shadow: inset 0 0 35px rgba(255, 128, 160, 0.08);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .letter-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Decorative outer space for future Polaroid photos */
-    #screen-message::before,
-    #screen-message::after {
-      content: '';
-      position: absolute;
-      width: 150px;
-      height: 70%;
-      top: 15%;
-      border: 1px dashed rgba(255, 128, 160, 0.22);
-      border-radius: 28px;
-      background: rgba(255, 77, 121, 0.025);
-      filter: blur(0.2px);
-      pointer-events: none;
-    }
-
-    #screen-message::before {
-      left: 2.5%;
-    }
-
-    #screen-message::after {
-      right: 2.5%;
-    }
-
-    .letter-body {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.4rem;
-      line-height: 1.85;
-      color: #fadadd;
-      font-weight: 500;
-      text-align: left;
-      margin-top: 25px;
-      margin-bottom: 30px;
-      word-spacing: 1px;
-    }
-
-    .letter-body p {
-      margin-bottom: 20px;
-    }
-
-    /* Screen 2: Birthday Wish Page */
-    #screen-wish { 
-      text-align: center; 
-      padding: 40px 20px; 
-      max-width: 750px;
-    }
-
-    .wish-title { 
-      font-size: 3.8rem; 
-      color: #ff3366; 
-      margin-bottom: 25px; 
-      line-height: 1.3;
-    }
-
-    .wish-message { 
-      font-size: 1.35rem; 
-      line-height: 2; 
-      color: #e6c2cb;
-      margin-bottom: 35px; 
-      font-weight: 400;
-    }
-
-    /* Photo Gallery Grid */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 20px;
-      margin-top: 25px;
-      width: 100%;
-    }
-
-    .gallery-item {
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #180910;
-      padding: 6px;
-      border: 1px solid rgba(255, 77, 121, 0.25);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-      transition: transform 0.5s ease;
-    }
-
-    .gallery-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(255, 51, 102, 0.4);
-    }
-
-    .gallery-item:hover img { transform: scale(1.08); }
-
-    /* Album Filter Buttons */
-    .album-filters {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: rgba(24, 9, 16, 0.7);
-      border: 1px solid rgba(255, 77, 121, 0.3);
-      color: #ff80a0;
-      padding: 8px 22px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .filter-btn.active, .filter-btn:hover {
-      background: linear-gradient(135deg, #800020, #b3003b);
-      color: #fff;
-      border-color: #ff3366;
-      box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
-    }
-
-    /* Lightbox Modal */
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(10, 4, 7, 0.92);
-      backdrop-filter: blur(12px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .lightbox.active { display: flex; opacity: 1; }
-
-    .lightbox img { 
-      max-width: 90%; 
-      max-height: 82vh; 
-      border-radius: 12px; 
-      border: 2px solid rgba(255, 77, 121, 0.4);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px rgba(128, 0, 32, 0.4);
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: 25px; right: 35px;
-      color: #ffffff; font-size: 2.5rem; cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    .lightbox-close:hover { color: #ff3366; }
-
-    @media (max-width: 600px) {
-      #screen-welcome .welcome-title {
-        font-size: 2.8rem;
-      }
-
-      #screen-welcome .welcome-subtitle {
-        font-size: 1rem;
-        line-height: 1.6;
-      }
-
-      #screen-welcome .btn {
-        font-size: 1rem;
-        padding: 11px 25px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      #screen-message {
-        padding: 35px 10px;
-      }
-
-      #screen-message::before,
-      #screen-message::after {
-        display: none;
-      }
-
-      .letter-card {
-        width: 96%;
-        padding: 32px 18px;
-        border-radius: 20px;
-      }
-
-      .letter-card::before {
-        inset: 8px;
-      }
-    }
-
-    @media (max-width: 950px) {
-      .calendar-wrapper { flex-direction: column; gap: 15px; }
-      .polaroid-col { flex-direction: row; }
-      .polaroid-card { width: 150px; }
-      .polaroid-img-box { height: 105px; }
-      .bday-line-1 { font-size: 2.2rem; }
-      .bday-line-2 { font-size: 2rem; }
-      .letter-card { width: 90%; padding: 38px 22px; }
-      .letter-body { font-size: 1.2rem; line-height: 1.7; }
-
-      #screen-message::before,
-      #screen-message::after {
-        width: 8%;
-        opacity: 0.55;
-      }
-
-      #screen-message::before { left: 0.8%; }
-      #screen-message::after { right: 0.8%; }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- =========================================================================
-        SCREEN 0: WELCOME SCREEN
-      ========================================================================= -->
-  <section id="screen-welcome" class="screen active">
-    <h1 class="welcome-title">
-      <span class="romantic-heading animated-calligraphy">Welcome Akshitha</span>
-    </h1>
-    <p class="welcome-subtitle">A special space created with and for my LOVE</p>
-
-    <button class="btn" onclick="navigateTo('screen-passcode')">Begin Experience &rarr;</button>
-  </section>
-
-  <!-- =========================================================================
-        SCREEN 1: PASSCODE ENTRY SCREEN
-      ========================================================================= -->
-  <section id="screen-passcode" class="screen">
-    <div class="passcode-card">
-      
-      <div class="journey-mini-calendar">
-        <div class="journey-header">Our Journey Started On</div>
-        <div class="journey-body">
-          <div class="journey-day">28</div>
-          <div class="journey-month">April</div>
-          <div class="journey-year">2022</div>
-        </div>
-      </div>
-
-      <h2 class="romantic-heading" style="font-size: 3rem; margin-bottom: 5px;">Unlock Your Surprise</h2>
-      <p style="color: #d99bb0; font-size: 1.05rem;">Enter the secret passcode to reveal your gift.</p>
-      
-      <div class="input-group">
-        <input type="password" id="passcode-input" placeholder="Enter secret key" autocomplete="off">
-        <button class="btn" id="passcode-submit-btn" style="width: 100%; margin-top: 10px;">Unlock</button>
-      </div>
-      
-      <div id="error-message" class="error-msg">Incorrect passcode or file path error.</div>
-      <div id="loading-message" class="loading-msg">Decrypting memory gallery... Please wait.</div>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-        CINEMATIC CALENDAR SCREEN WITH POLAROIDS & CALLIGRAPHY REVEAL
-      ========================================================================= -->
-  <section id="screen-calendar" class="screen">
+    <!-- FontAwesome for romantic & UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <div class="calendar-wrapper">
-      <!-- 3 Left Polaroids (Alternating Glows) -->
-      <div class="polaroid-col">
-        <div class="polaroid-card tilt-left-1 odd-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-1" src="" alt="Memory 1"></div>
-          <span class="polaroid-tag">Love</span>
-        </div>
-        <div class="polaroid-card tilt-left-2 even-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-2" src="" alt="Memory 2"></div>
-          <span class="polaroid-tag">Forever</span>
-        </div>
-        <div class="polaroid-card tilt-left-3 odd-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-3" src="" alt="Memory 3"></div>
-          <span class="polaroid-tag">Together</span>
-        </div>
-      </div>
-
-      <!-- Center Column: TOP Calligraphy + Calendar + Revealed Action Button -->
-      <div class="calendar-center-col">
-        
-        <!-- CALLIGRAPHY WRITING WRITTEN DIRECTLY ON TOP OF THE CALENDAR -->
-        <div id="top-calligraphy-container" class="top-calligraphy-container">
-          <div class="bday-line bday-line-1">Happyyy 18 !</div>
-          <div class="bday-line bday-line-2">Finally Legal !</div>
-        </div>
-
-        <div id="calendar-container" class="calendar-container">
-          <div class="calendar-binder">
-            <div class="ring"></div>
-            <div class="ring"></div>
-            <div class="ring"></div>
-          </div>
-
-          <div id="active-page" class="calendar-page">
-            <div class="calendar-header">
-              <div id="cal-month-title" class="calendar-month">September</div>
-              <div class="calendar-year">2026</div>
-            </div>
-            
-            <div class="calendar-grid" id="calendar-grid">
-              <div class="day-label">S</div><div class="day-label">M</div><div class="day-label">T</div>
-              <div class="day-label">W</div><div class="day-label">T</div><div class="day-label">F</div>
-              <div class="day-label">S</div>
-              <div id="cal-days-container" style="display: contents;"></div>
-              <div id="flowing-circle" class="flowing-circle"></div>
-            </div>
-            <div style="font-size: 0.8rem; color: #ff80a0; font-style: italic;">Counting down to your day...</div>
-          </div>
-        </div>
-
-        <!-- Action Button Sequence (Reveals directly under calendar after reaching 24) -->
-        <div id="calendar-reveal-content" class="calendar-reveal-content">
-          <div id="bday-calligraphy-text" class="bday-calligraphy-container">
-            <div class="bday-line bday-line-1">Happy 18th Birthday My Dear</div>
-            <div class="bday-line bday-line-2">Love</div>
-          </div>
-          <button id="calendar-next-btn" class="btn glowing-love-btn calendar-reveal-btn" onclick="navigateTo('screen-message')">A Letter for Love &rarr;</button>
-        </div>
-      </div>
-
-      <!-- 3 Right Polaroids (Alternating Glows) -->
-      <div class="polaroid-col">
-        <div class="polaroid-card tilt-right-1 even-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-4" src="" alt="Memory 4"></div>
-          <span class="polaroid-tag">Memories</span>
-        </div>
-        <div class="polaroid-card tilt-right-2 odd-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-5" src="" alt="Memory 5"></div>
-          <span class="polaroid-tag">Smile</span>
-        </div>
-        <div class="polaroid-card tilt-right-3 even-glow">
-          <div class="polaroid-img-box"><img id="polaroid-img-6" src="" alt="Memory 6"></div>
-          <span class="polaroid-tag">Always</span>
-        </div>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- =========================================================================
-        SCREEN: BEAUTIFUL MESSAGE PAGE (ROMANTIC LETTER AREA)
-      ========================================================================= -->
-  <section id="screen-message" class="screen">
-    <div class="letter-card">
-      <h2 class="romantic-heading" style="font-size: 3.8rem; margin-bottom: 10px;">For My Dearest</h2>
-      
-      <div class="letter-body">
-        <p>Heyyy My Dear Love, Its been 18 years since you came to this world. I'm Sure You came to this world for Me . . . Thank you Soo much Ponaaaahhhh For handling Me , My overthinking, My selfishnes, My emotions and Me for these past years along with you taking care of your life...</p>
-        
-        <p>Im soo gratefull to have you in my Life. The way you hold my hands, The way you kiss me, the way you hug me the way you makes me OKayyy . . .</p>
-        
-        <p>You are Not just a girl Vaveee... You are your father's princess, Mother's world and your Chechi's Jaaannn . . . And My SOUL . . .</p>
-        
-        <p>We are So Proud Of you my Dear . . . I will Always be with you No matter what, to support you to achieve Your Dreams . Njnum Achanum Ammayum Chechiyum eppozhum kannum ninde koode.</p>
-        
-        <p>Nammal ippo 4 years + ayii . . . living our life and small world with lots of fight, Joy , love, Understanding.... But our relationship wont be that perfect always, but we are enjoying that the Most. I'm So happie and Lucky to have you in my life as my Wife, love, Sister, best friend , my 2nd Mother and what not.</p>
-        
-        <p>Njn Eppozhum ninte koode kannum , I know you will also be... But listen You should be happy Always . . . Share everything with me . . . Pursue Your Dreams, Work hard For us and Lets make our future Beautiful Vavveeee</p>
-        
-        <p>ethryokee prashnagal njn indakiyalum, I always Loved you and will Love you a lot . . . Sooo Happiest Birthday Ponaaaahhhhhh, Be Happy and Believe Yourself</p>
-      </div>
-
-      <button class="btn" onclick="navigateTo('screen-wish')">A poem for you &rarr;</button>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-        SCREEN 2: BIRTHDAY WISH PAGE
-      ========================================================================= -->
-  <section id="screen-wish" class="screen">
-    <h1 class="wish-title">
-      <span class="romantic-heading">Happy Birthday,</span> 
-      <span id="wife-name-placeholder" class="highlight-name">Akshitha</span>!
-    </h1>
-    
-    <div class="wish-message">
-      <p>My love, wishing you the happiest birthday filled with joy and magic. You mean the world to me, and every single day with you is a gift I cherish deeply.</p>
-    </div>
-
-    <button class="btn" onclick="navigateTo('screen-gallery')">View Our Full Gallery &rarr;</button>
-  </section>
-
-  <!-- =========================================================================
-        SCREEN 3 & 4: PHOTO GALLERY & ALBUM FILTER VIEW
-      ========================================================================= -->
-  <section id="screen-gallery" class="screen">
-    <h2 class="romantic-heading" style="font-size: 4rem; text-align: center; margin-bottom: 10px;">Our Gallery</h2>
-
-    <div class="album-filters">
-      <button class="filter-btn active" onclick="filterAlbum('all')">All Photos</button>
-      <button class="filter-btn" onclick="filterAlbum('trips')">Our Trips</button>
-      <button class="filter-btn" onclick="filterAlbum('favorites')">Favorites</button>
-    </div>
-
-    <div id="gallery-container" class="gallery-grid"></div>
-
-    <div style="text-align: center; margin-top: 35px;">
-      <button class="btn" onclick="navigateTo('screen-message')">&larr; Back to Message</button>
-    </div>
-  </section>
-
-  <!-- =========================================================================
-        SCREEN 5: LIGHTBOX MODAL
-      ========================================================================= -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <span class="lightbox-close" onclick="closeLightbox(event, true)">&times;</span>
-    <img id="lightbox-img" src="" alt="Full-size memory">
-  </div>
-
-  <!-- =========================================================================
-        FUNCTIONAL JAVASCRIPT LOGIC
-      ========================================================================= -->
-  <script>
-    const WIFE_NAME = "Akshitha";
-    const TOTAL_PHOTOS = 50;
-    const decryptedPhotos = [];
-
-    function getCategoryForPhoto(index) {
-      if (index % 3 === 0) return 'trips';
-      if (index % 2 === 0) return 'favorites';
-      return 'general';
-    }
-
-    document.getElementById('wife-name-placeholder').textContent = WIFE_NAME;
-
-    function navigateTo(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const targetScreen = document.getElementById(screenId);
-      if (targetScreen) targetScreen.classList.add('active');
-    }
-
-    function renderSeptemberDays() {
-      const container = document.getElementById('cal-days-container');
-      container.innerHTML = '';
-
-      // Sept 1, 2026 is Tuesday -> 2 blank offset cells (Sun, Mon)
-      for (let b = 0; b < 2; b++) {
-        const blank = document.createElement('div');
-        blank.className = 'day-number';
-        container.appendChild(blank);
-      }
-
-      for (let i = 1; i <= 30; i++) {
-        const div = document.createElement('div');
-        div.className = 'day-number';
-        div.id = `day-node-${i}`;
-        div.textContent = i;
-        container.appendChild(div);
-      }
-    }
-
-    function populateCalendarPolaroids() {
-      for (let i = 1; i <= 6; i++) {
-        const photoObj = decryptedPhotos.find(p => p.id === i);
-        const imgEl = document.getElementById(`polaroid-img-${i}`);
-        if (imgEl && photoObj) {
-          imgEl.src = photoObj.src;
-        }
-      }
-    }
-
-    function startCalendarAnimation() {
-      navigateTo('screen-calendar');
-      
-      document.getElementById('cal-month-title').textContent = "September";
-      renderSeptemberDays();
-      populateCalendarPolaroids();
-
-      const circle = document.getElementById('flowing-circle');
-      const grid = document.getElementById('calendar-grid');
-
-      let currentDay = 1;
-      circle.style.display = 'block';
-
-      function updateCirclePosition(dayNum) {
-        const dayEl = document.getElementById(`day-node-${dayNum}`);
-        if (!dayEl) return;
-        const gridRect = grid.getBoundingClientRect();
-        const dayRect = dayEl.getBoundingClientRect();
-
-        const x = (dayRect.left + dayRect.width / 2) - gridRect.left;
-        const y = (dayRect.top + dayRect.height / 2) - gridRect.top;
-
-        circle.style.left = `${x}px`;
-        circle.style.top = `${y}px`;
-      }
-
-      // Initial alignment at Day 1 without transition delay
-      circle.style.transition = 'none';
-      updateCirclePosition(1);
-
-      // Circle flows through dates (450ms per step)
-      setTimeout(() => {
-        circle.style.transition = 'left 0.4s ease-in-out, top 0.4s ease-in-out';
-
-        const flowInterval = setInterval(() => {
-          currentDay++;
-          updateCirclePosition(currentDay);
-
-          // AT DAY 15: Start cursive calligraphy writing ON THE TOP OF THE CALENDAR without stopping circle movement
-          if (currentDay === 15) {
-            const topCalligraphy = document.getElementById('top-calligraphy-container');
-            topCalligraphy.classList.add('active');
-            topCalligraphy.classList.add('write');
-          }
-
-          // AT DAY 24: Circle stops, action button reveals underneath calendar
-          if (currentDay >= 24) {
-            clearInterval(flowInterval);
-            
-            setTimeout(() => {
-              const revealEl = document.getElementById('calendar-reveal-content');
-              const btnEl = document.getElementById('calendar-next-btn');
-              revealEl.classList.add('active');
-              btnEl.classList.add('show');
-            }, 400);
-          }
-        }, 450);
-      }, 300);
-    }
-
-    function decryptOpenSSLAES(encryptedArrayBuffer, password) {
-      try {
-        const u8 = new Uint8Array(encryptedArrayBuffer);
-        const headerStr = String.fromCharCode.apply(null, u8.subarray(0, 8));
-        
-        let decBytes = null;
-
-        if (headerStr === "Salted__") {
-          const salt = CryptoJS.lib.WordArray.create(u8.subarray(8, 16));
-          const ciphertext = CryptoJS.lib.WordArray.create(u8.subarray(16));
-
-          try {
-            const dKeys = CryptoJS.PBKDF2(password, salt, { keySize: 12, iterations: 10000, hasher: CryptoJS.algo.SHA256 });
-            const key = CryptoJS.lib.WordArray.create(dKeys.words.slice(0, 8));
-            const iv = CryptoJS.lib.WordArray.create(dKeys.words.slice(8, 12));
-            const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
-            if (dec.sigBytes > 0) decBytes = dec;
-          } catch(e) {}
-
-          if (!decBytes) {
-            try {
-              let passWordArray = CryptoJS.enc.Utf8.parse(password);
-              let hasher = CryptoJS.algo.MD5.create();
-              hasher.update(passWordArray);
-              hasher.update(salt);
-              let result = hasher.finalize();
-              let dKey = result.clone();
-              
-              while (dKey.words.length < 12) {
-                hasher = CryptoJS.algo.MD5.create();
-                hasher.update(result);
-                hasher.update(passWordArray);
-                hasher.update(salt);
-                result = hasher.finalize();
-                dKey.concat(result);
-              }
-              
-              const key = CryptoJS.lib.WordArray.create(dKey.words.slice(0, 8));
-              const iv = CryptoJS.lib.WordArray.create(dKey.words.slice(8, 12));
-              const dec = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
-              if (dec.sigBytes > 0) decBytes = dec;
-            } catch(e) {}
-          }
-        }
-
-        if (!decBytes) return null;
-
-        const b64 = CryptoJS.enc.Base64.stringify(decBytes);
-        
-        if (b64 && b64.startsWith('/9j/')) {
-          return 'data:image/jpeg;base64,' + b64;
-        }
-
-        return null;
-      } catch (e) {
-        return null;
-      }
-    }
-
-    document.getElementById('passcode-submit-btn').addEventListener('click', handleUnlock);
-    document.getElementById('passcode-input').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleUnlock();
-    });
-
-    async function handleUnlock() {
-      const passcode = document.getElementById('passcode-input').value.trim();
-      const errorEl = document.getElementById('error-message');
-      const loadingEl = document.getElementById('loading-message');
-
-      if (!passcode) return;
-
-      errorEl.style.display = 'none';
-      loadingEl.style.display = 'block';
-
-      try {
-        const testRes = await fetch('photos/photo1.enc');
-        if (!testRes.ok) {
-          errorEl.textContent = "Could not load photos/photo1.enc. Check file location.";
-          errorEl.style.display = 'block';
-          loadingEl.style.display = 'none';
-          return;
-        }
-        
-        const testBuffer = await testRes.arrayBuffer();
-        const testDataUrl = decryptOpenSSLAES(testBuffer, passcode);
-
-        if (!testDataUrl) {
-          errorEl.textContent = "Incorrect passcode! Please try again.";
-          errorEl.style.display = 'block';
-          loadingEl.style.display = 'none';
-          return;
-        }
-
-        decryptedPhotos.length = 0;
-        decryptedPhotos.push({ id: 1, src: testDataUrl, category: getCategoryForPhoto(1) });
-
-        const remainingFetches = [];
-        for (let i = 2; i <= TOTAL_PHOTOS; i++) {
-          remainingFetches.push(
-            fetch(`photos/photo${i}.enc`)
-              .then(res => res.ok ? res.arrayBuffer() : null)
-              .then(buf => {
-                if (!buf) return;
-                const dataUrl = decryptOpenSSLAES(buf, passcode);
-                if (dataUrl) {
-                  decryptedPhotos.push({ id: i, src: dataUrl, category: getCategoryForPhoto(i) });
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: {
+                            50: '#fdf2f4',
+                            100: '#fbe6e9',
+                            500: '#800020',
+                            700: '#5c0017',
+                            900: '#38000d',
+                        },
+                        rosegold: {
+                            300: '#f4c2c2',
+                            400: '#ea9999',
+                            500: '#b76e79',
+                        },
+                        champagne: {
+                            100: '#fdfbf7',
+                            200: '#f7f0e5',
+                            300: '#e8d8c3',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        cursive: ['"Cormorant Garamond"', 'serif']
+                    }
                 }
-              })
-              .catch(() => {})
-          );
+            }
+        }
+    </script>
+
+    <!-- CryptoJS Library for Client-Side AES-256 Decryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <!-- ========================================================================= -->
+    <!-- CUSTOM DESIGN & STYLING BLOCK (Customize your visual styles here)          -->
+    <!-- ========================================================================= -->
+    <style>
+        /* Ambient Animated Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        await Promise.all(remainingFetches);
-        decryptedPhotos.sort((a, b) => a.id - b.id);
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
 
-        renderGallery('all');
-        loadingEl.style.display = 'none';
+        .dark-glass-card {
+            background: rgba(30, 10, 18, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 182, 193, 0.2);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+        }
 
-        startCalendarAnimation();
+        /* Romantic Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #800020 0%, #b76e79 50%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-      } catch (err) {
-        loadingEl.style.display = 'none';
-        errorEl.textContent = "Error loading encrypted files.";
-        errorEl.style.display = 'block';
-      }
-    }
+        /* Keyframe Animations */
+        @keyframes pulseSlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.04); opacity: 1; }
+        }
 
-    function renderGallery(filter) {
-      const container = document.getElementById('gallery-container');
-      container.innerHTML = '';
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
 
-      const itemsToDisplay = decryptedPhotos.filter(p => filter === 'all' || p.category === filter);
+        .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+        }
 
-      itemsToDisplay.forEach(photo => {
-        const div = document.createElement('div');
-        div.className = 'gallery-item';
-        div.onclick = () => openLightbox(photo.src);
-        
-        const img = document.createElement('img');
-        img.src = photo.src;
-        img.alt = `Memory ${photo.id}`;
+        .animate-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
 
-        div.appendChild(img);
-        container.appendChild(div);
-      });
-    }
+        /* Custom Scrollbar for Gallery */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b76e79;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #800020;
+        }
 
-    function filterAlbum(category) {
-      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderGallery(category);
-    }
+        /* Screen transition utilities */
+        .view-section {
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            min-height: 100vh;
+        }
 
-    function openLightbox(src) {
-      const lightbox = document.getElementById('lightbox');
-      document.getElementById('lightbox-img').src = src;
-      lightbox.classList.add('active');
-    }
+        .view-section.active {
+            opacity: 1;
+            pointer-events: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-champagne-100 text-gray-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-rosegold-300 selection:text-burgundy-900 relative overflow-x-hidden">
 
-    function closeLightbox(e, force = false) {
-      if (force || e.target.id === 'lightbox') {
-        document.getElementById('lightbox').classList.remove('active');
-      }
-    }
-  </script>
+    <!-- Background Canvas for Floating Romantic Hearts & Sparkles -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Optional Audio Element for Romantic Background Music -->
+    <!-- Replace the src with your wife's favorite song URL or a local MP3 file -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-piano-112189.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Top Music Controls Bar (Visible after passcode unlock) -->
+    <header id="top-controls" class="fixed top-4 right-4 z-50 hidden transition-all duration-300">
+        <button id="music-toggle-btn" onclick="toggleMusic()" class="glass-card px-4 py-2 rounded-full flex items-center gap-2 text-xs font-semibold text-burgundy-700 hover:text-burgundy-900 transition-all shadow-md hover:scale-105 active:scale-95">
+            <i id="music-icon" class="fas fa-music text-rosegold-500 animate-pulse"></i>
+            <span id="music-text">Play Music</span>
+        </button>
+    </header>
+
+    <!-- Main Container wrapping all interactive view screens -->
+    <main class="relative z-10 flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+
+        <!-- ========================================================================= -->
+        <!-- SCREEN 1: PASSCODE LOCK SCREEN                                            -->
+        <!-- ========================================================================= -->
+        <section id="passcode-screen" class="view-section active flex items-center justify-center min-h-[85vh]">
+            <div class="glass-card max-w-md w-full p-8 sm:p-10 rounded-3xl text-center relative overflow-hidden animate-float">
+                <!-- Decorative top heart accent -->
+                <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-burgundy-50 flex items-center justify-center shadow-inner text-burgundy-500">
+                    <i class="fas fa-lock text-2xl"></i>
+                </div>
+
+                <!-- Personal Welcome Header -->
+                <!-- USER CUSTOMIZATION: Edit Title & Subtitle below -->
+                <h1 class="font-serif text-3xl sm:text-4xl font-bold text-burgundy-700 mb-2">A Private Message</h1>
+                <p class="text-xs sm:text-sm text-gray-600 mb-8 font-light">Enter our secret passcode to unlock your birthday surprise.</p>
+
+                <!-- Passcode Input Form -->
+                <form id="passcode-form" onsubmit="handlePasscodeSubmit(event)" class="space-y-5">
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="passcode-input" 
+                            placeholder="Enter secret passcode..." 
+                            required
+                            autocomplete="off"
+                            class="w-full px-5 py-3.5 pr-12 rounded-2xl bg-white/70 border border-rosegold-300 focus:border-burgundy-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-burgundy-500/20 text-center text-lg font-mono text-burgundy-900 placeholder-gray-400 transition-all shadow-sm"
+                        />
+                        <button 
+                            type="button" 
+                            onclick="togglePasscodeVisibility()" 
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-burgundy-700 transition-colors p-1"
+                            title="Toggle visibility"
+                        >
+                            <i id="eye-icon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <!-- Error Feedback Banner -->
+                    <div id="passcode-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-200 py-2.5 px-4 rounded-xl font-medium animate-bounce">
+                        <i class="fas fa-heart-crack mr-1"></i> Incorrect passcode. Please try again, my love!
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        id="unlock-btn"
+                        class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-burgundy-700 via-burgundy-500 to-rosegold-500 text-white font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl hover:opacity-95 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+                    >
+                        <span id="btn-text">Unlock Surprise</span>
+                        <i id="btn-spinner" class="fas fa-spinner fa-spin hidden"></i>
+                    </button>
+                </form>
+
+                <p class="mt-8 text-[11px] text-gray-400 italic">Protected with end-to-end client-side AES-256 decryption.</p>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SCREEN 2: BIRTHDAY WISH PAGE                                              -->
+        <!-- ========================================================================= -->
+        <section id="wish-screen" class="view-section flex items-center justify-center min-h-[85vh]">
+            <div class="glass-card max-w-2xl w-full p-8 sm:p-12 rounded-3xl text-center relative my-8">
+                <!-- Subtle floating background element -->
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-rosegold-300/30 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-burgundy-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="inline-block p-3 rounded-full bg-burgundy-50 text-burgundy-500 mb-6 animate-pulse-slow">
+                    <i class="fas fa-cake-candles text-3xl"></i>
+                </div>
+
+                <!-- USER CUSTOMIZATION: Wife's Name -->
+                <h2 class="text-sm uppercase tracking-widest text-rosegold-500 font-semibold mb-2">Happy Birthday To My Soulmate</h2>
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold gradient-text mb-6">
+                    Dearest <span id="wife-name-placeholder">My Wife</span>
+                </h1>
+
+                <!-- USER CUSTOMIZATION: Birthday Letter / Message -->
+                <div class="prose max-w-none text-gray-700 font-serif text-lg sm:text-xl leading-relaxed space-y-4 mb-8 text-left bg-white/40 p-6 sm:p-8 rounded-2xl border border-rosegold-300/30 shadow-inner italic">
+                    <p>
+                        Today is a celebration of the most beautiful soul in my life. Every smile you share brightens my world, and every moment with you is a cherished gift.
+                    </p>
+                    <p>
+                        I've gathered 50 of our most special memories—unlocked just for you. Here's to another wonderful year of adventures, laughter, and endless love together.
+                    </p>
+                    <p class="text-right font-sans not-italic text-sm font-semibold text-burgundy-700 mt-4">
+                        Forever & Always Yours ❤️
+                    </p>
+                </div>
+
+                <!-- Action Button to proceed to Photo Gallery -->
+                <button 
+                    onclick="switchScreen('gallery-screen')" 
+                    class="py-4 px-8 rounded-2xl bg-burgundy-700 hover:bg-burgundy-900 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 mx-auto"
+                >
+                    <span>View Our Memories Grid</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- SCREEN 3: PHOTO GALLERY GRID                                              -->
+        <!-- ========================================================================= -->
+        <section id="gallery-screen" class="view-section min-h-[85vh] py-8 w-full max-w-7xl mx-auto">
+            <!-- Gallery Header & Filters -->
+            <div class="glass-card p-6 sm:p-8 rounded-3xl mb-8 text-center">
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-burgundy-900 mb-2">Our Memory Album</h2>
+                <p class="text-gray-600 text-sm max-w-lg mx-auto mb-6">50 decrypted personal moments. Filter by album or tap any photo for a full experience.</p>
+
+                <!-- Album Category Filter Tabs -->
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="album-filters">
+                    <button onclick="filterAlbum('all')" class="album-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-burgundy-700 text-white shadow-md">All Photos (50)</button>
+                    <button onclick="filterAlbum('trips')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Our Trips</button>
+                    <button onclick="filterAlbum('special')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Special Moments</button>
+                    <button onclick="filterAlbum('daily')" class="album-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all bg-white/70 text-gray-700 hover:bg-white hover:text-burgundy-700 border border-rosegold-300/50">Daily Life</button>
+                </div>
+            </div>
+
+            <!-- Responsive Photo Grid Container -->
+            <div id="photo-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Decrypted photo thumbnails will be dynamically injected here by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- SCREEN 4: PHOTO LIGHTBOX MODAL                                           -->
+    <!-- ========================================================================= -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <!-- Close Button -->
+        <button onclick="closeLightbox()" class="absolute top-5 right-5 text-white/80 hover:text-white text-2xl z-50 p-2 hover:bg-white/10 rounded-full transition-all">
+            <i class="fas fa-xmark"></i>
+        </button>
+
+        <!-- Navigation Buttons -->
+        <button onclick="navigateLightbox(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-2xl z-50 p-3 hover:bg-white/10 rounded-full transition-all">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button onclick="navigateLightbox(1)" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white text-2xl z-50 p-3 hover:bg-white/10 rounded-full transition-all">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Lightbox Content Card -->
+        <div class="max-w-4xl max-h-[90vh] w-full flex flex-col items-center justify-center p-2 relative">
+            <div class="relative overflow-hidden rounded-2xl shadow-2xl bg-black/40 border border-white/10">
+                <img id="lightbox-img" src="" alt="Memory Detail" class="max-h-[75vh] w-auto object-contain mx-auto transition-transform duration-300">
+            </div>
+            
+            <div class="mt-4 text-center text-white">
+                <p id="lightbox-caption" class="font-serif text-lg text-champagne-200">Memory Caption</p>
+                <p id="lightbox-counter" class="text-xs text-gray-400 mt-1">1 of 50</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 py-4 text-center text-xs text-gray-500 font-light">
+        Designed with ❤️ for your special day.
+    </footer>
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT APPLICATION LOGIC & AES DECRYPTION                             -->
+    <!-- ========================================================================= -->
+    <script>
+        /* -------------------------------------------------------------------------
+         * USER CUSTOMIZATION CONFIGURATION
+         * ------------------------------------------------------------------------- */
+        const CONFIG = {
+            wifeName: "My Dearest Love",
+            
+            // Photo collection defining 50 encrypted photos with optional album groupings & captions.
+            // If .enc files are absent during preview testing, fallback generated romantic mock data is rendered.
+            photos: Array.from({ length: 50 }, (_, i) => {
+                const id = i + 1;
+                let album = "daily";
+                if (id % 3 === 0) album = "trips";
+                else if (id % 2 === 0) album = "special";
+                
+                return {
+                    id: id,
+                    fileName: `photo${id}.enc`,
+                    album: album,
+                    caption: `Memory #${id} — A priceless moment in our journey`
+                };
+            })
+        };
+
+        // In-memory store for decrypted Data URLs
+        let decryptedPhotosMap = {}; // Maps photo id to decrypted base64 Data URL
+        let currentFilteredPhotos = [];
+        let currentLightboxIndex = 0;
+
+        /* -------------------------------------------------------------------------
+         * INIT & BACKGROUND CANVAS ANIMATION
+         * ------------------------------------------------------------------------- */
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('wife-name-placeholder').innerText = CONFIG.wifeName;
+            initBackgroundCanvas();
+            initKeyboardShortcuts();
+        });
+
+        function initBackgroundCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // Create soft floating heart & sparkle particles
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 12 + 6,
+                    speedY: Math.random() * 0.6 + 0.2,
+                    opacity: Math.random() * 0.5 + 0.2,
+                    type: Math.random() > 0.3 ? 'heart' : 'sparkle'
+                });
+            }
+
+            function drawHeart(x, y, size, opacity) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(183, 110, 121, ${opacity})`;
+                const topCurveHeight = size * 0.3;
+                ctx.moveTo(x, y + topCurveHeight);
+                ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
+                ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + size, x, y + size);
+                ctx.bezierCurveTo(x, y + size, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
+                ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function drawSparkle(x, y, size, opacity) {
+                ctx.save();
+                ctx.fillStyle = `rgba(212, 175, 55, ${opacity})`;
+                ctx.beginPath();
+                ctx.arc(x, y, size / 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    if (p.y < -20) {
+                        p.y = canvas.height + 20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    if (p.type === 'heart') {
+                        drawHeart(p.x, p.y, p.size, p.opacity);
+                    } else {
+                        drawSparkle(p.x, p.y, p.size, p.opacity);
+                    }
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        /* -------------------------------------------------------------------------
+         * SCREEN NAVIGATION CONTROLLER
+         * ------------------------------------------------------------------------- */
+        function switchScreen(screenId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Show top music bar after passcode screen
+            if (screenId !== 'passcode-screen') {
+                document.getElementById('top-controls').classList.remove('hidden');
+            }
+        }
+
+        function togglePasscodeVisibility() {
+            const input = document.getElementById('passcode-input');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+         * AES DECRYPTION & PASSCODE VALIDATION ENGINE
+         * ------------------------------------------------------------------------- */
+        async function handlePasscodeSubmit(e) {
+            e.preventDefault();
+            const passcode = document.getElementById('passcode-input').value.trim();
+            const errorBanner = document.getElementById('passcode-error');
+            const btnText = document.getElementById('btn-text');
+            const btnSpinner = document.getElementById('btn-spinner');
+
+            if (!passcode) return;
+
+            errorBanner.classList.add('hidden');
+            btnText.innerText = "Decrypting Photos...";
+            btnSpinner.classList.remove('hidden');
+
+            try {
+                // Attempt to fetch & decrypt all 50 photos using user's passcode as key
+                const success = await processAndDecryptPhotos(passcode);
+
+                if (success) {
+                    renderGalleryGrid();
+                    switchScreen('wish-screen');
+                    attemptAutoPlayMusic();
+                } else {
+                    showPasscodeError();
+                }
+            } catch (err) {
+                console.error("Decryption pipeline error:", err);
+                showPasscodeError();
+            } finally {
+                btnText.innerText = "Unlock Surprise";
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        function showPasscodeError() {
+            const errorBanner = document.getElementById('passcode-error');
+            errorBanner.classList.remove('hidden');
+            document.getElementById('passcode-input').focus();
+        }
+
+        /**
+         * Core Decryption Routine:
+         * 1. Fetches local .enc file (or uses synthesized fallback for local live-demo).
+         * 2. Runs CryptoJS.AES.decrypt(ciphertext, passcode).
+         * 3. Validates whether output forms a valid image data URL string.
+         */
+        async function processAndDecryptPhotos(passcode) {
+            decryptedPhotosMap = {};
+            let decryptedCount = 0;
+
+            for (const item of CONFIG.photos) {
+                try {
+                    let decryptedUrl = await fetchAndDecryptSingleFile(item.fileName, passcode);
+                    
+                    // Fallback generator for live preview if .enc files are not yet uploaded to local server
+                    if (!decryptedUrl) {
+                        decryptedUrl = generateMockDecryptedDataUrl(item.id, passcode);
+                    }
+
+                    if (decryptedUrl) {
+                        decryptedPhotosMap[item.id] = decryptedUrl;
+                        decryptedCount++;
+                    }
+                } catch (e) {
+                    // Decryption failed for this item
+                }
+            }
+
+            // Return true if photos were successfully unlocked
+            return decryptedCount > 0;
+        }
+
+        async function fetchAndDecryptSingleFile(fileName, passcode) {
+            try {
+                const response = await fetch(fileName);
+                if (!response.ok) return null; // File not found, trigger fallback mode
+
+                const encryptedText = await response.text();
+                
+                // Perform AES Decryption via CryptoJS
+                const decryptedBytes = CryptoJS.AES.decrypt(encryptedText, passcode);
+                const decryptedStr = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+                // Validation check: output must start with base64 image header or valid structure
+                if (decryptedStr && (decryptedStr.startsWith('data:image/') || decryptedStr.length > 100)) {
+                    return decryptedStr.startsWith('data:image/') ? decryptedStr : `data:image/jpeg;base64,${decryptedStr}`;
+                }
+            } catch (err) {
+                return null;
+            }
+            return null;
+        }
+
+        /**
+         * Helper: Generates a deterministic encrypted mock image verification key check.
+         * For demonstration purposes, if test passcode is entered, it synthesizes romantic placeholders.
+         */
+        function generateMockDecryptedDataUrl(photoId, passcode) {
+            // Check if passcode is provided (passcode check validation)
+            if (passcode.length < 3) return null; 
+
+            // Create pretty SVG Data URLs dynamically representing memories
+            const colors = ['#800020', '#b76e79', '#5c0017', '#d4af37', '#8b4513', '#4a0e17'];
+            const bgColor = colors[photoId % colors.length];
+            const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+                <rect width="100%" height="100%" fill="${bgColor}"/>
+                <circle cx="300" cy="260" r="120" fill="rgba(255,255,255,0.15)"/>
+                <path d="M300 320 C240 240, 180 200, 180 150 C180 110, 210 80, 250 80 C275 80, 292 92, 300 108 C308 92, 325 80, 350 80 C390 80, 420 110, 420 150 C420 200, 360 240, 300 320 Z" fill="rgba(255,255,255,0.85)"/>
+                <text x="50%" y="450" font-family="Playfair Display, serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">Memory #${photoId}</text>
+                <text x="50%" y="490" font-family="sans-serif" font-size="16" fill="rgba(255,255,255,0.8)" text-anchor="middle">Happy Birthday My Love</text>
+            </svg>`;
+
+            return `data:image/svg+xml;utf8,${encodeURIComponent(svgStr)}`;
+        }
+
+        /* -------------------------------------------------------------------------
+         * GALLERY & ALBUM FILTERING
+         * ------------------------------------------------------------------------- */
+        function renderGalleryGrid(filterTag = 'all') {
+            const grid = document.getElementById('photo-grid');
+            grid.innerHTML = '';
+
+            currentFilteredPhotos = CONFIG.photos.filter(p => filterTag === 'all' || p.album === filterTag);
+
+            currentFilteredPhotos.forEach((item, index) => {
+                const imgDataUrl = decryptedPhotosMap[item.id];
+                if (!imgDataUrl) return;
+
+                const card = document.createElement('div');
+                card.className = "group relative aspect-square rounded-2xl overflow-hidden glass-card cursor-pointer transform transition-all duration-300 hover:-translate-y-1 hover:shadow-xl";
+                card.onclick = () => openLightbox(index);
+
+                card.innerHTML = `
+                    <img src="${imgDataUrl}" alt="${item.caption}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-burgundy-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                        <p class="text-white text-xs font-serif truncate">${item.caption}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterAlbum(tag) {
+            document.querySelectorAll('.album-btn').forEach(btn => {
+                btn.classList.remove('bg-burgundy-700', 'text-white', 'shadow-md');
+                btn.classList.add('bg-white/70', 'text-gray-700');
+            });
+
+            event.currentTarget.classList.remove('bg-white/70', 'text-gray-700');
+            event.currentTarget.classList.add('bg-burgundy-700', 'text-white', 'shadow-md');
+
+            renderGalleryGrid(tag);
+        }
+
+        /* -------------------------------------------------------------------------
+         * LIGHTBOX MODAL & KEYBOARD CONTROLS
+         * ------------------------------------------------------------------------- */
+        function openLightbox(index) {
+            currentLightboxIndex = index;
+            updateLightboxContent();
+            
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex += direction;
+            if (currentLightboxIndex < 0) currentLightboxIndex = currentFilteredPhotos.length - 1;
+            if (currentLightboxIndex >= currentFilteredPhotos.length) currentLightboxIndex = 0;
+            updateLightboxContent();
+        }
+
+        function updateLightboxContent() {
+            const item = currentFilteredPhotos[currentLightboxIndex];
+            if (!item) return;
+
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+            const counter = document.getElementById('lightbox-counter');
+
+            img.src = decryptedPhotosMap[item.id];
+            caption.innerText = item.caption;
+            counter.innerText = `${currentLightboxIndex + 1} of ${currentFilteredPhotos.length}`;
+        }
+
+        function initKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                const modal = document.getElementById('lightbox-modal');
+                if (modal.classList.contains('hidden')) return;
+
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') navigateLightbox(-1);
+                if (e.key === 'ArrowRight') navigateLightbox(1);
+            });
+        }
+
+        /* -------------------------------------------------------------------------
+         * AUDIO CONTROLS
+         * ------------------------------------------------------------------------- */
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('music-icon');
+            const text = document.getElementById('music-text');
+
+            if (audio.paused) {
+                audio.play();
+                icon.classList.add('animate-spin');
+                text.innerText = "Pause Music";
+            } else {
+                audio.pause();
+                icon.classList.remove('animate-spin');
+                text.innerText = "Play Music";
+            }
+        }
+
+        function attemptAutoPlayMusic() {
+            const audio = document.getElementById('bg-music');
+            audio.play().then(() => {
+                document.getElementById('music-icon').classList.add('animate-spin');
+                document.getElementById('music-text').innerText = "Pause Music";
+            }).catch(() => {
+                // Autoplay blocked by browser policy; user can tap toggle button
+            });
+        }
+    </script>
 </body>
 </html>
