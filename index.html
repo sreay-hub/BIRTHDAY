@@ -51,6 +51,14 @@ body::after{width:520px;height:520px;background:rgba(80,0,20,.30);bottom:5%;righ
 .animated-calligraphy{display:inline-block;overflow:hidden;white-space:nowrap;width:0;animation:writeCalligraphy 3.4s cubic-bezier(.4,0,.2,1) forwards;}
 @keyframes writeCalligraphy{from{width:0;}to{width:100%;}}
 .welcome-subtitle{font-size:1.05rem;color:#d99bb0;font-style:italic;margin:18px 0 6px;}
+.welcome-frame{display:flex;align-items:center;justify-content:center;gap:50px;flex-wrap:wrap;max-width:1100px;width:100%;}
+.welcome-photo{width:200px;flex:0 0 200px;border-radius:140px 140px 16px 16px;overflow:hidden;border:3px solid rgba(255,128,160,.55);box-shadow:0 18px 45px rgba(0,0,0,.75),0 0 30px rgba(255,51,102,.4);opacity:0;}
+.welcome-photo img{width:100%;height:260px;object-fit:cover;display:block;}
+.welcome-photo.left{animation:photoFadeLeft 1.1s ease-out forwards;animation-delay:.5s;}
+.welcome-photo.right{animation:photoFadeRight 1.1s ease-out forwards;animation-delay:.5s;}
+@keyframes photoFadeLeft{from{opacity:0;transform:translateX(-30px) rotate(-6deg) scale(.85);}to{opacity:1;transform:rotate(-4deg) scale(1);}}
+@keyframes photoFadeRight{from{opacity:0;transform:translateX(30px) rotate(6deg) scale(.85);}to{opacity:1;transform:rotate(4deg) scale(1);}}
+@media(max-width:800px){.welcome-photo{width:150px;flex-basis:150px;}.welcome-photo img{height:200px;}}
 
 /* ---------- SCREEN 1: PASSCODE ---------- */
 #screen-passcode{justify-content:center;align-items:center;min-height:100vh;text-align:center;}
@@ -148,9 +156,15 @@ input.pass-field:focus{border-color:#ff3366;box-shadow:0 0 15px rgba(255,51,102,
 
 <!-- ================= SCREEN 0: WELCOME ================= -->
 <section id="screen-welcome" class="screen active">
-  <h1 class="welcome-title"><span class="romantic-heading animated-calligraphy">Happy Birthday My Dear Love</span></h1>
-  <p class="welcome-subtitle">A space made for and with Love</p>
-  <button class="btn" onclick="navigateTo('screen-passcode')">Begin &rarr;</button>
+  <div class="welcome-frame">
+    <div class="welcome-photo left"><img src="enc/b1.jpg" alt="Her"></div>
+    <div>
+      <h1 class="welcome-title"><span class="romantic-heading animated-calligraphy">Happy Birthday My Dear Love</span></h1>
+      <p class="welcome-subtitle">A space made for and with Love</p>
+      <div style="text-align:center;"><button class="btn" onclick="navigateTo('screen-passcode')">Begin &rarr;</button></div>
+    </div>
+    <div class="welcome-photo right"><img src="enc/b2.jpg" alt="Her"></div>
+  </div>
 </section>
 
 <!-- ================= SCREEN 1: PASSCODE ================= -->
